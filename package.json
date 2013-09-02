@@ -1,0 +1,33 @@
+{
+  "name": "xlsx-template",
+  "version": "0.0.1",
+  "description": "Generate .xlsx (Excel) files from templates built in Excel",
+  "main": "./lib/index",
+  "author": {
+    "name": "Martin Aspeli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/optilude/xlsx-template.git"
+  },
+  "bugs": {
+    "url": "http://github.com/optilude/xlsx-template/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "elementtree": "0.1.5",
+    "node-zip": "1.0.1"  
+  },
+  "devDependencies": {
+    "buster": "0.6.12",
+    "grunt": "~0.4.1",
+    "grunt-buster": "~0.2.1"
+  },
+  "readme": "",
+  "readmeFilename": "README.md"
+}
