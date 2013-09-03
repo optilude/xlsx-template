@@ -26,6 +26,146 @@ describe("Helpers", function() {
 
     });
 
+    describe('replaceString', function() {
+
+        it("adds new string if old string not found", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.replaceString("foo", "bar")).toEqual(0);
+            expect(t.sharedStrings).toEqual(["bar"]);
+            expect(t.sharedStringsLookup).toEqual({"bar": 0});
+        });
+
+        it("replaces strings if found", function() {
+            var t = new XlsxTemplate();
+            
+            t.addSharedString("foo");
+            t.addSharedString("baz");
+
+            expect(t.replaceString("foo", "bar")).toEqual(0);
+            expect(t.sharedStrings).toEqual(["bar", "baz"]);
+            expect(t.sharedStringsLookup).toEqual({"bar": 0, "baz": 1});
+        });
+
+    });
+
+    describe('extractPlaceholders', function() {
+
+        it("can extract simple placeholders", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("${foo}")).toEqual([{
+                full: true,
+                key: undefined,
+                name: "foo",
+                placeholder: "${foo}",
+                type: "normal"
+            }]);
+        });
+
+        it("can extract simple placeholders inside strings", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("A string ${foo} bar")).toEqual([{
+                full: false,
+                key: undefined,
+                name: "foo",
+                placeholder: "${foo}",
+                type: "normal"
+            }]);
+        });
+
+        it("can extract multiple placeholders from one string", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("${foo} ${bar}")).toEqual([{
+                full: false,
+                key: undefined,
+                name: "foo",
+                placeholder: "${foo}",
+                type: "normal"
+            }, {
+                full: false,
+                key: undefined,
+                name: "bar",
+                placeholder: "${bar}",
+                type: "normal"
+            }]);
+        });
+
+        it("can extract placeholders with keys", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("${foo.bar}")).toEqual([{
+                full: true,
+                key: "bar",
+                name: "foo",
+                placeholder: "${foo.bar}",
+                type: "normal"
+            }]);
+        });
+
+        it("can extract placeholders with types", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("${table:foo}")).toEqual([{
+                full: true,
+                key: undefined,
+                name: "foo",
+                placeholder: "${table:foo}",
+                type: "table"
+            }]);
+        });
+
+        it("can extract placeholders with types and keys", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("${table:foo.bar}")).toEqual([{
+                full: true,
+                key: "bar",
+                name: "foo",
+                placeholder: "${table:foo.bar}",
+                type: "table"
+            }]);
+        });
+
+        it("can handle strings with no placeholders", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.extractPlaceholders("A string")).toEqual([]);
+        });
+
+
+    });
+
+    describe('splitRef', function() {
+
+        it("splits single digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRef("A1")).toEqual({col: "A", row: 1});
+        });
+
+        it("splits multiple digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRef("AB12")).toEqual({col: "AB", row: 12});
+        });
+
+    });
+
+    describe('joinRef', function() {
+
+        it("joins single digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRef({col: "A", row: 1})).toEqual("A1");
+        });
+
+        it("joins multiple digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRef({col: "AB", row: 12})).toEqual("AB12");
+        });
+
+    });
+
     describe('nexCol', function() {
 
         it("increments single columns", function() {
@@ -33,7 +173,6 @@ describe("Helpers", function() {
             
             expect(t.nextCol("A1")).toEqual("B1");
             expect(t.nextCol("B1")).toEqual("C1");
-
         });
 
         it("maintains row index", function() {
@@ -41,7 +180,6 @@ describe("Helpers", function() {
             
             expect(t.nextCol("A99")).toEqual("B99");
             expect(t.nextCol("B11231")).toEqual("C11231");
-
         });
 
         it("captialises letters", function() {
@@ -80,7 +218,6 @@ describe("Helpers", function() {
             expect(t.nextRow("A1")).toEqual("A2");
             expect(t.nextRow("B1")).toEqual("B2");
             expect(t.nextRow("AZ2")).toEqual("AZ3");
-
         });
 
         it("captialises letters", function() {
