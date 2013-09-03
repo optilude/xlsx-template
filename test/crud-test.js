@@ -17,9 +17,9 @@ describe("CRUD operations", function() {
         done();
     });
 
-    describe('Loading a template', function() {
+    describe('XlsxTemplate', function() {
 
-        it("Can load data", function(done) {
+        it("can load data", function(done) {
             
             fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
                 expect(err).toBeNull();
@@ -36,6 +36,28 @@ describe("CRUD operations", function() {
             });
 
         });
+
+        it("can write changed shared strings", function(done) {
+            
+            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                
+                t.replaceString("Plan table", "The plan");
+
+                t.writeSharedStrings();
+                
+                var text = t.archive.file("xl/sharedStrings.xml").asText();
+                expect(text).not.toMatch("<si><t>Plan table</t></si>");
+                expect(text).toMatch("<si><t>The plan</t></si>");
+
+                done();
+            });
+
+        });
+
+
 
     });
 

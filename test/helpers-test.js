@@ -135,7 +135,6 @@ describe("Helpers", function() {
             expect(t.extractPlaceholders("A string")).toEqual([]);
         });
 
-
     });
 
     describe('splitRef', function() {
