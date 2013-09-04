@@ -266,4 +266,233 @@ describe("Helpers", function() {
 
     });
 
+    describe('substituteScalar', function() {
+
+        it("can substitute simple string values", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = "bar",
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("bar");
+            expect(col.attrib.t).toEqual("s");
+            expect(val.text).toEqual("0");
+            expect(t.sharedStrings).toEqual(["bar"]);
+        });
+
+        it("can substitute simple numeric values", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = 10,
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("10");
+            expect(col.attrib.t).toEqual("n");
+            expect(val.text).toEqual("10");
+            expect(t.sharedStrings).toEqual(["${foo}"]);
+        });
+
+        it("can substitute simple boolean values (false)", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = false,
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("0");
+            expect(col.attrib.t).toEqual("b");
+            expect(val.text).toEqual("0");
+            expect(t.sharedStrings).toEqual(["${foo}"]);
+        });
+
+        it("can substitute simple boolean values (true)", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = true,
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("1");
+            expect(col.attrib.t).toEqual("b");
+            expect(val.text).toEqual("1");
+            expect(t.sharedStrings).toEqual(["${foo}"]);
+        });
+
+        it("can substitute dates", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = new Date("2013-01-01"),
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("2013-01-01T00:00:00.000Z");
+            expect(col.attrib.t).toEqual("d");
+            expect(val.text).toEqual("2013-01-01T00:00:00.000Z");
+            expect(t.sharedStrings).toEqual(["${foo}"]);
+        });
+
+        it("can substitute parts of strings", function() {
+            var t = new XlsxTemplate(),
+                string = "foo: ${foo}",
+                substitution = "bar",
+                placeholder = {
+                    full: false,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: bar");
+            expect(col.attrib.t).toEqual("s");
+            expect(val.text).toEqual("0");
+            expect(t.sharedStrings).toEqual(["foo: bar"]);
+        });
+
+        it("can substitute parts of strings with booleans", function() {
+            var t = new XlsxTemplate(),
+                string = "foo: ${foo}",
+                substitution = false,
+                placeholder = {
+                    full: false,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: 0");
+            expect(col.attrib.t).toEqual("s");
+            expect(val.text).toEqual("0");
+            expect(t.sharedStrings).toEqual(["foo: 0"]);
+        });
+
+        it("can substitute parts of strings with numbers", function() {
+            var t = new XlsxTemplate(),
+                string = "foo: ${foo}",
+                substitution = 10,
+                placeholder = {
+                    full: false,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: 10");
+            expect(col.attrib.t).toEqual("s");
+            expect(val.text).toEqual("0");
+            expect(t.sharedStrings).toEqual(["foo: 10"]);
+        });
+        
+
+    });
+
 });
