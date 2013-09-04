@@ -236,4 +236,34 @@ describe("Helpers", function() {
 
     });
 
+    describe('stringify', function() {
+
+        it("can stringify dates", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.stringify(new Date("2013-01-01"))).toEqual("2013-01-01T00:00:00.000Z");
+        });
+
+        it("can stringify numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.stringify(12)).toEqual("12");
+            expect(t.stringify(12.3)).toEqual("12.3");
+        });
+
+        it("can stringify booleans", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.stringify(true)).toEqual("1");
+            expect(t.stringify(false)).toEqual("0");
+        });
+
+        it("can stringify strings", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.stringify("foo")).toEqual("foo");
+        });
+
+    });
+
 });
