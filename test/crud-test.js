@@ -6,7 +6,8 @@ var buster       = require('buster'),
     XlsxTemplate = require('../lib'),
     fs           = require('fs'),
     path         = require('path'),
-    zip          = require('node-zip');
+    zip          = require('node-zip'),
+    etree        = require('elementtree');
 
 buster.spec.expose();
 buster.testRunner.timeout = 500;
@@ -81,9 +82,13 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                // TODO: Test file contents
+                var newData = t.generate(),
+                    archive = new zip(newData, {base64: false, checkCRC32: true});
 
-                var newData = t.generate();
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                debugger;
 
                 // XXX: Use a proper test
                 // fs.writeFileSync('test.xlsx', newData, 'binary');
