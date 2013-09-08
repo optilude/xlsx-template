@@ -88,7 +88,14 @@ describe("CRUD operations", function() {
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
-                debugger;
+                // extract date placeholder - interpolated into string referenced at B4
+                expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
+                expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("8");
+                expect(sharedStrings.findall("./si")[8].find("t").text).toEqual("Extracted on 2013-01-02T00:00:00.000Z");
+
+                // revision placeholder - cell C4 changed from string to number
+                expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
+                expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
                 // XXX: Use a proper test
                 // fs.writeFileSync('test.xlsx', newData, 'binary');
