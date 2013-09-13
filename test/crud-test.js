@@ -150,7 +150,6 @@ describe("CRUD operations", function() {
                 ).toEqual("two");
                 expect(sheet1.find("./sheetData/row/c[@r='D5']/v").text).toEqual("102");
                 
-
                 // C6 should not have moved, and the old B6 should be replaced
                 expect(sheet1.find("./sheetData/row/c[@r='B6']/v").text).toEqual("10");
                 expect(sheet1.find("./sheetData/row/c[@r='C6']/v").text).toEqual("103");
