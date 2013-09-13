@@ -106,26 +106,64 @@ describe("CRUD operations", function() {
                 expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual(new Date("2013-01-02").toISOString());
                 expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
 
-                // XXX: Use a proper test
-                fs.writeFileSync('test.xlsx', newData, 'binary');
+                // XXX: For debugging only
+                // fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });
 
         });
 
-        it("// can substitute empty lists", function(done) {
+        it("moves columns left or right when filling lists", function(done) {
+
+            fs.readFile(path.join(__dirname, 'templates', 'test-cols.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                
+                t.substitute(1, {
+                    emptyCols: [],
+                    multiCols: ["one", "two"],
+                    singleCols: [10]
+                });
+
+                var newData = t.generate(),
+                    archive = new zip(newData, {base64: false, checkCRC32: true});
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                // C4 should have moved left, and the old B4 should now be deleted
+                expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("101");
+                expect(sheet1.find("./sheetData/row/c[@r='C4']")).toBeNull();
+
+                // C5 should have moved right, and the old B5 should now be expanded
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B5']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("one");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C5']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("two");
+                expect(sheet1.find("./sheetData/row/c[@r='D5']/v").text).toEqual("102");
+                
+
+                // C6 should not have moved, and the old B6 should be replaced
+                expect(sheet1.find("./sheetData/row/c[@r='B6']/v").text).toEqual("10");
+                expect(sheet1.find("./sheetData/row/c[@r='C6']/v").text).toEqual("103");
+
+                // XXX: For debugging only
+                // fs.writeFileSync('test.xlsx', newData, 'binary');
+
+                done();
+            });
 
         });
 
-        it("// pushes columns to the right when inserting lists", function(done) {
-
-        });
-
-        it("// pushes columns to the left when inserting empty lists", function(done) {
-
-        });
-
+    
 
 
     });
