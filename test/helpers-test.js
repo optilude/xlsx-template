@@ -236,6 +236,62 @@ describe("Helpers", function() {
 
     });
 
+    describe('charToNum', function() {
+
+        it("can return single letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.charToNum("A")).toEqual(1);
+            expect(t.charToNum("B")).toEqual(2);
+            expect(t.charToNum("Z")).toEqual(26);
+        });
+
+        it("can return double letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.charToNum("AA")).toEqual(27);
+            expect(t.charToNum("AZ")).toEqual(52);
+            expect(t.charToNum("BZ")).toEqual(78);
+        });
+
+        it("can return triple letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.charToNum("AAA")).toEqual(703);
+            expect(t.charToNum("AAZ")).toEqual(728);
+            expect(t.charToNum("ADI")).toEqual(789);
+        });
+
+    });
+
+    describe('numToChar', function() {
+
+        it("can convert single letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.numToChar(1)).toEqual("A");
+            expect(t.numToChar(2)).toEqual("B");
+            expect(t.numToChar(26)).toEqual("Z");
+        });
+
+        it("can convert double letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.numToChar(27)).toEqual("AA");
+            expect(t.numToChar(52)).toEqual("AZ");
+            expect(t.numToChar(78)).toEqual("BZ");
+        });
+
+        it("can convert triple letter numbers", function() {
+            var t = new XlsxTemplate();
+            
+            expect(t.numToChar(703)).toEqual("AAA");
+            expect(t.numToChar(728)).toEqual("AAZ");
+            expect(t.numToChar(789)).toEqual("ADI");
+        });
+
+    });
+
     describe('stringify', function() {
 
         it("can stringify dates", function() {
