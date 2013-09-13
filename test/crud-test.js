@@ -58,7 +58,7 @@ describe("CRUD operations", function() {
 
         });
 
-        it("can substitute values and write a file", function(done) {
+        it("can substitute values and generate a file", function(done) {
             
             fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
                 expect(err).toBeNull();
@@ -97,11 +97,25 @@ describe("CRUD operations", function() {
                 expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
                 expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
+                // dates placeholder - added cells
+
                 // XXX: Use a proper test
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });
+
+        });
+
+        it("// can substitute empty lists", function(done) {
+
+        });
+
+        it("// pushes columns to the right when inserting lists", function(done) {
+
+        });
+
+        it("// pushes columns to the left when inserting empty lists", function(done) {
 
         });
 
