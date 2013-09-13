@@ -78,6 +78,10 @@ describe("CRUD operations", function() {
                             name: "James Smith",
                             role: "Analyst",
                             days: [4, 4,4 ]
+                        }, {
+                            name: "Jim Smith",
+                            role: "Manager",
+                            days: [4, 4,4 ]
                         }
                     ]
                 });
@@ -107,7 +111,7 @@ describe("CRUD operations", function() {
                 expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });
