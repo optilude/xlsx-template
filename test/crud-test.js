@@ -98,6 +98,13 @@ describe("CRUD operations", function() {
                 expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
                 // dates placeholder - added cells
+                expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.t).toEqual("d");
+                expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
+                expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
+
+                expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual(new Date("2013-01-01").toISOString());
+                expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual(new Date("2013-01-02").toISOString());
+                expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
 
                 // XXX: Use a proper test
                 fs.writeFileSync('test.xlsx', newData, 'binary');
