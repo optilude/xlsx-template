@@ -292,6 +292,38 @@ describe("Helpers", function() {
 
     });
 
+    describe('isWithin', function() {
+
+        it("can check 1x1 cells", function() {
+            var t = new XlsxTemplate();
+
+            expect(t.isWithin("A1", "A1", "A1")).toEqual(true);
+            expect(t.isWithin("A2", "A1", "A1")).toEqual(false);
+            expect(t.isWithin("B1", "A1", "A1")).toEqual(false);
+        });
+
+        it("can check 1xn cells", function() {
+            var t = new XlsxTemplate();
+
+            expect(t.isWithin("A1", "A1", "A3")).toEqual(true);
+            expect(t.isWithin("A3", "A1", "A3")).toEqual(true);
+            expect(t.isWithin("A4", "A1", "A3")).toEqual(false);
+            expect(t.isWithin("A5", "A1", "A3")).toEqual(false);
+            expect(t.isWithin("B1", "A1", "A3")).toEqual(false);
+        });
+
+        it("can check nxn cells", function() {
+            var t = new XlsxTemplate();
+
+            expect(t.isWithin("A1", "A2", "C3")).toEqual(false);
+            expect(t.isWithin("A3", "A2", "C3")).toEqual(true);
+            expect(t.isWithin("B2", "A2", "C3")).toEqual(true);
+            expect(t.isWithin("A5", "A2", "C3")).toEqual(false);
+            expect(t.isWithin("D2", "A2", "C3")).toEqual(false);
+        });
+
+    });
+
     describe('stringify', function() {
 
         it("can stringify dates", function() {
