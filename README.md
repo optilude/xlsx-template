@@ -17,7 +17,6 @@ those cells are formatted, so e.g. it is OK to insert a placeholder (which is
 text content) into a cell formatted as a number or currecy or date, if you
 expect the placeholder to resolve to a number or currency or date.
 
-
 ### Scalars
 
 Simple placholders take the format `${name}`. Here, `name` is the name of a
@@ -111,7 +110,23 @@ attach it to an email or do whatever you want with it.
 
 * The spreadsheet must be saved in `.xlsx` format. `.xls`, `.xlsb` or `.xlsm`
   won't work.
-* Merged cells are complicated. Things may go wrong if you have placeholders
-  inside, to the left of, or above merged cells.
-* Placeholders only work in simple cells, not data tables or pivot tables or
+* Column (array) and table (array-of-objects) insertions cause rows and cells to
+  be inserted or removed. Merged cells, named ranges or formulae elsewhere are
+  *not* updated when this happens (because doing so is really rather hard). This
+  means that you need to be avoid merged cells, named ranges or formulae
+  referencing cells to the right of column placeholders or below table
+  placeholders.
+* As a corollary to this, it is not always easy to build formulae that refer
+  to cells in a table (e.g. summing all rows) where the exact number of rows
+  or columns is not known in advance. There are two strategies for dealing
+  with this:
+    * Put the table as the last (or only) thing on a particular sheet, and
+      use a formula that includes a large number of rows or columns in the
+      hope that the actual table will be smaller than this number.
+    * Use named tables. When a placeholder in a named table causes columns or
+      rows to be added, the table definition (i.e. the cells included in the
+      table) will be updated accordingly. You can then use things like
+      `TableName[ColumnName]` in your formula to refer to all values in a given
+      column in the table as a logical range.
+* Placeholders only work in simple cells and tables, pivot tables or
   other such things.
