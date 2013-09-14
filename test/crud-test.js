@@ -111,7 +111,7 @@ describe("CRUD operations", function() {
                 expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
 
                 // XXX: For debugging only
-                fs.writeFileSync('test.xlsx', newData, 'binary');
+                // fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });
