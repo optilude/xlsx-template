@@ -322,6 +322,16 @@ describe("Helpers", function() {
             expect(t.isWithin("D2", "A2", "C3")).toEqual(false);
         });
 
+        it("can check large nxn cells", function() {
+            var t = new XlsxTemplate();
+
+            expect(t.isWithin("AZ1", "AZ2", "CZ3")).toEqual(false);
+            expect(t.isWithin("AZ3", "AZ2", "CZ3")).toEqual(true);
+            expect(t.isWithin("BZ2", "AZ2", "CZ3")).toEqual(true);
+            expect(t.isWithin("AZ5", "AZ2", "CZ3")).toEqual(false);
+            expect(t.isWithin("DZ2", "AZ2", "CZ3")).toEqual(false);
+        });
+
     });
 
     describe('stringify', function() {
