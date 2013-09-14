@@ -78,6 +78,10 @@ describe("CRUD operations", function() {
                             name: "James Smith",
                             role: "Analyst",
                             days: [4, 4,4 ]
+                        }, {
+                            name: "Jim Smith",
+                            role: "Manager",
+                            days: [4, 4,4 ]
                         }
                     ]
                 });
