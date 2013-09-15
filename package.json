@@ -28,6 +28,9 @@
     "grunt": "~0.4.1",
     "grunt-buster": "~0.2.1"
   },
+  "scripts": {
+    "test": "./node_modules/buster/bin/buster-test"
+  },
   "readme": "",
   "readmeFilename": "README.md"
 }
