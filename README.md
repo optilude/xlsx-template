@@ -130,3 +130,9 @@ attach it to an email or do whatever you want with it.
       column in the table as a logical range.
 * Placeholders only work in simple cells and tables, pivot tables or
   other such things.
+
+## Changelog
+
+### Version 0.0.1
+
+* Initial release
