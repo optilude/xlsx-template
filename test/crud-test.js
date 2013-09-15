@@ -236,7 +236,7 @@ describe("CRUD operations", function() {
 
                 var t = new XlsxTemplate(data);
                 
-                t.substitute(1, {
+                t.substitute("Tables", {
                     ages: [{name: "John", age: 10}, {name: "Bob", age: 2}],
                     scores: [{name: "John", score: 100}, {name: "Bob", score: 110}, {name: "Jim", score: 120}],
                     coords: [],
