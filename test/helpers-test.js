@@ -151,6 +151,34 @@ describe("Helpers", function() {
 
     });
 
+    describe('splitRange', function() {
+
+        it("splits single digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRange("A1:B1")).toEqual({start: "A1", end: "B1"});
+        });
+
+        it("splits multiple digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRange("AB12:CC13")).toEqual({start: "AB12", end: "CC13"});
+        });
+
+    });
+
+    describe('joinRange', function() {
+
+        it("join single digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRange({start: "A1", end: "B1"})).toEqual("A1:B1");
+        });
+
+        it("join multiple digit and letter values", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRange({start: "AB12", end: "CC13"})).toEqual("AB12:CC13");
+        });
+
+    });
+
     describe('joinRef', function() {
 
         it("joins single digit and letter values", function() {

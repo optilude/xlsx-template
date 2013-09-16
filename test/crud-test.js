@@ -366,6 +366,42 @@ describe("CRUD operations", function() {
 
         });
 
+        it("moves named tables and merged cells", function(done) {
+
+            fs.readFile(path.join(__dirname, 'templates', 'test-named-tables.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                
+                t.substitute("Tables", {
+                    ages: [
+                        {name: "John", age: 10},
+                        {name: "Bill", age: 12}
+                    ],
+                    days: ["Monday", "Tuesday", "Wednesday"],
+                    hours: [
+                        {name: "Bob", days: [10, 20, 30]},
+                        {name: "Jim", days: [12, 24, 36]}
+                    ],
+                    progress: 100
+                });
+
+                var newData = t.generate(),
+                    archive = new zip(newData, {base64: false, checkCRC32: true});
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                // TODO: Tests
+
+                // XXX: For debugging only
+                fs.writeFileSync('test.xlsx', newData, 'binary');
+
+                done();
+            });
+
+        });
+
     
 
 

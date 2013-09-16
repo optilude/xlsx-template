@@ -113,11 +113,15 @@ attach it to an email or do whatever you want with it.
 * The spreadsheet must be saved in `.xlsx` format. `.xls`, `.xlsb` or `.xlsm`
   won't work.
 * Column (array) and table (array-of-objects) insertions cause rows and cells to
-  be inserted or removed. Merged cells, named ranges or formulae elsewhere are
-  *not* updated when this happens (because doing so is really rather hard). This
-  means that you need to be avoid merged cells, named ranges or formulae
-  referencing cells to the right of column placeholders or below table
-  placeholders.
+  be inserted or removed. When this happens, only a limited number of
+  adjustments are made:
+    * Merged cells to the right of cells where insertions or deletions are made
+      are moved right or left, appropriately. This may not work well if cells
+      are merged across rows, unless all rows have the same number of
+      insertions.
+    * Merged cells or named tables below rows where further rows are inserted
+      are moved down.
+  Formulae are not adjusted.
 * As a corollary to this, it is not always easy to build formulae that refer
   to cells in a table (e.g. summing all rows) where the exact number of rows
   or columns is not known in advance. There are two strategies for dealing
