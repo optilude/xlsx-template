@@ -137,16 +137,50 @@ describe("Helpers", function() {
 
     });
 
+    describe('isRange', function() {
+
+        it("Returns true if there is a colon", function() {
+            var t = new XlsxTemplate();
+            expect(t.isRange("A1:A2")).toEqual(true);
+            expect(t.isRange("$A$1:$A$2")).toEqual(true);
+            expect(t.isRange("Table!$A$1:$A$2")).toEqual(true);
+        });
+
+        it("Returns false if there is not a colon", function() {
+            var t = new XlsxTemplate();
+            expect(t.isRange("A1")).toEqual(false);
+            expect(t.isRange("$A$1")).toEqual(false);
+            expect(t.isRange("Table!$A$1")).toEqual(false);
+        });
+
+    });
+
     describe('splitRef', function() {
 
         it("splits single digit and letter values", function() {
             var t = new XlsxTemplate();
-            expect(t.splitRef("A1")).toEqual({col: "A", row: 1});
+            expect(t.splitRef("A1")).toEqual({table: null, col: "A", colAbsolute: false, row: 1, rowAbsolute: false});
         });
 
         it("splits multiple digit and letter values", function() {
             var t = new XlsxTemplate();
-            expect(t.splitRef("AB12")).toEqual({col: "AB", row: 12});
+            expect(t.splitRef("AB12")).toEqual({table: null, col: "AB", colAbsolute: false, row: 12, rowAbsolute: false});
+        });
+
+        it("splits absolute references", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRef("$AB12")).toEqual({table: null, col: "AB", colAbsolute: true, row: 12, rowAbsolute: false});
+            expect(t.splitRef("AB$12")).toEqual({table: null, col: "AB", colAbsolute: false, row: 12, rowAbsolute: true});
+            expect(t.splitRef("$AB$12")).toEqual({table: null, col: "AB", colAbsolute: true, row: 12, rowAbsolute: true});
+        });
+
+        it("splits references with tables", function() {
+            var t = new XlsxTemplate();
+            expect(t.splitRef("Table one!AB12")).toEqual({table: "Table one", col: "AB", colAbsolute: false, row: 12, rowAbsolute: false});
+            expect(t.splitRef("Table one!$AB12")).toEqual({table: "Table one", col: "AB", colAbsolute: true, row: 12, rowAbsolute: false});
+            expect(t.splitRef("Table one!$AB12")).toEqual({table: "Table one", col: "AB", colAbsolute: true, row: 12, rowAbsolute: false});
+            expect(t.splitRef("Table one!AB$12")).toEqual({table: "Table one", col: "AB", colAbsolute: false, row: 12, rowAbsolute: true});
+            expect(t.splitRef("Table one!$AB$12")).toEqual({table: "Table one", col: "AB", colAbsolute: true, row: 12, rowAbsolute: true});
         });
 
     });
@@ -189,6 +223,20 @@ describe("Helpers", function() {
         it("joins multiple digit and letter values", function() {
             var t = new XlsxTemplate();
             expect(t.joinRef({col: "AB", row: 12})).toEqual("AB12");
+        });
+
+        it("joins multiple digit and letter values and absolute references", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRef({col: "AB", colAbsolute: true, row: 12, rowAbsolute: false})).toEqual("$AB12");
+            expect(t.joinRef({col: "AB", colAbsolute: true, row: 12, rowAbsolute: true})).toEqual("$AB$12");
+            expect(t.joinRef({col: "AB", colAbsolute: false, row: 12, rowAbsolute: false})).toEqual("AB12");
+        });
+
+        it("joins multiple digit and letter values and tables", function() {
+            var t = new XlsxTemplate();
+            expect(t.joinRef({table: "Table one", col: "AB", colAbsolute: true, row: 12, rowAbsolute: false})).toEqual("Table one!$AB12");
+            expect(t.joinRef({table: "Table one", col: "AB", colAbsolute: true, row: 12, rowAbsolute: true})).toEqual("Table one!$AB$12");
+            expect(t.joinRef({table: "Table one", col: "AB", colAbsolute: false, row: 12, rowAbsolute: false})).toEqual("Table one!AB12");
         });
 
     });

@@ -366,7 +366,7 @@ describe("CRUD operations", function() {
 
         });
 
-        it("moves named tables and merged cells", function(done) {
+        it("moves named tables, named cells and merged cells", function(done) {
 
             fs.readFile(path.join(__dirname, 'templates', 'test-named-tables.xlsx'), function(err, data) {
                 expect(err).toBeNull();
@@ -390,12 +390,40 @@ describe("CRUD operations", function() {
                     archive = new zip(newData, {base64: false, checkCRC32: true});
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
+                    workbook      = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot(),
+                    table1        = etree.parse(t.archive.file("xl/tables/table1.xml").asText()).getroot(),
+                    table2        = etree.parse(t.archive.file("xl/tables/table2.xml").asText()).getroot(),
+                    table3        = etree.parse(t.archive.file("xl/tables/table3.xml").asText()).getroot();
 
-                // TODO: Tests
+                // Named ranges have moved
+                expect(workbook.find("./definedNames/definedName[@name='BelowTable']").text).toEqual("Tables!$B$18");
+                expect(workbook.find("./definedNames/definedName[@name='Moving']").text).toEqual("Tables!$G$8");
+                expect(workbook.find("./definedNames/definedName[@name='RangeBelowTable']").text).toEqual("Tables!$B$19:$C$19");
+                expect(workbook.find("./definedNames/definedName[@name='RangeRightOfTable']").text).toEqual("Tables!$E$14:$F$14");
+                expect(workbook.find("./definedNames/definedName[@name='RightOfTable']").text).toEqual("Tables!$F$8");
+
+                // Merged cells have moved
+                expect(sheet1.find("./mergeCells/mergeCell[@ref='B2:C2']")).not.toBeNull(); // title - unchanged
+
+                expect(sheet1.find("./mergeCells/mergeCell[@ref='B10:C10']")).toBeNull(); // pushed down
+                expect(sheet1.find("./mergeCells/mergeCell[@ref='B12:C12']")).not.toBeNull(); // pushed down
+
+                expect(sheet1.find("./mergeCells/mergeCell[@ref='E7:F7']")).toBeNull(); // pushed down and accross
+                expect(sheet1.find("./mergeCells/mergeCell[@ref='G8:H8']")).not.toBeNull(); // pushed down and accross
+
+                // Table ranges and autofilter definitions have moved
+                expect(table1.attrib.ref).toEqual("B4:C6"); // Grown
+                expect(table1.find("./autoFilter").attrib.ref).toEqual("B4:C6"); // Grown
+
+                expect(table2.attrib.ref).toEqual("B8:E10"); // Grown and pushed down
+                expect(table2.find("./autoFilter").attrib.ref).toEqual("B8:E10"); // Grown and pushed down
+
+                expect(table3.attrib.ref).toEqual("C14:D16"); // Grown and pushed down
+                expect(table3.find("./autoFilter").attrib.ref).toEqual("C14:D16"); // Grown and pushed down
 
                 // XXX: For debugging only
-                fs.writeFileSync('test.xlsx', newData, 'binary');
+                // fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });

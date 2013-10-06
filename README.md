@@ -115,12 +115,12 @@ attach it to an email or do whatever you want with it.
 * Column (array) and table (array-of-objects) insertions cause rows and cells to
   be inserted or removed. When this happens, only a limited number of
   adjustments are made:
-    * Merged cells to the right of cells where insertions or deletions are made
-      are moved right or left, appropriately. This may not work well if cells
-      are merged across rows, unless all rows have the same number of
-      insertions.
-    * Merged cells or named tables below rows where further rows are inserted
-      are moved down.
+    * Merged cells and named cells/ranges to the right of cells where insertions
+      or deletions are made are moved right or left, appropriately. This may
+      not work well if cells are merged across rows, unless all rows have the
+      same number of insertions.
+    * Merged cells, named tables or named cells/ranges below rows where further
+      rows are inserted are moved down.
   Formulae are not adjusted.
 * As a corollary to this, it is not always easy to build formulae that refer
   to cells in a table (e.g. summing all rows) where the exact number of rows
