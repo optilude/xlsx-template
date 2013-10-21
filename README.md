@@ -139,6 +139,11 @@ attach it to an email or do whatever you want with it.
 
 ## Changelog
 
+### Version 0.0.2
+
+* Fix a potential issue with the typing of string indices that could cause the
+  first string to not render correctly if it contained a substitution.
+
 ### Version 0.0.1
 
 * Initial release
