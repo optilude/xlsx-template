@@ -65,7 +65,7 @@ those objects have keys `name` and `age`, you may end up with something like:
     | John Smith  | 20  |
     | Bob Johnson | 22  |
 
-If a particular value is an array, then it will be repeated accross columns as
+If a particular value is an array, then it will be repeated across columns as
 above.
 
 ## Generating reports
