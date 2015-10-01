@@ -413,7 +413,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./mergeCells/mergeCell[@ref='G8:H8']")).not.toBeNull(); // pushed down and accross
 
                 // Table ranges and autofilter definitions have moved
-                buster.expect(table1.attrib.ref).toEqual("B4:C6"); // Grown
+                buster.expect(table1.attrib.ref).toEqual("B4:C7"); // Grown
                 buster.expect(table1.find("./autoFilter").attrib.ref).toEqual("B4:C6"); // Grown
 
                 buster.expect(table2.attrib.ref).toEqual("B8:E10"); // Grown and pushed down
@@ -423,7 +423,7 @@ describe("CRUD operations", function() {
                 buster.expect(table3.find("./autoFilter").attrib.ref).toEqual("C14:D16"); // Grown and pushed down
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });
