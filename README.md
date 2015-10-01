@@ -86,7 +86,7 @@ To make this magic happen, you need some code like this:
         // Set up some placeholder values matching the placeholders in the template
         var values = {
                 extractDate: new Date(),
-                dates: new Date("2013-06-01"), new Date("2013-06-02"), new Date("2013-06-03"),
+                dates: [ new Date("2013-06-01"), new Date("2013-06-02"), new Date("2013-06-03") ],
                 people: [
                     {name: "John Smith", age: 20},
                     {name: "Bob Johnson", age: 22}
