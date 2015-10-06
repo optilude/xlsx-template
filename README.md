@@ -105,7 +105,7 @@ To make this magic happen, you need some code like this:
 
 At this stage, `data` is a string blob representing the compressed archive that
 is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
-if you didn't know). You can send this back to a client, store it to disk, 
+if you didn't know). You can send this back to a client, store it to disk,
 attach it to an email or do whatever you want with it.
 
 ## Caveats
@@ -138,6 +138,14 @@ attach it to an email or do whatever you want with it.
   other such things.
 
 ## Changelog
+
+### Version 0.0.3
+
+Merged a number of overdue pull requests, including:
+
+* Windows support
+* Support for table footers
+* Documentation improvements
 
 ### Version 0.0.2
 
