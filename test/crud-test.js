@@ -98,7 +98,7 @@ describe("CRUD operations", function() {
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='B4']/v").text, 10)
                     ].find("t").text
-                ).toEqual("Extracted on 2013-01-02T00:00:00.000Z");
+                ).toEqual("Extracted on 41276");
 
                 // revision placeholder - cell C4 changed from string to number
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
@@ -109,9 +109,9 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual(new Date("2013-01-02").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
 
                 // planData placeholder - added rows and cells
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B7']").attrib.t).toEqual("s");
@@ -336,8 +336,8 @@ describe("CRUD operations", function() {
                         parseInt(sheet1.find("./sheetData/row/c[@r='B15']/v").text, 10)
                     ].find("t").text
                 ).toEqual("John");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C15']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D15']/v").text).toEqual(new Date("2013-01-02").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C15']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D15']/v").text).toEqual("41276");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E15']/v").text).toEqual("104");
 
                 // Row 16 contains a name and three dates
@@ -346,9 +346,9 @@ describe("CRUD operations", function() {
                         parseInt(sheet1.find("./sheetData/row/c[@r='B16']/v").text, 10)
                     ].find("t").text
                 ).toEqual("Bob");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C16']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D16']/v").text).toEqual(new Date("2013-01-02").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E16']/v").text).toEqual(new Date("2013-01-03").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C16']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D16']/v").text).toEqual("41276");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E16']/v").text).toEqual("41277");
 
                 // Row 17 contains a name and no dates 
                 buster.expect(

@@ -415,7 +415,7 @@ describe("Helpers", function() {
         it("can stringify dates", function() {
             var t = new XlsxTemplate();
             
-            buster.expect(t.stringify(new Date("2013-01-01"))).toEqual("2013-01-01T00:00:00.000Z");
+            buster.expect(t.stringify(new Date("2013-01-01"))).toEqual(41275);
         });
 
         it("can stringify numbers", function() {
@@ -576,9 +576,9 @@ describe("Helpers", function() {
                 };
 
             t.addSharedString(string);
-            buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("2013-01-01T00:00:00.000Z");
+            buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual(41275);
             buster.expect(col.attrib.t).toEqual("d");
-            buster.expect(val.text).toEqual("2013-01-01T00:00:00.000Z");
+            buster.expect(val.text).toEqual(41275);
             buster.expect(t.sharedStrings).toEqual(["${foo}"]);
         });
 
