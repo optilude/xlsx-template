@@ -98,7 +98,7 @@ describe("CRUD operations", function() {
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='B4']/v").text, 10)
                     ].find("t").text
-                ).toEqual("Extracted on 2013-01-02T00:00:00.000Z");
+                ).toEqual("Extracted on 41276");
 
                 // revision placeholder - cell C4 changed from string to number
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
@@ -109,9 +109,9 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual(new Date("2013-01-02").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual(new Date("2013-01-03").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
 
                 // planData placeholder - added rows and cells
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B7']").attrib.t).toEqual("s");
@@ -336,8 +336,8 @@ describe("CRUD operations", function() {
                         parseInt(sheet1.find("./sheetData/row/c[@r='B15']/v").text, 10)
                     ].find("t").text
                 ).toEqual("John");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C15']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D15']/v").text).toEqual(new Date("2013-01-02").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C15']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D15']/v").text).toEqual("41276");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E15']/v").text).toEqual("104");
 
                 // Row 16 contains a name and three dates
@@ -346,9 +346,9 @@ describe("CRUD operations", function() {
                         parseInt(sheet1.find("./sheetData/row/c[@r='B16']/v").text, 10)
                     ].find("t").text
                 ).toEqual("Bob");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C16']/v").text).toEqual(new Date("2013-01-01").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D16']/v").text).toEqual(new Date("2013-01-02").toISOString());
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E16']/v").text).toEqual(new Date("2013-01-03").toISOString());
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C16']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D16']/v").text).toEqual("41276");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E16']/v").text).toEqual("41277");
 
                 // Row 17 contains a name and no dates 
                 buster.expect(
@@ -413,7 +413,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./mergeCells/mergeCell[@ref='G8:H8']")).not.toBeNull(); // pushed down and accross
 
                 // Table ranges and autofilter definitions have moved
-                buster.expect(table1.attrib.ref).toEqual("B4:C6"); // Grown
+                buster.expect(table1.attrib.ref).toEqual("B4:C7"); // Grown
                 buster.expect(table1.find("./autoFilter").attrib.ref).toEqual("B4:C6"); // Grown
 
                 buster.expect(table2.attrib.ref).toEqual("B8:E10"); // Grown and pushed down
@@ -423,7 +423,7 @@ describe("CRUD operations", function() {
                 buster.expect(table3.find("./autoFilter").attrib.ref).toEqual("C14:D16"); // Grown and pushed down
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test.xlsx', newData, 'binary');
 
                 done();
             });

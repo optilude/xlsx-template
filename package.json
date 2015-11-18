@@ -1,6 +1,6 @@
 {
   "name": "xlsx-template",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate .xlsx (Excel) files from templates built in Excel",
   "main": "./lib/index",
   "author": {
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "elementtree": "0.1.5",
-    "node-zip": "1.0.1"  
+    "node-zip": "1.0.1"
   },
   "devDependencies": {
     "buster": "0.7.6",
