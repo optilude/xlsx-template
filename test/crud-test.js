@@ -101,13 +101,13 @@ describe("CRUD operations", function() {
                 ).toEqual("Extracted on 41276");
 
                 // revision placeholder - cell C4 changed from string to number
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
                 // dates placeholder - added cells
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.hasOwnProperty("t")).toBe(false);
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.hasOwnProperty("t")).toBe(false);
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.hasOwnProperty("t")).toBe(false);
 
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
@@ -152,25 +152,25 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("Manager");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']").attrib.hasOwnProperty("t")).toBe(false);
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
 
                 // XXX: For debugging only
