@@ -139,6 +139,12 @@ attach it to an email or do whatever you want with it.
 
 ## Changelog
 
+### Version 0.0.4
+
+Merged pending pull requests
+
+* Deletion of the sheets. 
+
 ### Version 0.0.3
 
 Merged a number of overdue pull requests, including:
