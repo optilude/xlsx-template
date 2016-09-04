@@ -29,13 +29,13 @@
     }
   ],
   "dependencies": {
-    "elementtree": "0.1.5",
-    "node-zip": "1.0.1"
+    "elementtree": "0.1.6",
+    "node-zip": "1.1.1"
   },
   "devDependencies": {
-    "buster": "0.7.6",
-    "grunt": "~0.4.1",
-    "grunt-buster": "~0.2.1"
+    "buster": "0.7.18",
+    "grunt": "~1.0.1",
+    "grunt-buster": "~0.4.2"
   },
   "scripts": {
     "test": "./node_modules/buster/bin/buster-test"
