@@ -6,17 +6,26 @@
   "author": {
     "name": "Martin Aspeli"
   },
+  "contributors": [
+    {
+      "name": "Martin Aspeli"
+    },
+    {
+      "name": "Andrey Kurdyumov",
+      "email": "kant2002@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/optilude/xlsx-template.git"
+    "url": "http://github.com/kant2002/xlsx-template.git"
   },
   "bugs": {
-    "url": "http://github.com/optilude/xlsx-template/issues"
+    "url": "http://github.com/kant2002/xlsx-template/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
+      "url": "http://github.com/kant2002/xlsx-template/raw/master/LICENSE"
     }
   ],
   "dependencies": {
