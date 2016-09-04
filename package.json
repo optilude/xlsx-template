@@ -6,27 +6,36 @@
   "author": {
     "name": "Martin Aspeli"
   },
+  "contributors": [
+    {
+      "name": "Martin Aspeli"
+    },
+    {
+      "name": "Andrey Kurdyumov",
+      "email": "kant2002@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/optilude/xlsx-template.git"
+    "url": "http://github.com/kant2002/xlsx-template.git"
   },
   "bugs": {
-    "url": "http://github.com/optilude/xlsx-template/issues"
+    "url": "http://github.com/kant2002/xlsx-template/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
+      "url": "http://github.com/kant2002/xlsx-template/raw/master/LICENSE"
     }
   ],
   "dependencies": {
-    "elementtree": "0.1.5",
-    "node-zip": "1.0.1"
+    "elementtree": "0.1.6",
+    "node-zip": "1.1.1"
   },
   "devDependencies": {
-    "buster": "0.7.6",
-    "grunt": "~0.4.1",
-    "grunt-buster": "~0.2.1"
+    "buster": "0.7.18",
+    "grunt": "~1.0.1",
+    "grunt-buster": "~0.4.2"
   },
   "scripts": {
     "test": "./node_modules/buster/bin/buster-test"
