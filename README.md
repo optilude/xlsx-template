@@ -1,6 +1,6 @@
 # XLSX Template
 
-[![Build status](https://api.travis-ci.org/optilude/xlsx-template.png?branch=master)](http://travis-ci.org/optilude/xlsx-template)
+[![Build status](https://api.travis-ci.org/kant2002/xlsx-template.png?branch=master)](http://travis-ci.org/optilude/xlsx-template)
 
 This module provides a means of generating "real" Excel reports (i.e. not CSV
 files) in NodeJS applications.
