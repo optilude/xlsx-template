@@ -181,6 +181,129 @@ describe("CRUD operations", function() {
 
         });
 
+        it("can substitute values with descendant properties and generate a file", function(done) {
+
+            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute(1, {
+                    demo: { extractDate: new Date("2013-01-02") },
+                    revision: 10,
+                    dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
+                    planData: [
+                        {
+                            name: "John Smith",
+                            role: { name: "Developer" },
+                            days: [8, 8, 4]
+                        }, {
+                            name: "James Smith",
+                            role: { name: "Analyst" },
+                            days: [4, 4, 4]
+                        }, {
+                            name: "Jim Smith",
+                            role: { name: "Manager" },
+                            days: [4, 4, 4]
+                        }
+                    ]
+                });
+
+                var newData = t.generate(),
+                    archive = new zip(newData, {base64: false, checkCRC32: true});
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                // extract date placeholder - interpolated into string referenced at B4
+                buster.expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B4']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Extracted on 41276");
+
+                // revision placeholder - cell C4 changed from string to number
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
+
+                // dates placeholder - added cells
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.t).toEqual("d");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
+
+                // planData placeholder - added rows and cells
+                buster.expect(sheet1.find("./sheetData/row/c[@r='B7']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B7']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("John Smith");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='B8']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B8']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("James Smith");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='B9']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B9']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Jim Smith");
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C7']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C7']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Developer");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C8']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C8']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Analyst");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='C9']").attrib.t).toEqual("s");
+                buster.expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C9']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Manager");
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']/v").text).toEqual("4");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']/v").text).toEqual("4");
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']/v").text).toEqual("4");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']").attrib.t).toEqual("n");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
+
+                // XXX: For debugging only
+                // fs.writeFileSync('test.xlsx', newData, 'binary');
+
+                done();
+            });
+
+        });
+
         it("moves columns left or right when filling lists", function(done) {
 
             fs.readFile(path.join(__dirname, 'templates', 'test-cols.xlsx'), function(err, data) {
