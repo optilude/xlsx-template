@@ -38,7 +38,7 @@
     "grunt-buster": "~0.4.2"
   },
   "scripts": {
-    "test": "./node_modules/buster/bin/buster-test"
+    "test": "buster-test"
   },
   "readme": "",
   "readmeFilename": "README.md"
