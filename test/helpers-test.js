@@ -1,5 +1,6 @@
 /*jshint globalstrict:true, devel:true */
-/*global require, module, exports, process, __dirname, describe, before, after, it */
+/*eslint no-var:0 */
+/*global require, describe, before, it */
 "use strict";
 
 var buster       = require('buster'),

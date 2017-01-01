@@ -149,6 +149,7 @@ You can pass options to `generate()` to set a different return type. use
 ### Version 0.0.6
 
 * You can now pass `options` to `generate()`, which are passed to JSZip
+* Fix setting of sheet <dimensions /> when growing the sheet
 * Fix corruption of sheet when writing dates
 * Fix corruption of sheet when calculating calcChain
 

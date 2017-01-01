@@ -1,12 +1,12 @@
 /*jshint globalstrict:true, devel:true */
-/*global require, module, exports, process, __dirname, describe, before, after, it */
+/*eslint no-var:0 */
+/*global require, __dirname, describe, before, it */
 "use strict";
 
 var buster       = require('buster'),
     XlsxTemplate = require('../lib'),
     fs           = require('fs'),
     path         = require('path'),
-    zip          = require('node-zip'),
     etree        = require('elementtree');
 
 buster.spec.expose();
@@ -86,8 +86,7 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate(),
-                    archive = new zip(newData, {base64: false, checkCRC32: true});
+                var newData = t.generate();
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
@@ -195,8 +194,7 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate(),
-                    archive = new zip(newData, {base64: false, checkCRC32: true});
+                var newData = t.generate();
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
@@ -289,8 +287,7 @@ describe("CRUD operations", function() {
                     singleCols: [10]
                 });
 
-                var newData = t.generate(),
-                    archive = new zip(newData, {base64: false, checkCRC32: true});
+                var newData = t.generate();
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
@@ -342,8 +339,7 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate(),
-                    archive = new zip(newData, {base64: false, checkCRC32: true});
+                var newData = t.generate();
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
@@ -481,11 +477,9 @@ describe("CRUD operations", function() {
                     progress: 100
                 });
 
-                var newData = t.generate(),
-                    archive = new zip(newData, {base64: false, checkCRC32: true});
+                var newData = t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
                     workbook      = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot(),
                     table1        = etree.parse(t.archive.file("xl/tables/table1.xml").asText()).getroot(),
                     table2        = etree.parse(t.archive.file("xl/tables/table2.xml").asText()).getroot(),
