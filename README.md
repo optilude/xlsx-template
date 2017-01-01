@@ -110,6 +110,11 @@ is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
 if you didn't know). You can send this back to a client, store it to disk,
 attach it to an email or do whatever you want with it.
 
+You can pass options to `generate()` to set a different return type. use
+`{type: 'uint8array'}` to generate a `Uint8Array`, `arraybuffer`, `blob`,
+`nodebuffer` to generate an `ArrayBuffer`, `Blob` or `nodebuffer`, or
+`base64` to generate a base64-encoded string.
+
 ## Caveats
 
 * The spreadsheet must be saved in `.xlsx` format. `.xls`, `.xlsb` or `.xlsm`
@@ -143,6 +148,7 @@ attach it to an email or do whatever you want with it.
 
 ### Version 0.0.6
 
+* You can now pass `options` to `generate()`, which are passed to JSZip
 * Fix corruption of sheet when writing dates
 * Fix corruption of sheet when calculating calcChain
 
