@@ -72,6 +72,7 @@ above.
 
 To make this magic happen, you need some code like this:
 
+```
     var XlsxTemplate = require('xlsx-template');
 
     // Load an XLSX file into memory
@@ -102,6 +103,7 @@ To make this magic happen, you need some code like this:
         // ...
 
     });
+```
 
 At this stage, `data` is a string blob representing the compressed archive that
 is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
@@ -139,11 +141,20 @@ attach it to an email or do whatever you want with it.
 
 ## Changelog
 
+### Version 0.0.6
+
+* Fix corruption of sheet when writing dates
+* Fix corruption of sheet when calculating calcChain
+
+### Version 0.0.5
+
+* Mysterious
+
 ### Version 0.0.4
 
 Merged pending pull requests
 
-* Deletion of the sheets. 
+* Deletion of the sheets.
 
 ### Version 0.0.3
 

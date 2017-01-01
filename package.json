@@ -1,6 +1,6 @@
 {
   "name": "xlsx-template",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Generate .xlsx (Excel) files from templates built in Excel",
   "main": "./lib/index",
   "author": {
@@ -8,7 +8,8 @@
   },
   "contributors": [
     {
-      "name": "Martin Aspeli"
+      "name": "Martin Aspeli",
+      "email": "optilude@gmail.com"
     },
     {
       "name": "Andrey Kurdyumov",
@@ -17,15 +18,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/kant2002/xlsx-template.git"
+    "url": "http://github.com/optilude/xlsx-template.git"
   },
   "bugs": {
-    "url": "http://github.com/kant2002/xlsx-template/issues"
+    "url": "http://github.com/optilude/xlsx-template/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/kant2002/xlsx-template/raw/master/LICENSE"
+      "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
     }
   ],
   "dependencies": {

@@ -13,7 +13,7 @@ buster.spec.expose();
 buster.testRunner.timeout = 500;
 
 describe("CRUD operations", function() {
-    
+
     before(function(done) {
         done();
     });
@@ -21,7 +21,7 @@ describe("CRUD operations", function() {
     describe('XlsxTemplate', function() {
 
         it("can load data", function(done) {
-            
+
             fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
                 buster.expect(err).toBeNull();
 
@@ -39,16 +39,16 @@ describe("CRUD operations", function() {
         });
 
         it("can write changed shared strings", function(done) {
-            
+
             fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
                 buster.expect(err).toBeNull();
 
                 var t = new XlsxTemplate(data);
-                
+
                 t.replaceString("Plan table", "The plan");
 
                 t.writeSharedStrings();
-                
+
                 var text = t.archive.file("xl/sharedStrings.xml").asText();
                 buster.expect(text).not.toMatch("<si><t>Plan table</t></si>");
                 buster.expect(text).toMatch("<si><t>The plan</t></si>");
@@ -59,12 +59,12 @@ describe("CRUD operations", function() {
         });
 
         it("can substitute values and generate a file", function(done) {
-            
+
             fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
                 buster.expect(err).toBeNull();
 
                 var t = new XlsxTemplate(data);
-                
+
                 t.substitute(1, {
                     extractDate: new Date("2013-01-02"),
                     revision: 10,
@@ -101,14 +101,9 @@ describe("CRUD operations", function() {
                 ).toEqual("Extracted on 41276");
 
                 // revision placeholder - cell C4 changed from string to number
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
                 // dates placeholder - added cells
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
-
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
@@ -152,29 +147,20 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("Manager");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test1.xlsx', newData, 'binary');
 
                 done();
             });
@@ -224,14 +210,9 @@ describe("CRUD operations", function() {
                 ).toEqual("Extracted on 41276");
 
                 // revision placeholder - cell C4 changed from string to number
-                buster.expect(sheet1.find("./sheetData/row/c[@r='C4']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
 
                 // dates placeholder - added cells
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E6']").attrib.t).toEqual("d");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F6']").attrib.t).toEqual("d");
-
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
@@ -275,29 +256,20 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("Manager");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='E9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E9']/v").text).toEqual("4");
 
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F8']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='F9']").attrib.t).toEqual("n");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test2.xlsx', newData, 'binary');
 
                 done();
             });
@@ -310,7 +282,7 @@ describe("CRUD operations", function() {
                 buster.expect(err).toBeNull();
 
                 var t = new XlsxTemplate(data);
-                
+
                 t.substitute(1, {
                     emptyCols: [],
                     multiCols: ["one", "two"],
@@ -339,13 +311,13 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("two");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D5']/v").text).toEqual("102");
-                
+
                 // C6 should not have moved, and the old B6 should be replaced
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B6']/v").text).toEqual("10");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C6']/v").text).toEqual("103");
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test3.xlsx', newData, 'binary');
 
                 done();
             });
@@ -358,7 +330,7 @@ describe("CRUD operations", function() {
                 buster.expect(err).toBeNull();
 
                 var t = new XlsxTemplate(data);
-                
+
                 t.substitute("Tables", {
                     ages: [{name: "John", age: 10}, {name: "Bob", age: 2}],
                     scores: [{name: "John", score: 100}, {name: "Bob", score: 110}, {name: "Jim", score: 120}],
@@ -408,7 +380,7 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("John");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C7']/v").text).toEqual("10");
-                
+
                 buster.expect(
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='E7']/v").text, 10)
@@ -425,7 +397,7 @@ describe("CRUD operations", function() {
                     ].find("t").text
                 ).toEqual("Bob");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C8']/v").text).toEqual("2");
-                
+
                 buster.expect(
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='E8']/v").text, 10)
@@ -438,7 +410,7 @@ describe("CRUD operations", function() {
                 // Row 9 contains no values for the first table, and again no markers
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B9']")).toBeNull();
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C9']")).toBeNull();
-                
+
                 buster.expect(
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='E9']/v").text, 10)
@@ -473,7 +445,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D16']/v").text).toEqual("41276");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='E16']/v").text).toEqual("41277");
 
-                // Row 17 contains a name and no dates 
+                // Row 17 contains a name and no dates
                 buster.expect(
                     sharedStrings.findall("./si")[
                         parseInt(sheet1.find("./sheetData/row/c[@r='B17']/v").text, 10)
@@ -482,7 +454,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C17']")).toBeNull();
 
                 // XXX: For debugging only
-                // fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test4.xlsx', newData, 'binary');
 
                 done();
             });
@@ -495,7 +467,7 @@ describe("CRUD operations", function() {
                 buster.expect(err).toBeNull();
 
                 var t = new XlsxTemplate(data);
-                
+
                 t.substitute("Tables", {
                     ages: [
                         {name: "John", age: 10},
@@ -546,14 +518,14 @@ describe("CRUD operations", function() {
                 buster.expect(table3.find("./autoFilter").attrib.ref).toEqual("C14:D16"); // Grown and pushed down
 
                 // XXX: For debugging only
-                fs.writeFileSync('test.xlsx', newData, 'binary');
+                fs.writeFileSync('test5.xlsx', newData, 'binary');
 
                 done();
             });
 
         });
 
-    
+
 
 
     });
