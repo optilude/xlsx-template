@@ -299,7 +299,7 @@ describe("CRUD operations", function() {
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
                 // Dimensions should be set
-                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:D6");
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:E6");
 
                 // C4 should have moved left, and the old B4 should now be deleted
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("101");
@@ -354,7 +354,7 @@ describe("CRUD operations", function() {
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
                 // Dimensions should be updated
-                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:K17");
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:H17");
 
                 // Marker above table hasn't moved
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("101");
