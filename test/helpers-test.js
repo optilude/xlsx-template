@@ -493,7 +493,7 @@ describe("Helpers", function() {
 
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("10");
-            buster.expect(col.attrib.hasOwnProperty("t")).toBe(false);
+            buster.expect(col.attrib.t).toEqual("n");
             buster.expect(val.text).toEqual("10");
             buster.expect(t.sharedStrings).toEqual(["${foo}"]);
         });
@@ -577,7 +577,7 @@ describe("Helpers", function() {
 
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual(41275);
-            buster.expect(col.attrib.hasOwnProperty("t")).toBe(false);
+            buster.expect(col.attrib.t).toEqual("d");
             buster.expect(val.text).toEqual(41275);
             buster.expect(t.sharedStrings).toEqual(["${foo}"]);
         });
