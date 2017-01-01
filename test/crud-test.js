@@ -91,6 +91,9 @@ describe("CRUD operations", function() {
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
+                // Dimensions should be updated
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
+
                 // extract date placeholder - interpolated into string referenced at B4
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
                 buster.expect(
@@ -199,6 +202,9 @@ describe("CRUD operations", function() {
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
+                // Dimensions should be updated
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
+
                 // extract date placeholder - interpolated into string referenced at B4
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
                 buster.expect(
@@ -292,6 +298,9 @@ describe("CRUD operations", function() {
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
+                // Dimensions should be set
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:D6");
+
                 // C4 should have moved left, and the old B4 should now be deleted
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("101");
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C4']")).toBeNull();
@@ -343,6 +352,9 @@ describe("CRUD operations", function() {
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                // Dimensions should be updated
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:K17");
 
                 // Marker above table hasn't moved
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']/v").text).toEqual("101");
@@ -484,6 +496,9 @@ describe("CRUD operations", function() {
                     table1        = etree.parse(t.archive.file("xl/tables/table1.xml").asText()).getroot(),
                     table2        = etree.parse(t.archive.file("xl/tables/table2.xml").asText()).getroot(),
                     table3        = etree.parse(t.archive.file("xl/tables/table3.xml").asText()).getroot();
+
+                // Dimensions should be updated
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:L29");
 
                 // Named ranges have moved
                 buster.expect(workbook.find("./definedNames/definedName[@name='BelowTable']").text).toEqual("Tables!$B$18");
