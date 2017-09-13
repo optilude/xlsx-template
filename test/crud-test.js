@@ -559,6 +559,32 @@ describe("CRUD operations", function() {
         });
 
 
+        it("Correctly recalculate formula", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-formula.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                t.substitute(1, {
+                    data: [
+                        { name: 'A', quantity: 10, unitCost: 3 },
+                        { name: 'B', quantity: 15, unitCost: 5 },
+                    ]
+                });
+
+                var newData = t.generate();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                buster.expect(sheet1).toBeDefined();
+
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D2']/f").text).toEqual("Table3[Qty]*Table3[UnitCost]");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='D2']/v")).toBeNull();
+                
+                // This part is not working
+                // buster.expect(sheet1.find("./sheetData/row/c[@r='D3']/f").text).toEqual("Table3[Qty]*Table3[UnitCost]");
+                
+                // fs.writeFileSync('test6.xlsx', newData, 'binary');
+                done();
+            });        
+        });
     });
 
 });
