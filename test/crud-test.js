@@ -534,7 +534,29 @@ describe("CRUD operations", function() {
 
         });
 
+        it("Correctly parse when formula in the file", function(done) {
 
+            fs.readFile(path.join(__dirname, 'templates', 'template.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                t.substitute(1, {
+                    people: [
+                        {
+                            name: "John Smith",
+                            age: 55,
+                        },
+                        {
+                            name: "John Doe",
+                            age: 35,
+                        }
+                    ]
+                });
+
+                done();
+            });
+
+        });
 
 
     });
