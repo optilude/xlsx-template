@@ -558,7 +558,6 @@ describe("CRUD operations", function() {
 
         });
 
-
         it("Correctly recalculate formula", function(done) {
             fs.readFile(path.join(__dirname, 'templates', 'test-formula.xlsx'), function(err, data) {
                 buster.expect(err).toBeNull();
@@ -582,6 +581,27 @@ describe("CRUD operations", function() {
                 // buster.expect(sheet1.find("./sheetData/row/c[@r='D3']/f").text).toEqual("Table3[Qty]*Table3[UnitCost]");
                 
                 // fs.writeFileSync('test6.xlsx', newData, 'binary');
+                done();
+            });        
+        });
+        
+        it("File without dimensions works", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'gdocs.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                t.substitute(1, {
+                    planData: [
+                        { name: 'A', role: 'Role 1' },
+                        { name: 'B', role: 'Role 2' },
+                    ]
+                });
+
+                var newData = t.generate();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                buster.expect(sheet1).toBeDefined();
+
+                // fs.writeFileSync('test7.xlsx', newData, 'binary');
                 done();
             });        
         });
