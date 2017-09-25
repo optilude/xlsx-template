@@ -35,6 +35,21 @@ might result in (depending on date formatting in the second cell):
 Here, `extractDate` may be a date and the second cell may be formatted as a
 number.
 
+Inside scalars there possibility to use array indexers. 
+For example: 
+
+Given data
+
+    var template = { extractDates: ["Jun-01-2113", "Jun-01-2013" ]}
+
+which will be applied to following template
+
+    | Extracted on: | ${extractDates[0]} |
+
+will results in the 
+
+    | Extracted on: | Jun-01-2113 |
+
 ### Columns
 
 You can use arrays as placeholder values to indicate that the placeholder cell
