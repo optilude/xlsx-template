@@ -12,6 +12,12 @@ var buster       = require('buster'),
 buster.spec.expose();
 buster.testRunner.timeout = 500;
 
+function getSharedString(sharedStrings, sheet1, index) {
+    return sharedStrings.findall("./si")[
+        parseInt(sheet1.find("./sheetData/row/c[@r='" + index + "']/v").text, 10)
+    ].find("t").text;
+}
+
 describe("CRUD operations", function() {
 
     before(function(done) {
@@ -602,6 +608,32 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1).toBeDefined();
 
                 // fs.writeFileSync('test7.xlsx', newData, 'binary');
+                done();
+            });        
+        });
+        
+        it("Array indexing", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-array.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                t.substitute(1, {
+                    data: [
+                        "First row",
+                        { name: 'B' },
+                    ]
+                });
+
+                var newData = t.generate();
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                buster.expect(sheet1).toBeDefined();
+                buster.expect(sheet1.find("./sheetData/row/c[@r='A2']/v")).not.toBeNull();
+                buster.expect(getSharedString(sharedStrings, sheet1, "A2")).toEqual("First row");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='B2']/v")).not.toBeNull();
+                buster.expect(getSharedString(sharedStrings, sheet1, "B2")).toEqual("B");
+                
+                // fs.writeFileSync('test8.xlsx', newData, 'binary');
                 done();
             });        
         });
