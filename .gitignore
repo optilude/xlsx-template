@@ -4,7 +4,6 @@ node_modules
 *.log
 extract/
 checkouts
-*.xlsx
 .idea/.name
 .idea/encodings.xml
 .idea/misc.xml
