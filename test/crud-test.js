@@ -637,6 +637,30 @@ describe("CRUD operations", function() {
                 done();
             });        
         });
+        
+        it("Arrays with single element", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-nested-arrays.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                var data = { "sales": [ { "payments": [123], } ] };
+                t.substitute(1, data);
+
+                var newData = t.generate();
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                buster.expect(sheet1).toBeDefined();
+                var a1 = sheet1.find("./sheetData/row/c[@r='A1']/v");
+                var firstElement = sheet1.findall("./sheetData/row/c[@r='A1']");
+                buster.expect(a1).not.toBeNull();
+                buster.expect(a1.text).toEqual("123");
+                buster.expect(firstElement).not.toBeNull();
+                buster.expect(firstElement.length).toEqual(1);
+                
+                fs.writeFileSync('test/output/test-nested-arrays.xlsx', newData, 'binary');
+                done();
+            });        
+        });
     });
 
 });
