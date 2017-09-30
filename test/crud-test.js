@@ -168,7 +168,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
 
                 // XXX: For debugging only
-                fs.writeFileSync('test1.xlsx', newData, 'binary');
+                fs.writeFileSync('test/output/test1.xlsx', newData, 'binary');
 
                 done();
             });
@@ -279,7 +279,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
 
                 // XXX: For debugging only
-                fs.writeFileSync('test2.xlsx', newData, 'binary');
+                fs.writeFileSync('test/output/test2.xlsx', newData, 'binary');
 
                 done();
             });
@@ -329,7 +329,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C6']/v").text).toEqual("103");
 
                 // XXX: For debugging only
-                fs.writeFileSync('test3.xlsx', newData, 'binary');
+                fs.writeFileSync('test/output/test3.xlsx', newData, 'binary');
 
                 done();
             });
@@ -468,7 +468,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='C17']")).toBeNull();
 
                 // XXX: For debugging only
-                fs.writeFileSync('test4.xlsx', newData, 'binary');
+                fs.writeFileSync('test/output/test4.xlsx', newData, 'binary');
 
                 done();
             });
@@ -533,7 +533,7 @@ describe("CRUD operations", function() {
                 buster.expect(table3.find("./autoFilter").attrib.ref).toEqual("C14:D16"); // Grown and pushed down
 
                 // XXX: For debugging only
-                fs.writeFileSync('test5.xlsx', newData, 'binary');
+                fs.writeFileSync('test/output/test5.xlsx', newData, 'binary');
 
                 done();
             });
@@ -586,7 +586,7 @@ describe("CRUD operations", function() {
                 // This part is not working
                 // buster.expect(sheet1.find("./sheetData/row/c[@r='D3']/f").text).toEqual("Table3[Qty]*Table3[UnitCost]");
                 
-                // fs.writeFileSync('test6.xlsx', newData, 'binary');
+                // fs.writeFileSync('test/output/test6.xlsx', newData, 'binary');
                 done();
             });        
         });
@@ -607,7 +607,7 @@ describe("CRUD operations", function() {
                 var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
                 buster.expect(sheet1).toBeDefined();
 
-                // fs.writeFileSync('test7.xlsx', newData, 'binary');
+                // fs.writeFileSync('test/output/test7.xlsx', newData, 'binary');
                 done();
             });        
         });
@@ -633,7 +633,7 @@ describe("CRUD operations", function() {
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B2']/v")).not.toBeNull();
                 buster.expect(getSharedString(sharedStrings, sheet1, "B2")).toEqual("B");
                 
-                // fs.writeFileSync('test8.xlsx', newData, 'binary');
+                // fs.writeFileSync('test/output/test8.xlsx', newData, 'binary');
                 done();
             });        
         });
