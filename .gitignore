@@ -1,9 +1,9 @@
 .DS_Store
+*.swp
 node_modules
 *.log
+extract/
 checkouts
-public-optimized
-test.sql
 .idea/.name
 .idea/encodings.xml
 .idea/misc.xml

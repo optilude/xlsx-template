@@ -1,5 +1,6 @@
 /*jshint globalstrict:true, devel:true */
-/*global require, module, exports, process, __dirname, describe, before, after, it */
+/*eslint no-var:0 */
+/*global require, describe, before, it */
 "use strict";
 
 var buster       = require('buster'),
@@ -9,7 +10,7 @@ buster.spec.expose();
 buster.testRunner.timeout = 500;
 
 describe("Helpers", function() {
-    
+
     before(function(done) {
         done();
     });
@@ -30,7 +31,7 @@ describe("Helpers", function() {
 
         it("adds new string if old string not found", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.replaceString("foo", "bar")).toEqual(0);
             buster.expect(t.sharedStrings).toEqual(["bar"]);
             buster.expect(t.sharedStringsLookup).toEqual({"bar": 0});
@@ -38,7 +39,7 @@ describe("Helpers", function() {
 
         it("replaces strings if found", function() {
             var t = new XlsxTemplate();
-            
+
             t.addSharedString("foo");
             t.addSharedString("baz");
 
@@ -53,7 +54,7 @@ describe("Helpers", function() {
 
         it("can extract simple placeholders", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("${foo}")).toEqual([{
                 full: true,
                 key: undefined,
@@ -65,7 +66,7 @@ describe("Helpers", function() {
 
         it("can extract simple placeholders inside strings", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("A string ${foo} bar")).toEqual([{
                 full: false,
                 key: undefined,
@@ -77,7 +78,7 @@ describe("Helpers", function() {
 
         it("can extract multiple placeholders from one string", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("${foo} ${bar}")).toEqual([{
                 full: false,
                 key: undefined,
@@ -95,7 +96,7 @@ describe("Helpers", function() {
 
         it("can extract placeholders with keys", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("${foo.bar}")).toEqual([{
                 full: true,
                 key: "bar",
@@ -107,7 +108,7 @@ describe("Helpers", function() {
 
         it("can extract placeholders with types", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("${table:foo}")).toEqual([{
                 full: true,
                 key: undefined,
@@ -119,7 +120,7 @@ describe("Helpers", function() {
 
         it("can extract placeholders with types and keys", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("${table:foo.bar}")).toEqual([{
                 full: true,
                 key: "bar",
@@ -131,7 +132,7 @@ describe("Helpers", function() {
 
         it("can handle strings with no placeholders", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.extractPlaceholders("A string")).toEqual([]);
         });
 
@@ -245,14 +246,14 @@ describe("Helpers", function() {
 
         it("increments single columns", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.nextCol("A1")).toEqual("B1");
             buster.expect(t.nextCol("B1")).toEqual("C1");
         });
 
         it("maintains row index", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.nextCol("A99")).toEqual("B99");
             buster.expect(t.nextCol("B11231")).toEqual("C11231");
         });
@@ -263,7 +264,7 @@ describe("Helpers", function() {
             buster.expect(t.nextCol("a1")).toEqual("B1");
             buster.expect(t.nextCol("b1")).toEqual("C1");
         });
-        
+
         it("increments the last letter of double columns", function() {
             var t = new XlsxTemplate();
 
@@ -289,7 +290,7 @@ describe("Helpers", function() {
 
         it("increments single digit rows", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.nextRow("A1")).toEqual("A2");
             buster.expect(t.nextRow("B1")).toEqual("B2");
             buster.expect(t.nextRow("AZ2")).toEqual("AZ3");
@@ -301,7 +302,7 @@ describe("Helpers", function() {
             buster.expect(t.nextRow("a1")).toEqual("A2");
             buster.expect(t.nextRow("b1")).toEqual("B2");
         });
-        
+
         it("increments multi digit rows", function() {
             var t = new XlsxTemplate();
 
@@ -316,7 +317,7 @@ describe("Helpers", function() {
 
         it("can return single letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.charToNum("A")).toEqual(1);
             buster.expect(t.charToNum("B")).toEqual(2);
             buster.expect(t.charToNum("Z")).toEqual(26);
@@ -324,7 +325,7 @@ describe("Helpers", function() {
 
         it("can return double letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.charToNum("AA")).toEqual(27);
             buster.expect(t.charToNum("AZ")).toEqual(52);
             buster.expect(t.charToNum("BZ")).toEqual(78);
@@ -332,7 +333,7 @@ describe("Helpers", function() {
 
         it("can return triple letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.charToNum("AAA")).toEqual(703);
             buster.expect(t.charToNum("AAZ")).toEqual(728);
             buster.expect(t.charToNum("ADI")).toEqual(789);
@@ -344,7 +345,7 @@ describe("Helpers", function() {
 
         it("can convert single letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.numToChar(1)).toEqual("A");
             buster.expect(t.numToChar(2)).toEqual("B");
             buster.expect(t.numToChar(26)).toEqual("Z");
@@ -352,7 +353,7 @@ describe("Helpers", function() {
 
         it("can convert double letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.numToChar(27)).toEqual("AA");
             buster.expect(t.numToChar(52)).toEqual("AZ");
             buster.expect(t.numToChar(78)).toEqual("BZ");
@@ -360,7 +361,7 @@ describe("Helpers", function() {
 
         it("can convert triple letter numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.numToChar(703)).toEqual("AAA");
             buster.expect(t.numToChar(728)).toEqual("AAZ");
             buster.expect(t.numToChar(789)).toEqual("ADI");
@@ -414,27 +415,27 @@ describe("Helpers", function() {
 
         it("can stringify dates", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.stringify(new Date("2013-01-01"))).toEqual(41275);
         });
 
         it("can stringify numbers", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.stringify(12)).toEqual("12");
             buster.expect(t.stringify(12.3)).toEqual("12.3");
         });
 
         it("can stringify booleans", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.stringify(true)).toEqual("1");
             buster.expect(t.stringify(false)).toEqual("0");
         });
 
         it("can stringify strings", function() {
             var t = new XlsxTemplate();
-            
+
             buster.expect(t.stringify("foo")).toEqual("foo");
         });
 
@@ -493,7 +494,7 @@ describe("Helpers", function() {
 
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("10");
-            buster.expect(col.attrib.t).toEqual("n");
+            buster.expect(col.attrib.t).not.toBeDefined();
             buster.expect(val.text).toEqual("10");
             buster.expect(t.sharedStrings).toEqual(["${foo}"]);
         });
@@ -577,7 +578,7 @@ describe("Helpers", function() {
 
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual(41275);
-            buster.expect(col.attrib.t).toEqual("d");
+            buster.expect(col.attrib.t).not.toBeDefined();
             buster.expect(val.text).toEqual(41275);
             buster.expect(t.sharedStrings).toEqual(["${foo}"]);
         });
@@ -665,7 +666,7 @@ describe("Helpers", function() {
             buster.expect(val.text).toEqual("0");
             buster.expect(t.sharedStrings).toEqual(["foo: 10"]);
         });
-        
+
 
     });
 

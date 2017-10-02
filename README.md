@@ -35,6 +35,21 @@ might result in (depending on date formatting in the second cell):
 Here, `extractDate` may be a date and the second cell may be formatted as a
 number.
 
+Inside scalars there possibility to use array indexers. 
+For example: 
+
+Given data
+
+    var template = { extractDates: ["Jun-01-2113", "Jun-01-2013" ]}
+
+which will be applied to following template
+
+    | Extracted on: | ${extractDates[0]} |
+
+will results in the 
+
+    | Extracted on: | Jun-01-2113 |
+
 ### Columns
 
 You can use arrays as placeholder values to indicate that the placeholder cell
@@ -72,6 +87,7 @@ above.
 
 To make this magic happen, you need some code like this:
 
+```
     var XlsxTemplate = require('xlsx-template');
 
     // Load an XLSX file into memory
@@ -102,11 +118,17 @@ To make this magic happen, you need some code like this:
         // ...
 
     });
+```
 
 At this stage, `data` is a string blob representing the compressed archive that
 is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
 if you didn't know). You can send this back to a client, store it to disk,
 attach it to an email or do whatever you want with it.
+
+You can pass options to `generate()` to set a different return type. use
+`{type: 'uint8array'}` to generate a `Uint8Array`, `arraybuffer`, `blob`,
+`nodebuffer` to generate an `ArrayBuffer`, `Blob` or `nodebuffer`, or
+`base64` to generate a base64-encoded string.
 
 ## Caveats
 
@@ -138,6 +160,27 @@ attach it to an email or do whatever you want with it.
   other such things.
 
 ## Changelog
+
+### Version 0.0.7
+
+* Fix bug with calculating <dimensions /> when adding columns
+
+### Version 0.0.6
+
+* You can now pass `options` to `generate()`, which are passed to JSZip
+* Fix setting of sheet <dimensions /> when growing the sheet
+* Fix corruption of sheet when writing dates
+* Fix corruption of sheet when calculating calcChain
+
+### Version 0.0.5
+
+* Mysterious
+
+### Version 0.0.4
+
+Merged pending pull requests
+
+* Deletion of the sheets.
 
 ### Version 0.0.3
 
