@@ -161,6 +161,10 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 0.2.0
+
+* Add ability copy and delete sheets.
+
 ### Version 0.0.7
 
 * Fix bug with calculating <dimensions /> when adding columns
