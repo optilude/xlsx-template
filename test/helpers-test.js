@@ -467,8 +467,39 @@ describe("Helpers", function() {
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("bar");
             buster.expect(col.attrib.t).toEqual("s");
-            buster.expect(String(val.text)).toEqual("0");
-            buster.expect(t.sharedStrings).toEqual(["bar"]);
+            buster.expect(String(val.text)).toEqual("1");
+            buster.expect(t.sharedStrings).toEqual(["${foo}", "bar"]);
+        });
+        
+        it("Substitution of shared simple string values", function() {
+            var t = new XlsxTemplate(),
+                string = "${foo}",
+                substitution = "bar",
+                placeholder = {
+                    full: true,
+                    key: undefined,
+                    name: "foo",
+                    placeholder: "${foo}",
+                    type: "normal"
+                },
+                val = {
+                    text: "0"
+                },
+                col = {
+                    attrib: {t: "s"},
+                    find: function() {
+                        return val;
+                    }
+                };
+
+            t.addSharedString(string);
+            buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("bar");
+            
+            // Explicitly share substritution strings if they could be reused.
+            buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("bar");
+            buster.expect(col.attrib.t).toEqual("s");
+            buster.expect(String(val.text)).toEqual("1");
+            buster.expect(t.sharedStrings).toEqual(["${foo}", "bar"]);
         });
 
         it("can substitute simple numeric values", function() {

@@ -662,5 +662,37 @@ describe("CRUD operations", function() {
             });        
         });
     });
+    
+    describe("Multiple sheets", function() {
+        it("Each sheet should take each name", function (done) {
+            fs.readFile(path.join(__dirname, 'templates', 'multple-sheets-arrays.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
 
+                // Create a template
+                var t = new XlsxTemplate(data);
+                for (let sheetNumber = 1; sheetNumber <= 2; sheetNumber++) {
+                    // Set up some placeholder values matching the placeholders in the template
+                    var values = {
+                        page: 'page: ' + sheetNumber
+                    };
+            
+                    // Perform substitution
+                    t.substitute(sheetNumber, values);
+                }
+            
+                // Get binary data
+                var newData = t.generate();
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sheet2        = etree.parse(t.archive.file("xl/worksheets/sheet2.xml").asText()).getroot();
+                buster.expect(sheet1).toBeDefined();
+                buster.expect(sheet2).toBeDefined();
+                buster.expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("page: 1");
+                buster.expect(getSharedString(sharedStrings, sheet2, "A1")).toEqual("page: 2");
+                
+                fs.writeFileSync('test/output/multple-sheets-arrays.xlsx', newData, 'binary');
+                done();
+            });
+        });
+    });
 });
