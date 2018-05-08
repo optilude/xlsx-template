@@ -367,14 +367,12 @@ describe("CRUD operations", function() {
                 });
 
                 var newData = t.generate();
-
-				fs.writeFileSync('test/output/test7.xlsx', newData, 'binary');
 				
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
 
                 // Dimensions should be updated
-                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F7");
 
                 // extract date placeholder - interpolated into string referenced at B4
                 buster.expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
@@ -409,8 +407,8 @@ describe("CRUD operations", function() {
 
 
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
-                buster.expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
+                buster.expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
 
                 // XXX: For debugging only
                 fs.writeFileSync('test/output/test7.xlsx', newData, 'binary');
@@ -775,14 +773,10 @@ describe("CRUD operations", function() {
         it("Arrays with single element", function(done) {
             fs.readFile(path.join(__dirname, 'templates', 'test-nested-arrays.xlsx'), function(err, data) {
                 buster.expect(err).toBeNull();
-
-				console.log("array with single element");
 				
                 var t = new XlsxTemplate(data);
                 var data = { "sales": [ { "payments": [123] } ] };
                 t.substitute(1, data);
-				
-				console.log("array with single element DONE");
 
                 var newData = t.generate();
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
