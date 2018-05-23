@@ -793,6 +793,53 @@ describe("CRUD operations", function() {
                 done();
             });        
         });
+
+        it("will correctly fill cells on all rows where arrays are used to dynamically render multiple cells", function (done) {
+            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), function (err, data) {
+                buster.expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute(1, {
+                    demo: { extractDate: new Date("2013-01-02") },
+                    revision: 10,
+                    dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
+                    planData: [{
+                            name: "John Smith",
+                            role: { name: "Developer" },
+                            days: [1, 2, 3]
+                        },
+                        {
+                            name: "James Smith",
+                            role: { name: "Analyst" },
+                            days: [1, 2, 3, 4, 5]
+                        },
+                        {
+                            name: "Jim Smith",
+                            role: { name: "Manager" },
+                            days: [1, 2, 3, 4, 5, 6, 7]
+                        }
+                    ]
+                });
+
+                var newData = t.generate();
+
+                // var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                var sheet1 = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                // Dimensions should be updated
+                buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
+
+                // Check length of all rows
+                buster.expect(sheet1.find("./sheetData/row[@r='7']")._children.length).toEqual(2 + 3);
+                buster.expect(sheet1.find("./sheetData/row[@r='8']")._children.length).toEqual(2 + 5);
+                buster.expect(sheet1.find("./sheetData/row[@r='9']")._children.length).toEqual(2 + 7);
+
+                fs.writeFileSync('test/output/test8.xlsx', newData, 'binary');
+
+                done();
+            });
+        });
     });
     
     describe("Multiple sheets", function() {
