@@ -852,7 +852,8 @@ describe("CRUD operations", function() {
                 for (let sheetNumber = 1; sheetNumber <= 2; sheetNumber++) {
                     // Set up some placeholder values matching the placeholders in the template
                     var values = {
-                        page: 'page: ' + sheetNumber
+                        page: 'page: ' + sheetNumber,
+                        sheetNumber
                     };
             
                     // Perform substitution
@@ -868,6 +869,8 @@ describe("CRUD operations", function() {
                 buster.expect(sheet2).toBeDefined();
                 buster.expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("page: 1");
                 buster.expect(getSharedString(sharedStrings, sheet2, "A1")).toEqual("page: 2");
+                buster.expect(getSharedString(sharedStrings, sheet1, "A2")).toEqual("Page 1");
+                buster.expect(getSharedString(sharedStrings, sheet2, "A2")).toEqual("Page 2");
                 
                 fs.writeFileSync('test/output/multple-sheets-arrays.xlsx', newData, 'binary');
                 done();

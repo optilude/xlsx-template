@@ -638,8 +638,8 @@ describe("Helpers", function() {
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: bar");
             buster.expect(col.attrib.t).toEqual("s");
-            buster.expect(val.text).toEqual("0");
-            buster.expect(t.sharedStrings).toEqual(["foo: bar"]);
+            buster.expect(val.text).toEqual("1");
+            buster.expect(t.sharedStrings).toEqual(["foo: ${foo}", "foo: bar"]);
         });
 
         it("can substitute parts of strings with booleans", function() {
@@ -666,8 +666,8 @@ describe("Helpers", function() {
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: 0");
             buster.expect(col.attrib.t).toEqual("s");
-            buster.expect(val.text).toEqual("0");
-            buster.expect(t.sharedStrings).toEqual(["foo: 0"]);
+            buster.expect(val.text).toEqual("1");
+            buster.expect(t.sharedStrings).toEqual(["foo: ${foo}", "foo: 0"]);
         });
 
         it("can substitute parts of strings with numbers", function() {
@@ -694,8 +694,8 @@ describe("Helpers", function() {
             t.addSharedString(string);
             buster.expect(t.substituteScalar(col, string, placeholder, substitution)).toEqual("foo: 10");
             buster.expect(col.attrib.t).toEqual("s");
-            buster.expect(val.text).toEqual("0");
-            buster.expect(t.sharedStrings).toEqual(["foo: 10"]);
+            buster.expect(val.text).toEqual("1");
+            buster.expect(t.sharedStrings).toEqual(["foo: ${foo}", "foo: 10"]);
         });
 
 
