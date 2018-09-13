@@ -607,6 +607,37 @@ describe("CRUD operations", function() {
 
         });
 
+        it("replaces hyperlinks in sheet", function(done){
+          fs.readFile(path.join(__dirname, 'templates', 'test-hyperlinks.xlsx'), function(err, data) {
+            buster.expect(err).toBeNull();
+
+            var t = new XlsxTemplate(data);
+
+            t.substitute(1, {
+              email: "john@bob.com",
+              subject: "hello",
+              url: "http://www.google.com",
+              domain: "google"
+            });
+
+            var newData = t.generate();
+
+            var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+              sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
+              rels          = etree.parse(t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").asText()).getroot()
+            ;
+
+            //buster.expect(sheet1.find("./hyperlinks/hyperlink/c[@r='C16']/v").text).toEqual("41275");
+            buster.expect(rels.find("./Relationship[@Id='rId2']").attrib.Target).toEqual("http://www.google.com");
+            buster.expect(rels.find("./Relationship[@Id='rId1']").attrib.Target).toEqual("mailto:john@bob.com?subject=Hello%20hello");
+
+            // XXX: For debugging only
+            fs.writeFileSync('test/output/test9.xlsx', newData, 'binary');
+
+            done();
+          });
+        });
+
         it("moves named tables, named cells and merged cells", function(done) {
 
             fs.readFile(path.join(__dirname, 'templates', 'test-named-tables.xlsx'), function(err, data) {
