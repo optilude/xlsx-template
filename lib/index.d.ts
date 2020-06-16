@@ -5,7 +5,7 @@ export default class Workbook
     public copySheet(sheetName : string, copyName : string) : this;
     public loadTemplate(data : Buffer) : void;
     public substitute(sheetName : string | number, substitutions : Object) : void;
-    public generate(options? : GenerateOptions) : Buffer | Uint8Array | Blob | string | ArrayBuffer;
+    public generate<T extends Buffer | Uint8Array | Blob | string | ArrayBuffer>(options? : GenerateOptions) : T;
 
     // need typing properly
     protected _rebuild() : void;
