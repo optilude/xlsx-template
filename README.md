@@ -91,10 +91,11 @@ To make this magic happen, you need some code like this:
     var XlsxTemplate = require('xlsx-template');
 
     // Load an XLSX file into memory
-    fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), function(err, data) {
+    fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), async function(err, data) {
 
         // Create a template
-        var template = new XlsxTemplate(data);
+        var template = new XlsxTemplate();
+        await template.loadTemplate(data);
 
         // Replacements take place on first sheet
         var sheetNumber = 1;
@@ -110,10 +111,10 @@ To make this magic happen, you need some code like this:
             };
 
         // Perform substitution
-        template.substitute(sheetNumber, values);
+        await template.substitute(sheetNumber, values);
 
         // Get binary data
-        var data = template.generate();
+        var data = await template.generate();
 
         // ...
 

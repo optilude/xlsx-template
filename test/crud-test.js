@@ -28,10 +28,11 @@ describe("CRUD operations", function() {
 
         it("can load data", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
                 buster.expect(t.sharedStrings).toEqual([
                     "Name", "Role", "Plan table", "${table:planData.name}",
                     "${table:planData.role}", "${table:planData.days}",
@@ -46,16 +47,17 @@ describe("CRUD operations", function() {
 
         it("can write changed shared strings", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
                 t.replaceString("Plan table", "The plan");
 
-                t.writeSharedStrings();
+                await t.writeSharedStrings();
 
-                var text = t.archive.file("xl/sharedStrings.xml").asText();
+                var text = await t.archive.file("xl/sharedStrings.xml").async("string");
                 buster.expect(text).not.toMatch("<si><t>Plan table</t></si>");
                 buster.expect(text).toMatch("<si><t>The plan</t></si>");
 
@@ -66,12 +68,13 @@ describe("CRUD operations", function() {
 
         it("can substitute values and generate a file", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't1.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     extractDate: new Date("2013-01-02"),
                     revision: 10,
                     dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
@@ -92,10 +95,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
@@ -177,12 +180,13 @@ describe("CRUD operations", function() {
 
         it("can substitute values with descendant properties and generate a file", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     demo: { extractDate: new Date("2013-01-02") },
                     revision: 10,
                     dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
@@ -203,10 +207,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
@@ -288,12 +292,13 @@ describe("CRUD operations", function() {
 		
 		it("can substitute values when single item array contains an object and generate a file", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't3.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't3.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     demo: { extractDate: new Date("2013-01-02") },
                     revision: 10,
                     planData: [
@@ -304,10 +309,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:C7");
@@ -348,12 +353,13 @@ describe("CRUD operations", function() {
 		
 		it("can substitute values when single item array contains an object with sub array containing primatives and generate a file", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     demo: { extractDate: new Date("2013-01-02") },
                     revision: 10,
                     dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
@@ -366,10 +372,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 				
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F7");
@@ -420,21 +426,22 @@ describe("CRUD operations", function() {
 
         it("moves columns left or right when filling lists", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 'test-cols.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-cols.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     emptyCols: [],
                     multiCols: ["one", "two"],
                     singleCols: [10]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be set
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:E6");
@@ -470,12 +477,13 @@ describe("CRUD operations", function() {
 
         it("moves rows down when filling tables", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 'test-tables.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-tables.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute("Tables", {
+                await t.substitute("Tables", {
                     ages: [{name: "John", age: 10}, {name: "Bob", age: 2}],
                     scores: [{name: "John", score: 100}, {name: "Bob", score: 110}, {name: "Jim", score: 120}],
                     coords: [],
@@ -486,10 +494,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:H17");
@@ -608,23 +616,24 @@ describe("CRUD operations", function() {
         });
 
         it("replaces hyperlinks in sheet", function(done){
-          fs.readFile(path.join(__dirname, 'templates', 'test-hyperlinks.xlsx'), function(err, data) {
+          fs.readFile(path.join(__dirname, 'templates', 'test-hyperlinks.xlsx'), async function(err, data) {
             buster.expect(err).toBeNull();
 
-            var t = new XlsxTemplate(data);
+              var t = new XlsxTemplate();
+              await t.loadTemplate(data);
 
-            t.substitute(1, {
+            await t.substitute(1, {
               email: "john@bob.com",
               subject: "hello",
               url: "http://www.google.com",
               domain: "google"
             });
 
-            var newData = t.generate();
+            var newData = await t.generate();
 
-            var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-              sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
-              rels          = etree.parse(t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").asText()).getroot()
+            var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+              sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot(),
+              rels          = etree.parse(await t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").async("string")).getroot()
             ;
 
             //buster.expect(sheet1.find("./hyperlinks/hyperlink/c[@r='C16']/v").text).toEqual("41275");
@@ -640,12 +649,13 @@ describe("CRUD operations", function() {
 
         it("moves named tables, named cells and merged cells", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 'test-named-tables.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-named-tables.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute("Tables", {
+                await t.substitute("Tables", {
                     ages: [
                         {name: "John", age: 10},
                         {name: "Bill", age: 12}
@@ -658,13 +668,13 @@ describe("CRUD operations", function() {
                     progress: 100
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
-                    workbook      = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot(),
-                    table1        = etree.parse(t.archive.file("xl/tables/table1.xml").asText()).getroot(),
-                    table2        = etree.parse(t.archive.file("xl/tables/table2.xml").asText()).getroot(),
-                    table3        = etree.parse(t.archive.file("xl/tables/table3.xml").asText()).getroot();
+                var sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot(),
+                    workbook      = etree.parse(await t.archive.file("xl/workbook.xml").async("string")).getroot(),
+                    table1        = etree.parse(await t.archive.file("xl/tables/table1.xml").async("string")).getroot(),
+                    table2        = etree.parse(await t.archive.file("xl/tables/table2.xml").async("string")).getroot(),
+                    table3        = etree.parse(await t.archive.file("xl/tables/table3.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:L29");
@@ -705,11 +715,12 @@ describe("CRUD operations", function() {
 
         it("Correctly parse when formula in the file", function(done) {
 
-            fs.readFile(path.join(__dirname, 'templates', 'template.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'template.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
-                t.substitute(1, {
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
+                await t.substitute(1, {
                     people: [
                         {
                             name: "John Smith",
@@ -728,19 +739,20 @@ describe("CRUD operations", function() {
         });
 
         it("Correctly recalculate formula", function(done) {
-            fs.readFile(path.join(__dirname, 'templates', 'test-formula.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-formula.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
-                t.substitute(1, {
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
+                await t.substitute(1, {
                     data: [
                         { name: 'A', quantity: 10, unitCost: 3 },
                         { name: 'B', quantity: 15, unitCost: 5 },
                     ]
                 });
 
-                var newData = t.generate();
-                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var newData = await t.generate();
+                var sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
                 buster.expect(sheet1).toBeDefined();
 
                 buster.expect(sheet1.find("./sheetData/row/c[@r='D2']/f").text).toEqual("Table3[Qty]*Table3[UnitCost]");
@@ -755,19 +767,20 @@ describe("CRUD operations", function() {
         });
         
         it("File without dimensions works", function(done) {
-            fs.readFile(path.join(__dirname, 'templates', 'gdocs.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'gdocs.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
-                t.substitute(1, {
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
+                await t.substitute(1, {
                     planData: [
                         { name: 'A', role: 'Role 1' },
                         { name: 'B', role: 'Role 2' },
                     ]
                 });
 
-                var newData = t.generate();
-                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var newData = await t.generate();
+                var sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
                 buster.expect(sheet1).toBeDefined();
 
                 // fs.writeFileSync('test/output/test7.xlsx', newData, 'binary');
@@ -776,20 +789,21 @@ describe("CRUD operations", function() {
         });
         
         it("Array indexing", function(done) {
-            fs.readFile(path.join(__dirname, 'templates', 'test-array.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-array.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
-                t.substitute(1, {
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
+                await t.substitute(1, {
                     data: [
                         "First row",
                         { name: 'B' },
                     ]
                 });
 
-                var newData = t.generate();
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var newData = await t.generate();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
                 buster.expect(sheet1).toBeDefined();
                 buster.expect(sheet1.find("./sheetData/row/c[@r='A2']/v")).not.toBeNull();
                 buster.expect(getSharedString(sharedStrings, sheet1, "A2")).toEqual("First row");
@@ -802,16 +816,17 @@ describe("CRUD operations", function() {
         });
         
         it("Arrays with single element", function(done) {
-            fs.readFile(path.join(__dirname, 'templates', 'test-nested-arrays.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-nested-arrays.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
-				
-                var t = new XlsxTemplate(data);
-                var data = { "sales": [ { "payments": [123] } ] };
-                t.substitute(1, data);
 
-                var newData = t.generate();
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
+                var data = { "sales": [ { "payments": [123] } ] };
+                await t.substitute(1, data);
+
+                var newData = await t.generate();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                    sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
                 buster.expect(sheet1).toBeDefined();
                 var a1 = sheet1.find("./sheetData/row/c[@r='A1']/v");
                 var firstElement = sheet1.findall("./sheetData/row/c[@r='A1']");
@@ -826,12 +841,13 @@ describe("CRUD operations", function() {
         });
 
         it("will correctly fill cells on all rows where arrays are used to dynamically render multiple cells", function (done) {
-            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), function (err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 't2.xlsx'), async function (err, data) {
                 buster.expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
 
-                t.substitute(1, {
+                await t.substitute(1, {
                     demo: { extractDate: new Date("2013-01-02") },
                     revision: 10,
                     dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
@@ -853,10 +869,10 @@ describe("CRUD operations", function() {
                     ]
                 });
 
-                var newData = t.generate();
+                var newData = await t.generate();
 
-                // var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
-                var sheet1 = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                // var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot(),
+                var sheet1 = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
 
                 // Dimensions should be updated
                 buster.expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
@@ -875,11 +891,12 @@ describe("CRUD operations", function() {
     
     describe("Multiple sheets", function() {
         it("Each sheet should take each name", function (done) {
-            fs.readFile(path.join(__dirname, 'templates', 'multple-sheets-arrays.xlsx'), function(err, data) {
+            fs.readFile(path.join(__dirname, 'templates', 'multple-sheets-arrays.xlsx'), async function(err, data) {
                 buster.expect(err).toBeNull();
 
                 // Create a template
-                var t = new XlsxTemplate(data);
+                var t = new XlsxTemplate();
+                await t.loadTemplate(data);
                 for (let sheetNumber = 1; sheetNumber <= 2; sheetNumber++) {
                     // Set up some placeholder values matching the placeholders in the template
                     var values = {
@@ -888,14 +905,14 @@ describe("CRUD operations", function() {
                     };
             
                     // Perform substitution
-                    t.substitute(sheetNumber, values);
+                    await t.substitute(sheetNumber, values);
                 }
             
                 // Get binary data
-                var newData = t.generate();
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
-                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
-                var sheet2        = etree.parse(t.archive.file("xl/worksheets/sheet2.xml").asText()).getroot();
+                var newData = await t.generate();
+                var sharedStrings = etree.parse(await t.archive.file("xl/sharedStrings.xml").async("string")).getroot();
+                var sheet1        = etree.parse(await t.archive.file("xl/worksheets/sheet1.xml").async("string")).getroot();
+                var sheet2        = etree.parse(await t.archive.file("xl/worksheets/sheet2.xml").async("string")).getroot();
                 buster.expect(sheet1).toBeDefined();
                 buster.expect(sheet2).toBeDefined();
                 buster.expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("page: 1");
