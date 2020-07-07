@@ -1,5 +1,29 @@
+import * as etree from "elementtree";
+import * as JSZip from "jszip";
+
+export interface TemplatePlaceholder{
+    type: string;
+    string?: string;
+    full: boolean;
+    name: string;
+    key: string;
+    placeholder?: string
+}
+
+export interface NamedTable{
+    filename: string;
+    root: etree.Element;
+}
+
 export default class Workbook
 {
+
+    protected readonly sharedStrings: string[];
+    protected readonly workbook: ElementTree;
+    protected readonly archive: JSZip;
+    protected readonly workbookPath: string;
+    protected readonly calcChainPath?: string;
+
     constructor(data? : Buffer);
     public deleteSheet(sheetName : string) : this;
     public copySheet(sheetName : string, copyName : string) : this;
@@ -13,7 +37,7 @@ export default class Workbook
     protected addSharedString(s : any) : any; // I think s is a string? Not sure what its return "idx" is though, I think it's a number? Is "idx" short for "index"?
     protected stringIndex(s : any) : any; // returns idx
     protected replaceString(oldString : string, newString : string) : any; // returns idx
-    protected loadSheets(prefix : any, workbook : any, workbookRels : any) : any[];
+    protected loadSheets(prefix : any, workbook : ElementTree, workbookRels : any) : any[];
     protected loadSheet(sheet : any) : { filename : any, name : any, id : any, root : any }; // this could definitely return a "Sheet" interface/class
     protected loadTables(sheet : any, sheetFilename : any) : any;
     protected writeTables(tables : any) : void;
@@ -30,18 +54,18 @@ export default class Workbook
     protected isWithin(ref : any, startRef : any, endRef : any) : boolean;
     protected stringify(value : any) : string;
     protected insertCellValue(cell : any, substitution : any) : string;
-    protected substituteScalar(cell : any);
+    protected substituteScalar(cell : any, string: string, placeholder: TemplatePlaceholder, substitution: any);
     protected substituteArray(cells : any[], cell : any, substitution : any);
     protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any) : any;
-    protected cloneElement(element : any, deep : any) : any;
+    protected cloneElement(element : any, deep? : any) : any;
     protected replaceChildren(parent : any, children : any) : void;
     protected getCurrentRow(row : any, rowsInserted : any) : number;
     protected getCurrentCell(cell : any, currentRow : any, cellsInserted : any) : string;
     protected updateRowSpan(row : any, cellsInserted : any) : any;
     protected splitRange(range : string) : any;
     protected joinRange(range : any) : string
-    protected pushRight(workbook : any, sheet : any, currentCell : any, numCols : any) : any;
-    protected pushDown(workbook : any, sheets : any, tables : any, currentRow : any, numRows : any) : any;
+    protected pushRight(workbook : ElementTree, sheet : any, currentCell : any, numCols : any) : any;
+    protected pushDown(workbook : ElementTree, sheets : any, tables : any, currentRow : any, numRows : any) : any;
 }
 
 export interface GenerateOptions
