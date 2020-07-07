@@ -15,10 +15,11 @@
       "email": "optilude@gmail.com"
     },
     {
-      "name": "Andrey Kurdyumov",
+      "name": "Andrii Kurdiumov",
       "email": "kant2002@gmail.com"
     }
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "http://github.com/optilude/xlsx-template.git"
