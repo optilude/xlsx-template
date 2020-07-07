@@ -19,3 +19,4 @@ atlassian-ide-plugin.xml
 .idea/jsLibraryMappings.xml
 .idea/jsLinters/jshint.xml
 .idea/libraries/sass_stdlib.xml
+/.vs
