@@ -19,7 +19,7 @@ export default class Workbook
 {
 
     protected readonly sharedStrings: string[];
-    protected readonly workbook: ElementTree;
+    protected readonly workbook: etree.ElementTree;
     protected readonly archive: JSZip;
     protected readonly workbookPath: string;
     protected readonly calcChainPath?: string;
@@ -37,7 +37,7 @@ export default class Workbook
     protected addSharedString(s : any) : any; // I think s is a string? Not sure what its return "idx" is though, I think it's a number? Is "idx" short for "index"?
     protected stringIndex(s : any) : any; // returns idx
     protected replaceString(oldString : string, newString : string) : any; // returns idx
-    protected loadSheets(prefix : any, workbook : ElementTree, workbookRels : any) : any[];
+    protected loadSheets(prefix : any, workbook : etree.ElementTree, workbookRels : any) : any[];
     protected loadSheet(sheet : any) : { filename : any, name : any, id : any, root : any }; // this could definitely return a "Sheet" interface/class
     protected loadTables(sheet : any, sheetFilename : any) : any;
     protected writeTables(tables : any) : void;
@@ -64,8 +64,8 @@ export default class Workbook
     protected updateRowSpan(row : any, cellsInserted : any) : any;
     protected splitRange(range : string) : any;
     protected joinRange(range : any) : string
-    protected pushRight(workbook : ElementTree, sheet : any, currentCell : any, numCols : any) : any;
-    protected pushDown(workbook : ElementTree, sheets : any, tables : any, currentRow : any, numRows : any) : any;
+    protected pushRight(workbook : etree.ElementTree, sheet : any, currentCell : any, numCols : any) : any;
+    protected pushDown(workbook : etree.ElementTree, sheets : any, tables : any, currentRow : any, numRows : any) : any;
 }
 
 export interface GenerateOptions
