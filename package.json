@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "elementtree": "0.1.6",
-    "jszip": "^2.6.1"
+    "jszip": "^3.5.0"
   },
   "devDependencies": {
     "buster": "0.7.18",
