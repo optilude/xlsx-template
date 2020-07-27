@@ -24,7 +24,7 @@ export default class Workbook
     protected readonly workbookPath: string;
     protected readonly calcChainPath?: string;
 
-    constructor(data? : Buffer);
+    constructor(data? : Buffer, option? : object);
     public deleteSheet(sheetName : string) : this;
     public copySheet(sheetName : string, copyName : string) : this;
     public loadTemplate(data : Buffer) : void;
@@ -39,6 +39,10 @@ export default class Workbook
     protected replaceString(oldString : string, newString : string) : any; // returns idx
     protected loadSheets(prefix : any, workbook : etree.ElementTree, workbookRels : any) : any[];
     protected loadSheet(sheet : any) : { filename : any, name : any, id : any, root : any }; // this could definitely return a "Sheet" interface/class
+    protected loadSheetRels(sheetFilename : string) : { rels : any};
+    protected loadDrawing(sheet : any, sheetFilename : string, rels : any) : { drawing : any};
+    protected writeDrawing(drawing : any);
+    protected moveAllImages(drawing : any, fromRow : int, nbRow : int);
     protected loadTables(sheet : any, sheetFilename : any) : any;
     protected writeTables(tables : any) : void;
     protected substituteHyperlinks(sheetFilename : any, substitutions : any) : void;

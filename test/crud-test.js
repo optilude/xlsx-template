@@ -871,6 +871,142 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+	    
+	it("do not move Images", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-move-images.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+                var option = {
+                    moveImages : false
+                }
+                var t = new XlsxTemplate(data, option);
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
+                    ]
+                });
+                var newData = t.generate();
+                var drawingSheet = etree.parse(t.archive.file("xl/drawings/drawing1.xml").asText()).getroot();
+                buster.expect(drawingSheet).toBeDefined();
+                drawingSheet.findall('xdr:twoCellAnchor').forEach(element => {
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='3']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("3");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("9");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='6']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("2");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("9");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='8']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("1");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("11");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='10']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("10");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("24");
+                    }
+                });
+                fs.writeFileSync('test/output/test_donotmoveImages.xlsx', newData, 'binary');
+                done();
+            });
+        });
+
+        it("Move Images", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-move-images.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+                var option = {
+                    moveImages : true
+                }
+                var t = new XlsxTemplate(data, option);
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
+                    ]
+                });
+                var newData = t.generate();
+                var drawingSheet = etree.parse(t.archive.file("xl/drawings/drawing1.xml").asText()).getroot();
+                buster.expect(drawingSheet).toBeDefined();
+                drawingSheet.findall('xdr:twoCellAnchor').forEach(element => {
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='3']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("4");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='6']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("2");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("9");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='8']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("1");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("11");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='10']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("11");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("25");
+                    }
+                });
+                fs.writeFileSync('test/output/test_moveImages.xlsx', newData, 'binary');
+                done();
+            });
+        });
+
+        it("Move Images with sameLine option", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-move-images.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+                var option = {
+                    moveImages : true,
+                    moveSameLineImages : true,
+                }
+                var t = new XlsxTemplate(data, option);
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
+                    ]
+                });
+                var newData = t.generate();
+                var drawingSheet = etree.parse(t.archive.file("xl/drawings/drawing1.xml").asText()).getroot();
+                buster.expect(drawingSheet).toBeDefined();
+                drawingSheet.findall('xdr:twoCellAnchor').forEach(element => {
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='3']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("4");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='6']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("3");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='8']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("1");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("11");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='10']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("11");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("25");
+                    }
+                });
+                fs.writeFileSync('test/output/test_moveImages_withSameLineOption.xlsx', newData, 'binary');
+                done();
+            });
+        });
     });
     
     describe("Multiple sheets", function() {
