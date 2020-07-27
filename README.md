@@ -161,6 +161,26 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.3.0
+* Added support for optional moving of the images together with table. (#109)
+
+### Version 1.2.0
+* Specify license field in addition to licenses field in the package.json (#102)
+
+### Version 1.1.0
+* Added TypeScript definitions. #101
+* NodeJS 12, 14 support
+
+### Version 1.0.0
+Nothing to see here. Just I'm being brave and make version 1.0.0
+
+### Version 0.5.0
+* Placeholder in hyperlinks. #87
+* NodeJS 10 support
+
+### Version 0.4.0
+* Fix wrongly replacing text in shared strings #81
+
 ### Version 0.2.0
 
 * Add ability copy and delete sheets.
