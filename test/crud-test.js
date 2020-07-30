@@ -1021,29 +1021,23 @@ describe("CRUD operations", function() {
                     imgB64 : imgB64,
                 });
                 var newData = t.generate();
-
-
-                //var drawingSheet = etree.parse(t.archive.file("test_coco").asText()).getroot();
-                /*buster.expect(drawingSheet).toBeDefined();
-                drawingSheet.findall('xdr:twoCellAnchor').forEach(element => {
-                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='3']")){
-                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("4");
-                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
-                    }
-                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='6']")){
-                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("3");
-                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
-                    }
-                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='8']")){
-                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("1");
-                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("11");
-                    }
-                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='10']")){
-                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("11");
-                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("25");
-                    }
-                });
-                fs.writeFileSync('test/output/test_moveImages_withSameLineOption.xlsx', newData, 'binary');*/
+                var rels = etree.parse(t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").asText()).getroot();
+                buster.expect(rels.findall("Relationship").length).toEqual(1);
+                buster.expect(rels.findall("Relationship")[0].attrib.Id).toEqual("rId1");
+                buster.expect(rels.findall("Relationship")[0].attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing");
+                buster.expect(rels.findall("Relationship")[0].attrib.Target).toEqual("../drawings/drawing2.xml");
+                var drawing2 = etree.parse(t.archive.file("xl/drawings/drawing2.xml").asText()).getroot();
+                buster.expect(drawing2.findall("xdr:oneCellAnchor").length).toEqual(1);
+                buster.expect(drawing2.findall("xdr:oneCellAnchor")[0].findall("xdr:from")[0].findall("xdr:col")[0].text).toEqual("1");
+                buster.expect(drawing2.findall("xdr:oneCellAnchor")[0].findall("xdr:from")[0].findall("xdr:row")[0].text).toEqual("2");
+                buster.expect(drawing2.findall("xdr:oneCellAnchor")[0].findall("xdr:pic")[0].findall("xdr:blipFill")[0].findall("a:blip")[0].attrib["r:embed"]).toEqual("rId1");
+                var relsdrawing2 = etree.parse(t.archive.file("xl/drawings/_rels/drawing2.xml.rels").asText()).getroot();
+                buster.expect(relsdrawing2.findall("Relationship").length).toEqual(1);
+                buster.expect(relsdrawing2.findall("Relationship")[0].attrib.Id).toEqual("rId1");
+                buster.expect(relsdrawing2.findall("Relationship")[0].attrib.Target).toEqual("../media/image1.jpg");
+                buster.expect(relsdrawing2.findall("Relationship")[0].attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");
+                //var image = t.archive.file("xl/media/image1.jpg");
+                fs.writeFileSync('test/output/insert_image.xlsx', newData, 'binary');
                 done();
             });
         });
