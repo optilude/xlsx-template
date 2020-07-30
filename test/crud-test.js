@@ -1007,6 +1007,46 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+
+        it("Insert image", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-insert-images.xlsx'), function(err, data) {
+                buster.expect(err).toBeNull();
+                var option = {
+                    imageRootPath : path.join(__dirname, 'templates', 'dataset')
+                }
+                var t = new XlsxTemplate(data, option);
+                var imgB64 = 'iVBORw0KGgoAAAANSUhEUgAAALAAAAA2CAYAAABnXhObAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAUjSURBVHhe7ZtbyGVjGMfXlmmccpqRcYgZmQsTMeVYQiJzozEYJRHCcCUaNy5kyg3KhUNEhjSRbwipIcoF0pRpxiFiLsYUIqcoZ8b2/6/1vKtnv3u9+/smuXjW/v/qv593PetZa+/17f9617vetb9BVVVDSIiQ7GFRiJC0PfBwOGRbiBAMBoPat+qBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoenND9oHg8EFCOdBPJ57cDzfWf5MhLPZBr9AL2LdzmZxFNTui3AdtF+dqKqtqH3F2iOg9g6EVLcFdTPW7gT1CxAuhE6FFkG/Ql9Cm7HtC4gtqL0S4ehmaRzU32XNiWA/VyGcDGGT4c11sifg2Np/hWODB8iXsAJ3p2OBznL5rS5Pfey38wJPuzpqe6HuXFdDfdRVlwRo9r+stkvboYWu/ifLlzTP7z8XOBZ63mqTDuyqjap0XNMwhGCvStjjkeNw9q6ydgtyCxEub5Za5lnMWW0xsQzbn2btEZBfh0DtWSeq6h3oQeghaBMTYCl0UtMc4U/obegN6FXoJWgGXyBPhk7wfrcgfAJdXCemgNrJ3t0RBUo98KeW+wCiIdjmMCLfnpdYNrw+y+us9ltb/6FFisOWvO4Ut/4HaHWh5j7odJdLPfAXvnYuAk/Ztuuhn61NqQcOzt/QM02zWome6gBrJzj2Jey9imC7lQjsrcn1FsmlFj33WiS34Q+/0dotyL0L3QptttR/hT32cuzvWkQec6+ZNgNvaJo1ay3SlLyxOr5Zqm6wWKI1qpluW7NULcF+zrE29zkfId08sid/3Nq7BfazwMvSRfA+j0Lv2eIui71lqgyML/Z1xO+bxepqi+RGizTAW9Ycw0yZxr+8VJP7LZJLLJJjLBIOY2qwj1XQRtOM6VmIMxM5R0CcTWmFunRSzAX1wD0ifZnpMn4kzHCita+xyLEoKX3xNC9NTB7mCwz/ZL3U4A18sEWSThpyCMRenOL+qMsgfxNXD/IKTFqXox64RyRTcqossQ4mvsna5AmLacYinxv3sw9/YNvlFNpp/HoYlldY+2uLhLMMiTchvifFGYlJcJ6YJ0IrnDDcfq703sCkvpsDfAkrMNssxGsut8Ny1O8W2xkHQPOxsdPleOPGxmx6zG3Dyz4bfI9FKe/WP2DrqRUu/6PldnsWwgvwgU3av2YhguOHBX42IA0J/Fj2N4se3/tOwg8j0qwH3+POpjnC/z1G1RCipzxn0eMfBU8y8C70AINcyKeT4iAMIy6y9u3QN02zWoP8y9D50OHQMuTOaFaVQd0JuWxVJ1i/N7SUwqI/QY5CbjG0vy33hrorBmPddCSB2YYQm7L69y3ftW6L5eshBFhiy9R6X5sEOD+caja4PG8QeROX1pXUNYQoaX6qzQV4JcnrvTo/fzSl45nWHpj4YUT+Q5y8B+YPhRJ8nDsG/qjMf9UsVVdYZJ43hpxS4+NjPsHL4Xj8EdTxUXEi7adE/Q0WKD5mNno1rOClr7FzcxkMDS6P+zDiWNIsQg3yeyHHG6kRmGcsrfP50r5zZqvD+sUIh0L8ZdznqONj4zHSZ+ui6/N6sG2xY8K2/1gzNDjG2re9MrCYHpKBp3kIIXqADCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAhN+x8ZQkREPbAITFX9C5ozpqaetbGcAAAAAElFTkSuQmCC';
+
+                t.substitute('init_rels', {
+                    imgB64 : imgB64,
+                });
+                var newData = t.generate();
+
+
+                //var drawingSheet = etree.parse(t.archive.file("test_coco").asText()).getroot();
+                /*buster.expect(drawingSheet).toBeDefined();
+                drawingSheet.findall('xdr:twoCellAnchor').forEach(element => {
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='3']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("4");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='6']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("3");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("10");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='8']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("1");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("11");
+                    }
+                    if(element.find("xdr:pic/xdr:nvPicPr/xdr:cNvPr[@id='10']")){
+                        buster.expect(element.find("xdr:from/xdr:row").text).toEqual("11");
+                        buster.expect(element.find("xdr:to/xdr:row").text).toEqual("25");
+                    }
+                });
+                fs.writeFileSync('test/output/test_moveImages_withSameLineOption.xlsx', newData, 'binary');*/
+                done();
+            });
+        });
     });
     
     describe("Multiple sheets", function() {

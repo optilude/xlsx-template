@@ -60,6 +60,7 @@ describe("Helpers", function() {
                 key: undefined,
                 name: "foo",
                 placeholder: "${foo}",
+                subType: undefined,
                 type: "normal"
             }]);
         });
@@ -72,6 +73,7 @@ describe("Helpers", function() {
                 key: undefined,
                 name: "foo",
                 placeholder: "${foo}",
+                subType: undefined,
                 type: "normal"
             }]);
         });
@@ -84,12 +86,14 @@ describe("Helpers", function() {
                 key: undefined,
                 name: "foo",
                 placeholder: "${foo}",
+                subType: undefined,
                 type: "normal"
             }, {
                 full: false,
                 key: undefined,
                 name: "bar",
                 placeholder: "${bar}",
+                subType: undefined,
                 type: "normal"
             }]);
         });
@@ -102,6 +106,7 @@ describe("Helpers", function() {
                 key: "bar",
                 name: "foo",
                 placeholder: "${foo.bar}",
+                subType: undefined,
                 type: "normal"
             }]);
         });
@@ -114,6 +119,7 @@ describe("Helpers", function() {
                 key: undefined,
                 name: "foo",
                 placeholder: "${table:foo}",
+                subType: undefined,
                 type: "table"
             }]);
         });
@@ -126,6 +132,7 @@ describe("Helpers", function() {
                 key: "bar",
                 name: "foo",
                 placeholder: "${table:foo.bar}",
+                subType: undefined,
                 type: "table"
             }]);
         });
