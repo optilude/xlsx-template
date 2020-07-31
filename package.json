@@ -35,6 +35,7 @@
   ],
   "dependencies": {
     "elementtree": "0.1.6",
+    "image-size": "^0.3.5",
     "jszip": "^2.6.1"
   },
   "devDependencies": {
