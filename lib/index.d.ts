@@ -60,7 +60,8 @@ export default class Workbook
     protected insertCellValue(cell : any, substitution : any) : string;
     protected substituteScalar(cell : any, string: string, placeholder: TemplatePlaceholder, substitution: any);
     protected substituteArray(cells : any[], cell : any, substitution : any);
-    protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any) : any;
+    protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any, placeholder : TemplatePlaceholder, drawing : etree.ElementTree) : any;
+    protected substituteImage(cell : any, string : string, placeholder: TemplatePlaceholder, substitution : any, drawing : etree.ElementTree) : boolean
     protected cloneElement(element : any, deep? : any) : any;
     protected replaceChildren(parent : any, children : any) : void;
     protected getCurrentRow(row : any, rowsInserted : any) : number;
@@ -70,6 +71,22 @@ export default class Workbook
     protected joinRange(range : any) : string
     protected pushRight(workbook : etree.ElementTree, sheet : any, currentCell : any, numCols : any) : any;
     protected pushDown(workbook : etree.ElementTree, sheets : any, tables : any, currentRow : any, numRows : any) : any;
+
+    //Insert for insert_image
+    protected getWidthCell(numCol : int, sheet : etree.ElementTree) : float;
+    protected getWidthMergeCell(mergeCell : etree.ElementTree, sheet : etree.ElementTree) : Float32Array
+    protected getHeightCell(numRow : int, sheet : etree.ElementTree) : float;
+    protected getHeightMergeCell(mergeCell : etree.ElementTree, sheet : etree.ElementTree) : Float32Array
+    protected getNbRowOfMergeCell(mergeCell : etree.ElementTree) : Int16Array;
+    protected pixels(pixels : float) : Int16Array;
+    protected columnWidthToEMUs(width : float) : Int16Array;
+    protected rowHeightToEMUs(height : float) : Int16Array;
+    protected findMaxFileId(fileNameRegex : string, idRegex : string) : Int16Array;
+    protected cellInMergeCells(cell : etree.ElementTree, mergeCell : etree.ElementTree) : boolean;
+    protected isUrl(str : string) : boolean;
+    protected toArrayBuffer(buffer : Buffer) : ArrayBuffer;
+    protected imageToBuffer(imageObj : any) : Buffer;
+    protected findMaxId(element : etree.ElementTree, tag : string, attr : string, idRegex : string) : int;
 }
 
 export interface GenerateOptions
