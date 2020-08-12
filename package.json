@@ -33,18 +33,43 @@
       "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
     }
   ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "../coverage",
+    "coverageReporters": [
+      "text",
+      "cobertura"
+    ],
+    "transform": {
+      ".(js|ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|-(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testTimeout": 500,
+    "moduleNameMapper": {
+      "^app/(.*)": "<rootDir>/lib/$1",
+      "^tests/(.*)": "<rootDir>/tests/$1"
+    }
+  },
   "dependencies": {
     "elementtree": "0.1.6",
     "image-size": "^0.3.5",
     "jszip": "^2.6.1"
   },
   "devDependencies": {
-    "buster": "0.7.18",
-    "grunt": "~1.0.1",
-    "grunt-buster": "~0.4.2"
+    "@types/jest": "^26.0.9",
+    "@types/jszip": "0.0.27",
+    "@types/node": "^14.0.27",
+    "jest": "^26.2.2",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
   },
   "scripts": {
-    "test": "buster-test"
+    "test": "jest"
   },
   "readme": "",
   "readmeFilename": "README.md"
