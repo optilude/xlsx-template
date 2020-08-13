@@ -85,18 +85,12 @@ above.
 
 ### Images
 
-You can insert images with   
-
-    | My image: | ${image:imageName} |
-
+You can insert images with ${image:imageName}
 Given data
 
     var template = { imageName: "helloImage.jpg"}
 
-You can insert a list of images with   
-
-    | My images | ${table:images.name:image} |
-
+You can insert a list of images with ${table:images.name:image}
 Given data
 
     var template = { images: [{name : "helloImage1.jpg"}, {name : "helloImage2.jpg"}]}
@@ -108,21 +102,13 @@ Supported image format in given data :
 - relative path file (absolute is prior to relative in test)
 - URL : TODO
 
-You can pass imageRootPath option for setting the root folder for your images.  
+You can pass imageRootPath option for setting the root folder for your images.
+var option = {imageRootPath : "/path/to/your/image/dir"}
+...
+var t = new XlsxTemplate(data, option);
 
-    var option = {imageRootPath : "/path/to/your/image/dir"}  
-    ...  
-    var t = new XlsxTemplate(data, option);
-
-If the image Placeholders is in standard cell, image is insert normaly  
+If the image Placeholders is in standard cell, image is insert normaly
 If the image Placeholders is in merge cell, image feet (at the best) the size of the merge cell.
-
-You can pass imageRatio option for adjust the ratio image (in percent and for standard cell - not applied on merge cell)
- 
-    var option = {imageRatio : 75.4}  
-    ...  
-    var t = new XlsxTemplate(data, option);
-
 
 
 ## Generating reports
