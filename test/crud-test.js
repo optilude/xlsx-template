@@ -1098,6 +1098,73 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+
+        it("pushDownPageBreakOnTableSubstitution option", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-movePageBreakOption.xlsx'), function(err, buffer) {
+                expect(err).toBeNull();
+                expect(err).toBeNull();
+                var option = {
+                    pushDownPageBreakOnTableSubstitution : true
+                }
+                var t = new XlsxTemplate(buffer, option);
+                var data = {
+                    myarray : [
+                        {name : "foo"},
+                        {name : "john"},
+                        {name : "doe"},
+                    ]
+                };
+                t.substitute(1, data);
+                var newData = t.generate();
+                var workbook = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
+
+                workbook.findall("definedNames/definedName").forEach(function(name) {
+                    expect(name.text == "Feuil1!$A$1:$J$12")
+                });
+                
+                fs.writeFileSync('test/output/movePageBreakOption.xlsx', newData, 'binary');
+                done();
+            });
+        });
+
+        it("subsituteAllTableRow option", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-movePageBreakOption.xlsx'), function(err, buffer) {
+                expect(err).toBeNull();
+                expect(err).toBeNull();
+                var option = {
+                    subsituteAllTableRow : true
+                }
+                var t = new XlsxTemplate(buffer, option);
+                var data = {
+                    myarray : [
+                        {name : "foo"},
+                        {name : "john"},
+                        {name : "doe"},
+                    ]
+                };
+                t.substitute(1, data);
+                var newData = t.generate();
+                var sheet1      = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                expect(sheet1.find("./sheetData/row[@r='4']/c[@r='C4']").attrib.s).toEqual("2");
+                expect(sheet1.find("./sheetData/row[@r='4']/c[@r='D4']").attrib.s).toEqual("3");
+                expect(sheet1.find("./sheetData/row[@r='4']/c[@r='F4']/v").text).toEqual("5");
+                expect(sheet1.find("./sheetData/row[@r='4']/c[@r='H4']").attrib.s).toEqual("4");
+
+                expect(sheet1.find("./sheetData/row[@r='5']/c[@r='C5']").attrib.s).toEqual("2");
+                expect(sheet1.find("./sheetData/row[@r='5']/c[@r='D5']").attrib.s).toEqual("3");
+                expect(sheet1.find("./sheetData/row[@r='5']/c[@r='F5']/v").text).toEqual("5");
+                expect(sheet1.find("./sheetData/row[@r='5']/c[@r='H5']").attrib.s).toEqual("4");
+
+                expect(sheet1.find("./sheetData/row[@r='6']/c[@r='C6']").attrib.s).toEqual("2");
+                expect(sheet1.find("./sheetData/row[@r='6']/c[@r='D6']").attrib.s).toEqual("3");
+                expect(sheet1.find("./sheetData/row[@r='6']/c[@r='F6']/v").text).toEqual("5");
+                expect(sheet1.find("./sheetData/row[@r='6']/c[@r='H6']").attrib.s).toEqual("4");
+                
+                fs.writeFileSync('test/output/substituteAllTheRow.xlsx', newData, 'binary');
+                done();
+            });
+        });
     });
     
     describe("Multiple sheets", function() {
