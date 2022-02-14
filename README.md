@@ -204,7 +204,8 @@ You can pass options to `generate()` to set a different return type. use
 ## Changelog
 
 ### Version 1.3.1
-* Add new substitution for images. (#121) (#110)
+* Added the imageRatio parameter like a percent ratio when insert images. (#121)
+* Add new substitution for images. (#110)
 * Fixing Defined Range Name with Sheet Name. (#150)
 
 ### Version 1.3.0
