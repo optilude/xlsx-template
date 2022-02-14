@@ -203,6 +203,10 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.3.1
+* Add new substitution for images. (#121) (#110)
+* Fixing Defined Range Name with Sheet Name. (#150)
+
 ### Version 1.3.0
 * Added support for optional moving of the images together with table. (#109)
 
