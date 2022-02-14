@@ -667,6 +667,7 @@ describe("CRUD operations", function() {
                 expect(workbook.find("./definedNames/definedName[@name='RangeBelowTable']").text).toEqual("Tables!$B$19:$C$19");
                 expect(workbook.find("./definedNames/definedName[@name='RangeRightOfTable']").text).toEqual("Tables!$E$14:$F$14");
                 expect(workbook.find("./definedNames/definedName[@name='RightOfTable']").text).toEqual("Tables!$F$8");
+                expect(workbook.find("./definedNames/definedName[@name='_xlnm.Print_Titles']").text).toEqual("Tables!$1:$3");
 
                 // Merged cells have moved
                 expect(sheet1.find("./mergeCells/mergeCell[@ref='B2:C2']")).not.toBeNull(); // title - unchanged
