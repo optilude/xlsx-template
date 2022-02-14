@@ -207,6 +207,7 @@ You can pass options to `generate()` to set a different return type. use
 * Added the imageRatio parameter like a percent ratio when insert images. (#121)
 * Add new substitution for images. (#110)
 * Fixing Defined Range Name with Sheet Name. (#150)
+* Add binary option for copySheet : for header/footer in UTF-8 (#130)
 
 ### Version 1.3.0
 * Added support for optional moving of the images together with table. (#109)
