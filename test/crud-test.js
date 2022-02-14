@@ -1135,4 +1135,44 @@ describe("CRUD operations", function() {
             });
         });
     });
+
+    describe("Copy sheets", function() {
+        it("Standard-copy-sheets", function (done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-copy-sheet.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+                // Create a template
+                var t = new XlsxTemplate(data);
+                // Test copy simple sheet
+                t.copySheet("simple_sheet", "simple_sheet_copy");
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
+                var copysheet4    = etree.parse(t.archive.file("xl/worksheets/sheet4.xml").asText()).getroot();
+                expect(copysheet4).toBeDefined();
+                expect(getSharedString(sharedStrings, copysheet4, "B4")).toEqual("Some data");
+                expect(getSharedString(sharedStrings, copysheet4, "C6")).toEqual("${data.foo}");
+                expect(getSharedString(sharedStrings, copysheet4, "C11")).toEqual("AZE²&é\"'(-è_çà)=~#{[|`\\^@]} ^$ù*,;:!¨£%µ?./§¤€<>Ôöôîïï");
+                // TODO : How can I test the fill color of cell D9 ?
+                // test copy sheet with image
+                t.copySheet("image_sheet", "image_sheet_copy");
+                var relscopysheet2    = etree.parse(t.archive.file("xl/worksheets/_rels/sheet5.xml.rels").asText()).getroot();
+                expect(relscopysheet2.findall("Relationship").length).toEqual(1);
+                expect(relscopysheet2.findall("Relationship")[0].attrib.Target).toEqual("../drawings/drawing1.xml");
+                // test copy sheet with utf-8 header/footer
+                // without binary mode (no ok) :
+                // This test can be remove if you wish. This is just for show the issue if binary is set to true (default)
+                t.copySheet("utf8_header_sheet", "utf8_header_sheet_copy");
+                var copysheet6    = etree.parse(t.archive.file("xl/worksheets/sheet6.xml").asText()).getroot();
+                expect(copysheet6).toBeDefined();
+                expect(copysheet6.find("headerFooter/oddHeader").text).not.toEqual("&LTEST UTF8 éàè&ùï&C&A");
+                // with binary mode (ok) :
+                t.copySheet("utf8_header_sheet", "utf8_header_sheet_copy_v2", false);
+                var copysheet7    = etree.parse(t.archive.file("xl/worksheets/sheet7.xml").asText()).getroot();
+                expect(copysheet7).toBeDefined();
+                expect(copysheet7.find("headerFooter/oddHeader").text).toEqual("&LTEST UTF8 éàè&ùï&C&A");
+                // Get binary data
+                var newData = t.generate();
+                fs.writeFileSync('test/output/copy-sheet.xlsx', newData, 'binary');
+                done();
+            });
+        });
+    });
 });
