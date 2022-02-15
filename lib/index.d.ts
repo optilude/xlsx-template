@@ -55,7 +55,7 @@ class XlsxTemplate
 
     constructor(data? : Buffer, option? : object);
     public deleteSheet(sheetName : string) : this;
-    public copySheet(sheetName : string, copyName : string) : this;
+    public copySheet(sheetName : string, copyName : string, binary? : boolean) : this;
     public loadTemplate(data : Buffer) : void;
     public substitute(sheetName : string | number, substitutions : Object) : void;
     public generate<T extends GenerateOptions>(options : T) : OutputByType[T];
