@@ -203,6 +203,9 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.3.2
+* Fix import statement for jszip
+
 ### Version 1.3.1
 * Added the imageRatio parameter like a percent ratio when insert images. (#121)
 * Add new substitution for images. (#110)
