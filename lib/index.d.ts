@@ -27,7 +27,9 @@ interface OutputByType {
     nodebuffer: Buffer;
 }
 
-export type GenerateOptions = keyof OutputByType;
+export type GenerateOptions = {
+    type: keyof OutputByType
+};
 
 interface RangeSplit
 {
@@ -58,7 +60,7 @@ class XlsxTemplate
     public copySheet(sheetName : string, copyName : string, binary? : boolean) : this;
     public loadTemplate(data : Buffer) : void;
     public substitute(sheetName : string | number, substitutions : Object) : void;
-    public generate<T extends GenerateOptions>(options : T) : OutputByType[T];
+    public generate<T extends GenerateOptions>(options : T) : OutputByType[OutputByType];
     public generate() : any;
 
     public replaceString(oldString : string, newString : string) : number; // returns idx
