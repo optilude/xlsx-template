@@ -4,12 +4,14 @@
     "module": "commonjs",
     "allowJs": true,
     "checkJs": true,
-    "noEmit": true,
+    "noEmit": false,
     "strict": false,
     "noImplicitAny": false,
-    "esModuleInterop": true
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "outDir": "lib"
   }, 
   "files": [
-    "lib/index.js"
+    "src/index.js"
   ]
 }

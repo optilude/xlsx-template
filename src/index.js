@@ -1,7 +1,6 @@
 /*jshint globalstrict:true, devel:true */
 /*eslint no-var:0 */
 /*global require, module, Buffer */
-"use strict";
 
 var path = require('path'),
     sizeOf = require('image-size'),
