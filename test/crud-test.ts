@@ -1289,4 +1289,34 @@ describe("CRUD operations", function() {
             });
         });
     });
+
+    describe("Rebuild file", function() {
+        it("Rebuild archive file with custom Relationship workbook rels after delete a sheet", function (done) {
+            fs.readFile(path.join(__dirname, 'templates', 'custom-xml.xlsx'), function(err, buffer) {
+                expect(err).toBeNull();
+                // Create a template
+                var t = new XlsxTemplate(buffer);
+
+                t.deleteSheet("Sheet2");
+                var newData     = t.generate();
+                var wbrels      = etree.parse(t.archive.file("xl/_rels/workbook.xml.rels").asText()).getroot();
+                expect(wbrels.find("Relationship[@Id='rId1']").attrib.Target).toEqual("worksheets/sheet1.xml");
+                expect(wbrels.find("Relationship[@Id='rId1']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
+                expect(wbrels.find("Relationship[@Id='rId2']").attrib.Target).toEqual("worksheets/sheet3.xml");
+                expect(wbrels.find("Relationship[@Id='rId2']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
+                expect(wbrels.find("Relationship[@Id='rId3']").attrib.Target).toEqual("theme/theme1.xml");
+                expect(wbrels.find("Relationship[@Id='rId3']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+                expect(wbrels.find("Relationship[@Id='rId4']").attrib.Target).toEqual("styles.xml");
+                expect(wbrels.find("Relationship[@Id='rId4']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
+                expect(wbrels.find("Relationship[@Id='rId5']").attrib.Target).toEqual("sharedStrings.xml");
+                expect(wbrels.find("Relationship[@Id='rId5']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings");
+                expect(wbrels.find("Relationship[@Id='rId6']").attrib.Target).toEqual("xmlMaps.xml");
+                expect(wbrels.find("Relationship[@Id='rId6']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/xmlMaps");
+                expect(wbrels.find("Relationship[@Id='rId7']").attrib.Target).toEqual("connections.xml");
+                expect(wbrels.find("Relationship[@Id='rId7']").attrib.Type).toEqual("http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections");
+                fs.writeFileSync('test/output/custom-xml.xlsx', newData, 'binary');
+                done();
+            });
+        });
+    });
 });
