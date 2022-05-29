@@ -147,6 +147,12 @@ module.exports = (function() {
       .sort(function(rel1, rel2){ //using order
         var index1 = order.indexOf( path.basename(rel1.attrib.Type) );
         var index2 = order.indexOf( path.basename(rel2.attrib.Type) );
+        // If the attrib.Type is not in the order list, go to the end of sort
+        // Maybe we can do it more gracefully with the boolean operator
+        if ( index1 < 0 && index2 >= 0 ) return 1; // rel1 go after rel2
+        if ( index1 >= 0 && index2 < 0 ) return -1; // rel1 go before rel2
+        if ( index1 < 0 && index2 < 0 ) return 0; // change nothing
+
         if ((index1 + index2) == 0) {
             if(rel1.attrib.Id && rel2.attrib.Id) return rel1.attrib.Id.substring(3) - rel2.attrib.Id.substring(3);
           return rel1._id - rel2._id;
