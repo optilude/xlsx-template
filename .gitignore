@@ -7,3 +7,6 @@ checkouts
 .idea/
 atlassian-ide-plugin.xml
 .vs/
+lib/*.js
+lib/*.d.ts
+!lib/index.d.ts
