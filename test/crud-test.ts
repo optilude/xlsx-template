@@ -1066,6 +1066,52 @@ describe("CRUD operations", function() {
             });
         });
 
+        it("Insert image does not exist", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-insert-images.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+                var option = {
+                    imageRootPath : path.join(__dirname, 'templates', 'dataset')
+                }
+                var t = new XlsxTemplate(data, option);
+                var imgB64 = 'iVBORw0KGgoAAAANSUhEUgAAALAAAAA2CAYAAABnXhObAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAUjSURBVHhe7ZtbyGVjGMfXlmmccpqRcYgZmQsTMeVYQiJzozEYJRHCcCUaNy5kyg3KhUNEhjSRbwipIcoF0pRpxiFiLsYUIqcoZ8b2/6/1vKtnv3u9+/smuXjW/v/qv593PetZa+/17f9617vetb9BVVVDSIiQ7GFRiJC0PfBwOGRbiBAMBoPat+qBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoenND9oHg8EFCOdBPJ57cDzfWf5MhLPZBr9AL2LdzmZxFNTui3AdtF+dqKqtqH3F2iOg9g6EVLcFdTPW7gT1CxAuhE6FFkG/Ql9Cm7HtC4gtqL0S4ehmaRzU32XNiWA/VyGcDGGT4c11sifg2Np/hWODB8iXsAJ3p2OBznL5rS5Pfey38wJPuzpqe6HuXFdDfdRVlwRo9r+stkvboYWu/ifLlzTP7z8XOBZ63mqTDuyqjap0XNMwhGCvStjjkeNw9q6ydgtyCxEub5Za5lnMWW0xsQzbn2btEZBfh0DtWSeq6h3oQeghaBMTYCl0UtMc4U/obegN6FXoJWgGXyBPhk7wfrcgfAJdXCemgNrJ3t0RBUo98KeW+wCiIdjmMCLfnpdYNrw+y+us9ltb/6FFisOWvO4Ut/4HaHWh5j7odJdLPfAXvnYuAk/Ztuuhn61NqQcOzt/QM02zWome6gBrJzj2Jey9imC7lQjsrcn1FsmlFj33WiS34Q+/0dotyL0L3QptttR/hT32cuzvWkQec6+ZNgNvaJo1ay3SlLyxOr5Zqm6wWKI1qpluW7NULcF+zrE29zkfId08sid/3Nq7BfazwMvSRfA+j0Lv2eIui71lqgyML/Z1xO+bxepqi+RGizTAW9Ycw0yZxr+8VJP7LZJLLJJjLBIOY2qwj1XQRtOM6VmIMxM5R0CcTWmFunRSzAX1wD0ifZnpMn4kzHCita+xyLEoKX3xNC9NTB7mCwz/ZL3U4A18sEWSThpyCMRenOL+qMsgfxNXD/IKTFqXox64RyRTcqossQ4mvsna5AmLacYinxv3sw9/YNvlFNpp/HoYlldY+2uLhLMMiTchvifFGYlJcJ6YJ0IrnDDcfq703sCkvpsDfAkrMNssxGsut8Ny1O8W2xkHQPOxsdPleOPGxmx6zG3Dyz4bfI9FKe/WP2DrqRUu/6PldnsWwgvwgU3av2YhguOHBX42IA0J/Fj2N4se3/tOwg8j0qwH3+POpjnC/z1G1RCipzxn0eMfBU8y8C70AINcyKeT4iAMIy6y9u3QN02zWoP8y9D50OHQMuTOaFaVQd0JuWxVJ1i/N7SUwqI/QY5CbjG0vy33hrorBmPddCSB2YYQm7L69y3ftW6L5eshBFhiy9R6X5sEOD+caja4PG8QeROX1pXUNYQoaX6qzQV4JcnrvTo/fzSl45nWHpj4YUT+Q5y8B+YPhRJ8nDsG/qjMf9UsVVdYZJ43hpxS4+NjPsHL4Xj8EdTxUXEi7adE/Q0WKD5mNno1rOClr7FzcxkMDS6P+zDiWNIsQg3yeyHHG6kRmGcsrfP50r5zZqvD+sUIh0L8ZdznqONj4zHSZ+ui6/N6sG2xY8K2/1gzNDjG2re9MrCYHpKBp3kIIXqADCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAhN+x8ZQkREPbAITFX9C5ozpqaetbGcAAAAAElFTkSuQmCC';
+
+                expect(() => {t.substitute('breaking_image', {
+                    imgBuffer : Buffer.from(imgB64, 'base64'),
+                    imgPath : "image_does_not_exist.png",
+                })}).toThrow(TypeError);
+                // TODO : @kant2002 if image is null or empty string in user substitution data, throw an error or not ?
+                // expect(() => {t.substitute('breaking_image', {
+                //     imgBuffer : Buffer.from(imgB64, 'base64'),
+                //     imgPath : null,
+                // })}).toThrow(TypeError);
+                done();
+            });
+        });
+
+        it("Catch insert image does not exist", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-insert-images.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+                var substituteImgBuffer = Buffer.from('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', 'base64');
+                var handleImageFunction = function(substitution, error) {
+                    return substituteImgBuffer;
+                }
+                var option = {
+                    imageRootPath : path.join(__dirname, 'templates', 'dataset'),
+                    handleImageError : handleImageFunction
+                }
+                var t = new XlsxTemplate(data, option);
+                
+                expect(() => {t.substitute('breaking_image', {
+                    imgPath : "image_does_not_exist.png",
+                })}).not.toThrow(TypeError);
+
+                var newData = t.generate();
+                expect(t.archive.file("xl/media/image1.jpg").asText()).not.toBeNull();
+                // TODO : @kant2002 How can I test if "xl/media/image1.jpg" is equal to substituteImgBuffer ?
+                done();
+            });
+        });
+
         it("Insert 100 image", function(done) {
             fs.readFile(path.join(__dirname, 'templates', 'test-insert-images.xlsx'), function(err, buffer) {
                 expect(err).toBeNull();

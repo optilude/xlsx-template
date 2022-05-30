@@ -30,6 +30,7 @@ module.exports = (function() {
             imageRatio : 100,
             pushDownPageBreakOnTableSubstitution : false,
             imageRootPath : null,
+            handleImageError : null,
         };
         Object.assign(this.option, option)
         this.sharedStringsPath = "";
@@ -1153,6 +1154,8 @@ module.exports = (function() {
         var self = this;
         self.substituteScalar(cell, string, placeholder, '');
         if (substitution==null || substitution==""){
+            // TODO : @kant2002 if image is null or empty string in user substitution data, throw an error or not ?
+            // If yes, remove this test.
             return true;
         }
         // get max refid
@@ -1172,7 +1175,16 @@ module.exports = (function() {
             }
             return ab;
         };
-        substitution = self.imageToBuffer(substitution)
+        try {
+            substitution = self.imageToBuffer(substitution)
+        } catch (error) {
+            if (self.option && self.option.handleImageError && typeof self.option.handleImageError === "function") {
+                self.option.handleImageError(substitution, error)
+            }else{
+                throw error;
+            }
+        }
+        
         // put image to media.
         self.archive.file('xl/media/image' + maxFildId + '.jpg', toArrayBuffer(substitution), {binary:true, base64:false});
         var dimension = sizeOf(substitution);
@@ -1182,12 +1194,13 @@ module.exports = (function() {
         var imageInMergeCell = false;
         self.sheet.root.findall("mergeCells/mergeCell").forEach(function(mergeCell) {
             // If image is in merge cell, fit the image
-            if(self.cellInMergeCells(cell, mergeCell)){
+            if (self.cellInMergeCells(cell, mergeCell)) {
                 var mergeCellWidth = self.getWidthMergeCell(mergeCell, self.sheet)
                 var mergeCellHeight = self.getHeightMergeCell(mergeCell, self.sheet)
                 var mergeWidthEmus = self.columnWidthToEMUs(mergeCellWidth);
                 var mergeHeightEmus = self.rowHeightToEMUs(mergeCellHeight);
-                /*if(imageWidth <= mergeWidthEmus && imageHeight <= mergeHeightEmus){
+                // Maybe we can add an option for fit image to mergecell if image is more little. Not by default
+                /*if (imageWidth <= mergeWidthEmus && imageHeight <= mergeHeightEmus) {
                     // Image as more little than the merge cell
                     imageWidth = mergeWidthEmus;
                     imageHeight = mergeHeightEmus;
@@ -1620,12 +1633,24 @@ module.exports = (function() {
     };
 
     Workbook.prototype.imageToBuffer = function(imageObj){
-        // TODO : I think I can make this function more graceful
+        /**
+         * Check if the buffer image is supported by the library before return it
+         * @param {Buffer} buffer the final buffer image
+         */
+        function checkImage(buffer){
+            try {
+                sizeOf(buffer);
+                return buffer;
+            } catch (error){
+                throw new TypeError('imageObj cannot be parse as a buffer image');
+            }
+        }
+        
         if(!imageObj){
-            return null;
+            throw new TypeError('imageObj cannot be null');
         }
         if(imageObj instanceof Buffer){
-            return imageObj
+            return checkImage(imageObj);
         }
         else{
             if(typeof(imageObj) === 'string'  || imageObj instanceof String){
@@ -1633,25 +1658,19 @@ module.exports = (function() {
                 //if(this.isUrl(imageObj)){
                     // TODO
                 //}else{
-                    if("imageRootPath" in this.option && fs.existsSync(this.option.imageRootPath + "/" + imageObj)){
-                        // get the Absolute path file
-                        return Buffer.from(fs.readFileSync(this.option.imageRootPath + "/" + imageObj, { encoding: 'base64' }), 'base64');
-                    }else{
-                        if(fs.existsSync(imageObj)){
-                            // get the relatif path file
-                            return Buffer.from(fs.readFileSync(imageObj, { encoding: 'base64' }), 'base64');
-                        }
+                    var imagePath = this.option && this.option.imageRootPath ? `${this.option.imageRootPath}/${imageObj}` : imageObj;
+                    if (fs.existsSync(imagePath)){
+                        return checkImage(Buffer.from(fs.readFileSync(imagePath, { encoding: 'base64' }), 'base64'));
                     }
                 //}
                 try {
-                    var buff = Buffer.from(imageObj, 'base64')
-                    return buff;
+                    return checkImage(Buffer.from(imageObj, 'base64'));
                 } catch (error) {
-                    console.log("this is NOT a base64 string")
-                    return null;
+                    throw new TypeError('imageObj cannot be parse as a buffer');
                 }
             }
         }
+        throw new TypeError(`imageObj type is not supported : ${typeof(imageObj)}`);
     }
     
     Workbook.prototype.findMaxId = function (element, tag, attr, idRegex) {
