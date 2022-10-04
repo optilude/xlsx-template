@@ -1248,6 +1248,31 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+
+        it("Each sheet should be replaced", function (done) {
+            fs.readFile(path.join(__dirname, 'templates', 'multple-sheet-substitution.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+
+                // Create a template
+                var t = new XlsxTemplate(data);
+                t.substituteAll({
+                    foo: "bar"
+                });
+            
+                // Get binary data
+                var newData = t.generate();
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var sheet2        = etree.parse(t.archive.file("xl/worksheets/sheet2.xml").asText()).getroot();
+                expect(sheet1).toBeDefined();
+                expect(sheet2).toBeDefined();
+                expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("bar");
+                expect(getSharedString(sharedStrings, sheet2, "A1")).toEqual("bar");
+                
+                fs.writeFileSync('test/output/multple-sheet-substitution.xlsx', newData, 'binary');
+                done();
+            });
+        });
     });
 
     describe("Copy sheets", function() {

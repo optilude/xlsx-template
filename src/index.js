@@ -224,6 +224,18 @@ module.exports = (function() {
     };
 
     /**
+     * Interpolate values for all the sheets using the given substitutions 
+     * (an object).
+     */
+    Workbook.prototype.substituteAll = function(substitutions) {
+        var self = this;
+        var sheets = self.loadSheets(self.prefix, self.workbook, self.workbookRels);
+        sheets.forEach(function(sheet) {
+            self.substitute(sheet.id, substitutions);
+        });
+    };
+
+    /**
      * Interpolate values for the sheet with the given number (1-based) or
      * name (if a string) using the given substitutions (an object).
      */
