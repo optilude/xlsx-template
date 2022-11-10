@@ -1076,6 +1076,8 @@ module.exports = (function() {
         var self = this,
             newCellsInserted = 0; // on the original row
 
+        const mergeCell = self.sheet.root.findall("mergeCells/mergeCell").find(c => self.splitRange(c.attrib.ref).start === cell.attrib.r)
+
         // if no elements, blank the cell, but don't delete it
         if(substitution.length === 0) {
             delete cell.attrib.t;
@@ -1137,6 +1139,23 @@ module.exports = (function() {
 
                         // Add the cell that previously held the placeholder
                         newRow.append(newCell);
+
+                        if(mergeCell) {
+                            var mergeRange    = self.splitRange(mergeCell.attrib.ref),
+                            mergeStart    = self.splitRef(mergeRange.start),
+                            mergeEnd      = self.splitRef(mergeRange.end);
+                            for (let colNum = self.charToNum(mergeStart.col) + 1; colNum <= self.charToNum(mergeEnd.col); colNum++) {
+                                const lastRow = self.sheet.root.find('sheetData').getItem(mergeStart.row - 1)
+                                const upperCell = lastRow.getItem(colNum - 1)
+                            
+                                const cell = self.cloneElement(upperCell);
+                                cell.attrib.r = self.joinRef({
+                                  row: newRow.attrib.r,
+                                  col: self.numToChar(colNum)
+                                });
+                                newRow.append(cell);
+                            }
+                        }
                     }
 
                     // expand named table range if necessary
