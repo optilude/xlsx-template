@@ -1,6 +1,6 @@
 {
   "name": "xlsx-template",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Generate .xlsx (Excel) files from templates built in Excel",
   "main": "./lib/index",
   "files": [
