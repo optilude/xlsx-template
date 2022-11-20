@@ -203,6 +203,13 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.4.0
+* substituteAll: Interpolate values for all the sheets using the given substitutions (#173) Thanks @jonathankeebler
+* int` and `float` don't exist in Typescript, both are of type `number`. This fixes it. (#169) Thanks @EHadoux
+* Insert images. (#126). Thanks @jdugh
+* Add customXml in the order list for rebuild. (#154). Thanks @jdugh
+* Adding 2 options affect table substitution : subsituteAllTableRow and pushDownPageBreakOnTableSubstitution. (#124). Thanks @jdugh
+
 ### Version 1.3.2
 * Fix import statement for jszip
 
