@@ -58,7 +58,7 @@
   "dependencies": {
     "elementtree": "^0.1.7",
     "image-size": "^0.3.5",
-    "jszip": "^2.6.1"
+    "jszip": "^3.8.0"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
