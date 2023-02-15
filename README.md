@@ -203,6 +203,14 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.4.2
+* Move to @kant2002/jszip which fix https://github.com/advisories/GHSA-36fh-84j7-cv5h
+* Fix previously broken release.
+
+### Version 1.4.1
+* Move to @kant2002/jszip which fix https://github.com/advisories/GHSA-36fh-84j7-cv5h
+* Also broke everything. **DONT USE THIS VERSION**
+
 ### Version 1.4.0
 * substituteAll: Interpolate values for all the sheets using the given substitutions (#173) Thanks @jonathankeebler
 * int` and `float` don't exist in Typescript, both are of type `number`. This fixes it. (#169) Thanks @EHadoux
