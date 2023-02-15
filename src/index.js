@@ -6,7 +6,7 @@ var path = require('path'),
     sizeOf = require('image-size'),
     fs = require('fs'),
     etree = require('elementtree'),
-    zip = require("jszip");
+    zip = require("@kant2002/jszip");
 
 module.exports = (function() {
 
