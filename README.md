@@ -203,6 +203,10 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.4.3
+* Fix potential issue when template has lot of images.
+* Update image-size to 1.0.2
+
 ### Version 1.4.2
 * Move to @kant2002/jszip which fix https://github.com/advisories/GHSA-36fh-84j7-cv5h
 * Fix previously broken release.
