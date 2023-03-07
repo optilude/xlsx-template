@@ -4,7 +4,7 @@
 /// <reference path="augment.d.ts" />
 
 var path = require('path'),
-    sizeOf = require('image-size'),
+    sizeOf = require('image-size').imageSize,
     fs = require('fs'),
     etree = require('elementtree'),
     zip = require("@kant2002/jszip");
