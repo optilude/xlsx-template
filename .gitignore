@@ -10,3 +10,4 @@ atlassian-ide-plugin.xml
 lib/*.js
 lib/*.d.ts
 !lib/index.d.ts
+*.map
