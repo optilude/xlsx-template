@@ -633,6 +633,66 @@ describe("CRUD operations", function() {
           });
         });
 
+        it("moved hyperlinks in sheet", function(done) {
+          fs.readFile(path.join(__dirname, "templates", "test-moved-hyperlinks.xlsx"), function(err, data) {
+            expect(err).toBeNull();
+
+            var t = new XlsxTemplate(data);
+
+            t.substitute(1, {
+              email: "john@bob.com",
+              subject: "hello",
+              url: "http://www.google.com",
+              domain: "google",
+              rows: [{
+                name: 'One',
+                amount: 1,
+              }, {
+                name: 'Two',
+                amount: 2,
+              }, {
+                name: 'Three',
+                amount: 3,
+              }],
+              list: ['A', 'B', 'C', 'D']
+            });
+
+            var newData = t.generate();
+
+            var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+              sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot(),
+              rels          = etree.parse(t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").asText()).getroot()
+            ;
+
+            // Every hyperlink has being substituted
+            expect(rels.find("./Relationship[@Id='rId1']").attrib.Target).toEqual("mailto:john@bob.com?subject=Hello%20hello");
+            expect(rels.find("./Relationship[@Id='rId2']").attrib.Target).toEqual("http://www.google.com");
+            expect(rels.find("./Relationship[@Id='rId3']").attrib.Target).toEqual("mailto:john@bob.com?subject=Hello%20hello");
+            expect(rels.find("./Relationship[@Id='rId4']").attrib.Target).toEqual("http://www.google.com");
+            expect(rels.find("./Relationship[@Id='rId5']").attrib.Target).toEqual("mailto:john@bob.com?subject=Hello%20hello");
+            expect(rels.find("./Relationship[@Id='rId6']").attrib.Target).toEqual("http://www.google.com");
+
+            // Hyperlinks have moved
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='B7']")).not.toBeNull(); // before table and list - unchanged
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='C7']")).not.toBeNull(); // before table and list - unchanged
+
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='B14']")).toBeNull(); // pushed down
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='B16']")).not.toBeNull(); // pushed down
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='C14']")).toBeNull(); // pushed down
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='C16']")).not.toBeNull(); // pushed down
+
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='F14']")).toBeNull(); // pushed down and accross
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='I16']")).not.toBeNull(); // pushed down and accross
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='G14']")).toBeNull(); // pushed down and accross
+            expect(sheet1.find("./hyperlinks/hyperlink[@ref='J16']")).not.toBeNull(); // pushed down and accross
+
+            // XXX: For debugging only
+            fs.writeFileSync("test/output/test-moved-hyperlinks.xlsx", newData, "binary");
+
+            done();
+          });
+        });
+
         it("moves named tables, named cells and merged cells", function(done) {
 
             fs.readFile(path.join(__dirname, "templates", "test-named-tables.xlsx"), function(err, data) {
