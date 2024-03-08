@@ -1060,11 +1060,9 @@ class Workbook {
                             originalMergeEnd      = self.splitRef(originalMergeRange.end);
                         
                         for (let colnum = self.charToNum(originalMergeStart.col) + 1; colnum <= self.charToNum(originalMergeEnd.col); colnum++) {
-                            const originalRow = self.sheet.root.find('sheetData')._children.find(f=>f.attrib.r == originalMergeStart.row)
-
-                            let origianlColRow = self.numToChar(colnum) + originalMergeEnd.row
-
-                            let originalCell = originalRow._children.find(f=>f.attrib.r === origianlColRow)
+                            const originalRow = self.sheet.root.find('sheetData')._children.find(f=>f.attrib.r == originalMergeStart.row)      
+                            let col = self.numToChar(colnum)
+                            let originalCell = originalRow._children.find(f=>f.attrib.r.startsWith(col))
 
                             const addtionalCell = self.cloneElement(originalCell);
                             addtionalCell.attrib.r = self.joinRef({
