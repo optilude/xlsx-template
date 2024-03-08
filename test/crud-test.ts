@@ -602,6 +602,44 @@ describe("CRUD operations", function() {
 
         });
 
+        it("moves rows down when filling tables with merged line cell", function(done) {
+
+            fs.readFile(path.join(__dirname, "templates", "test-tables-merged-line.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute("Tables", {
+                    score_first: {name: "Jason", score: 1},
+                    scores: [
+                        {name: "John", score: 100},
+                        {name: "Bob", score: 110}, 
+                        {name: "Jim", score: 120}
+                    ],
+                    score_last: {name: "Fox", score: 99},
+                });
+
+                var newData = t.generate();
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='B8']").attrib.s).toEqual("12");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='B8']/v").text).toEqual("12");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='C8']").attrib.s).toEqual("13");
+
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='D8']").attrib.s).toEqual("14");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='E8']").attrib.s).toEqual("17");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='F8']").attrib.s).toEqual("15");
+
+                // XXX: For debugging only
+                fs.writeFileSync("test/output/test-tables-merged-line-out.xlsx", newData, "binary");
+
+                done();
+            });
+
+        });
+        
         it("replaces hyperlinks in sheet", function(done) {
           fs.readFile(path.join(__dirname, "templates", "test-hyperlinks.xlsx"), function(err, data) {
             expect(err).toBeNull();

@@ -1049,6 +1049,32 @@ class Workbook {
                         newRow.append(newCell);
                     }
 
+                    // check merged and if yes, add merged cell with proper shape
+                    let mergeCell = self.sheet.root.findall("mergeCells/mergeCell")
+                        .find(c => self.splitRange(c.attrib.ref).start === cell.attrib.r)
+                    let isMergeCell = mergeCell != null
+                    
+                    if(isMergeCell) {
+                        let originalMergeRange = self.splitRange(mergeCell.attrib.ref),
+                            originalMergeStart    = self.splitRef(originalMergeRange.start),
+                            originalMergeEnd      = self.splitRef(originalMergeRange.end);
+                        
+                        for (let colnum = self.charToNum(originalMergeStart.col) + 1; colnum <= self.charToNum(originalMergeEnd.col); colnum++) {
+                            const originalRow = self.sheet.root.find('sheetData')._children.find(f=>f.attrib.r == originalMergeStart.row)
+
+                            let origianlColRow = self.numToChar(colnum) + originalMergeEnd.row
+
+                            let originalCell = originalRow._children.find(f=>f.attrib.r === origianlColRow)
+
+                            const addtionalCell = self.cloneElement(originalCell);
+                            addtionalCell.attrib.r = self.joinRef({
+                                row: newRow.attrib.r,
+                                col: self.numToChar(colnum)
+                            });
+                            newRow.append(addtionalCell);
+                        }
+                    }
+
                     // expand named table range if necessary
                     parentTables.forEach(function (namedTable) {
                         var tableRoot = namedTable.root, autoFilter = tableRoot.find("autoFilter"), range = self.splitRange(tableRoot.attrib.ref);
