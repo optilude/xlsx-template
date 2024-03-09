@@ -602,6 +602,57 @@ describe("CRUD operations", function() {
 
         });
 
+        it("moves rows down when filling tables with merged line cell", function(done) {
+
+            fs.readFile(path.join(__dirname, "templates", "test-tables-merged-line.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute("Tables", {
+                    score_first: {name: "Jason", score: 1},
+                    scores: [
+                        {name: "John", score: 100, extra:'O'},
+                        {name: "Bob", score: 110, extra:'O'}, 
+                        {name: "Jim", score: 120, extra:'O'}
+                    ],
+                    score_last: {name: "Fox", score: 99},
+
+                    score2_first: {name: "Daddy", score: 1},
+                    scores2: [
+                        {name: "Son1", score: 100, extra:'O'},
+                        {name: "Son2", score: 110, extra:'O'}, 
+                        {name: "Son3", score: 120, extra:'O'},
+                        {name: "Son4", score: 130, extra:'O'}
+                    ],
+                    score2_last: {name: "Mom", score: 99},
+                });
+
+                var newData = t.generate();
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='B8']").attrib.s).toEqual("3");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='B8']/v").text).toEqual("23");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='C8']").attrib.s).toEqual("4");
+
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='D8']").attrib.s).toEqual("5");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='E8']").attrib.s).toEqual("6");
+                expect(sheet1.find("./sheetData/row[@r='8']/c[@r='F8']").attrib.s).toEqual("7");
+
+                expect(sheet1.find("./sheetData/row[@r='18']/c[@r='B18']").attrib.s).toEqual("3");
+                expect(sheet1.find("./sheetData/row[@r='18']/c[@r='C18']").attrib.s).toEqual("4");
+                expect(sheet1.find("./sheetData/row[@r='18']/c[@r='D18']").attrib.s).toEqual("5");
+
+                // XXX: For debugging only
+                fs.writeFileSync("test/output/test-tables-merged-line-out.xlsx", newData, "binary");
+
+                done();
+            });
+
+        });
+        
         it("replaces hyperlinks in sheet", function(done) {
           fs.readFile(path.join(__dirname, "templates", "test-hyperlinks.xlsx"), function(err, data) {
             expect(err).toBeNull();
