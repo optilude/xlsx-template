@@ -1312,6 +1312,16 @@ class Workbook {
             }
 
         });
+
+        // Update hyperlinks refs
+        sheet.findall("hyperlinks/hyperlink").forEach(function (hyperlink) {
+            var ref = self.splitRef(hyperlink.attrib.ref);
+            var colNumber = self.charToNum(ref.col);
+            if (colNumber > currentCol) {
+                ref.col = self.numToChar(colNumber + numCols);
+                hyperlink.attrib.ref = self.joinRef(ref);
+            }
+        });
     }
     // Look for any merged cell, named table or named range definitions below
     // `currentRow` and push down by `numRows` (used when rows are inserted).
@@ -1413,6 +1423,15 @@ class Workbook {
                 }
             }
 
+        });
+
+        // Update hyperlinks refs
+        sheet.findall("hyperlinks/hyperlink").forEach(function (hyperlink) {
+            var ref = self.splitRef(hyperlink.attrib.ref);
+            if (ref.row > currentRow) {
+                ref.row += numRows;
+                hyperlink.attrib.ref = self.joinRef(ref);
+            }
         });
     }
     getWidthCell(numCol, sheet) {
