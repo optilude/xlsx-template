@@ -203,6 +203,10 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.4.4
+* Move hyperlinks references on added rows and columns. (#184). Thanks @IagoSRL
+* Fix line issue under table with merged cell. (#188). Thanks @muyoungko
+
 ### Version 1.4.3
 * Fix potential issue when template has lot of images.
 * Update image-size to 1.0.2
