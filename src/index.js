@@ -270,7 +270,7 @@ class Workbook {
                         // Only substitute things for which we have a substitution
                         var substitution = _get(substitutions, placeholder.name, ''), newCellsInserted = 0;
 
-                        if (placeholder.full && placeholder.type === "table" && substitution instanceof Array) {
+                        if (placeholder.full && placeholder.type === "table" && (substitution instanceof Array || Array.isArray(substitution))) {
                             if (placeholder.subType === 'image' && drawing == null) {
                                 if (rels) {
                                     drawing = self.loadDrawing(sheet.root, sheet.filename, rels.root);
@@ -302,7 +302,7 @@ class Workbook {
                                 cellsInserted += newCellsInserted;
                                 self.pushRight(self.workbook, sheet.root, cell.attrib.r, newCellsInserted);
                             }
-                        } else if (placeholder.full && placeholder.type === "normal" && substitution instanceof Array) {
+                        } else if (placeholder.full && placeholder.type === "normal" && (substitution instanceof Array || Array.isArray(substitution))) {
                             appendCell = false; // don't double-insert cells
                             newCellsInserted = self.substituteArray(
                                 cells, cell, substitution
@@ -744,7 +744,7 @@ class Workbook {
                     }
 
                     // Array -> new columns
-                    if (placeholder.full && placeholder.type === "normal" && substitution instanceof Array) {
+                    if (placeholder.full && placeholder.type === "normal" && (substitution instanceof Array || Array.isArray(substitution))) {
                         substitution.forEach(function (element, i) {
                             var newCol = col;
                             if (i > 0) {
