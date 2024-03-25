@@ -88,6 +88,9 @@ class XlsxTemplate
     protected loadSheetRels(sheetFilename : string) : { rels : any};
     protected loadDrawing(sheet : any, sheetFilename : string, rels : any) : { drawing : any};
     protected writeDrawing(drawing : any);
+    protected initRichData() : void;
+    protected writeRichDataAlreadyExist(element : etree.ElementTree, elementSearchName : string, attributeName : string, attributeValue : string) : boolean;
+    protected writeRichData() : void;
     protected moveAllImages(drawing : any, fromRow : number, nbRow : number);
     protected loadTables(sheet : any, sheetFilename : any) : any;
     protected writeTables(tables : any) : void;
@@ -97,6 +100,7 @@ class XlsxTemplate
     protected substituteArray(cells : any[], cell : any, substitution : any);
     protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any, placeholder : TemplatePlaceholder, drawing : etree.ElementTree) : any;
     protected substituteImage(cell : any, string : string, placeholder: TemplatePlaceholder, substitution : any, drawing : etree.ElementTree) : boolean
+    protected substituteImageInCell(cell : any, substitution : any) : boolean;
     protected cloneElement(element : any, deep? : any) : any;
     protected replaceChildren(parent : any, children : any) : void;
     protected getCurrentRow(row : any, rowsInserted : any) : number;
