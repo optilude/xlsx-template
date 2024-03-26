@@ -321,6 +321,8 @@ class Workbook {
                             } else {
                                 console.log("Need to implement initRels. Or init this with Excel");
                             }
+                        } else if (placeholder.type === "imageincell" && placeholder.full) {
+                            string = self.substituteImageInCell(cell, substitution);
                         } else {
                             if (placeholder.key) {
                                 substitution = _get(substitutions, placeholder.name + '.' + placeholder.key);
@@ -439,6 +441,7 @@ class Workbook {
         if (rels) {
             self.archive.file(rels.filename, etree.tostring(rels.root));
         }
+        self.writeRichData();
         self.archive.file('[Content_Types].xml', etree.tostring(self.contentTypes));
         // Remove calc chain - Excel will re-build, and we may have moved some formulae
         if (self.calcChainPath && self.archive.file(self.calcChainPath)) {
@@ -1092,6 +1095,259 @@ class Workbook {
 
         return newCellsInserted;
     }
+
+    /**
+     * Init the RichData structure for ImageInCell
+     * There are 6 xml to init.
+     * If one of the files is available in the Excel archive, we read it rather than using the default value
+     */
+    initRichData() {
+
+        if (!this.richDataIsInit) {
+            const _relsrichValueRel = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+        </Relationships>`;
+            const rdrichvalue = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <rvData xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata" count="0">
+        </rvData>`;
+            const rdrichvaluestructure = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+            <rvStructures xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata" count="1">
+                <s t="_localImage">
+                    <k n="_rvRel:LocalImageIdentifier" t="i"/>
+                    <k n="CalcOrigin" t="i"/>
+                </s>
+            </rvStructures>`;
+            const rdRichValueTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <rvTypesInfo xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata2"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x"
+            xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+            <global>
+                <keyFlags>
+                    <key name="_Self">
+                        <flag name="ExcludeFromFile" value="1"/>
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_DisplayString">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_Flags">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_Format">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_SubLabel">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_Attribution">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_Icon">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_Display">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_CanonicalPropertyNames">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                    <key name="_ClassificationId">
+                        <flag name="ExcludeFromCalcComparison" value="1"/>
+                    </key>
+                </keyFlags>
+            </global>
+        </rvTypesInfo>`;
+            const richValueRel = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <richValueRels xmlns="http://schemas.microsoft.com/office/spreadsheetml/2022/richvaluerel"
+            xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+        </richValueRels>`;
+        const metadata = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <metadata xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+            xmlns:xlrd="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata">
+            <metadataTypes count="1">
+                <metadataType name="XLRICHVALUE" minSupportedVersion="120000" copy="1" pasteAll="1" pasteValues="1" merge="1" splitFirst="1" rowColShift="1" clearFormats="1" clearComments="1" assign="1" coerce="1"/>
+            </metadataTypes>
+            <futureMetadata name="XLRICHVALUE" count="0">
+            </futureMetadata>
+            <valueMetadata count="0">
+            </valueMetadata>
+        </metadata>`;
+            const _relsrichValueRelFileName = 'xl/richData/_rels/richValueRel.xml.rels';
+            const rdrichvalueFileName = 'xl/richData/rdrichvalue.xml';
+            const rdrichvaluestructureFileName = 'xl/richData/rdrichvaluestructure.xml';
+            const rdRichValueTypesFileName = 'xl/richData/rdRichValueTypes.xml';
+            const richValueRelFileName = 'xl/richData/richValueRel.xml';
+            const metadataFileName = 'xl/metadata.xml';
+
+            this._relsrichValueRel = etree.parse(_relsrichValueRel).getroot();
+            this.rdrichvalue = etree.parse(rdrichvalue).getroot();
+            this.rdrichvaluestructure = etree.parse(rdrichvaluestructure).getroot();
+            this.rdRichValueTypes = etree.parse(rdRichValueTypes).getroot();
+            this.richValueRel = etree.parse(richValueRel).getroot();
+            this.metadata = etree.parse(metadata).getroot();
+            if(this.archive.file(_relsrichValueRelFileName) ){
+                this._relsrichValueRel = etree.parse(this.archive.file(_relsrichValueRelFileName).asText()).getroot()
+            }
+            if(this.archive.file(rdrichvalueFileName) ){
+                this.rdrichvalue = etree.parse(this.archive.file(rdrichvalueFileName).asText()).getroot()
+            }
+            if(this.archive.file(rdrichvaluestructureFileName) ){
+                this.rdrichvaluestructure = etree.parse(this.archive.file(rdrichvaluestructureFileName).asText()).getroot()
+            }
+            if(this.archive.file(rdRichValueTypesFileName) ){
+                this.rdRichValueTypes = etree.parse(this.archive.file(rdRichValueTypesFileName).asText()).getroot()
+            }
+            if(this.archive.file(richValueRelFileName) ){
+                this.richValueRel = etree.parse(this.archive.file(richValueRelFileName).asText()).getroot()
+            }
+            if(this.archive.file(metadataFileName) ){
+                this.metadata = etree.parse(this.archive.file(metadataFileName).asText()).getroot()
+            }
+            this.richDataIsInit = true;
+        }
+    };
+
+    writeRichDataAlreadyExist(element, elementSearchName, attributeName, attributeValue) {
+        for (const e of element.findall(elementSearchName)) {
+            if (e.attrib[attributeName] == attributeValue) {
+                return true;
+            }
+        };
+        return false;
+    };
+
+    /**
+     * Write the new RichData structure with the updated XML Value for each RichData files
+     */
+    writeRichData() {
+        if (this.richDataIsInit) {
+            const _relsrichValueRelFileName = 'xl/richData/_rels/richValueRel.xml.rels';
+            const rdrichvalueFileName = 'xl/richData/rdrichvalue.xml';
+            const rdrichvaluestructureFileName = 'xl/richData/rdrichvaluestructure.xml';
+            const rdRichValueTypesFileName = 'xl/richData/rdRichValueTypes.xml';
+            const richValueRelFileName = 'xl/richData/richValueRel.xml';
+            const metadataFileName = 'xl/metadata.xml';
+            this.archive.file(_relsrichValueRelFileName, etree.tostring(this._relsrichValueRel));
+            this.archive.file(rdrichvalueFileName, etree.tostring(this.rdrichvalue));
+            this.archive.file(rdrichvaluestructureFileName, etree.tostring(this.rdrichvaluestructure));
+            this.archive.file(rdRichValueTypesFileName, etree.tostring(this.rdRichValueTypes));
+            this.archive.file(richValueRelFileName, etree.tostring(this.richValueRel));
+            this.archive.file(metadataFileName, etree.tostring(this.metadata));
+
+            const wbrelsidMax = this.findMaxId(this.workbookRels, 'Relationship', 'Id', /rId(\d*)/);
+            if (!this.writeRichDataAlreadyExist(this.workbookRels, 'Relationship', 'Target', "richData/rdrichvaluestructure.xml")) {
+                var _rel = etree.SubElement(this.workbookRels, 'Relationship');
+                _rel.set('Id', 'rId' + wbrelsidMax);
+                _rel.set('Type', "http://schemas.microsoft.com/office/2017/06/relationships/rdRichValueStructure");
+                _rel.set('Target', "richData/rdrichvaluestructure.xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.workbookRels, 'Relationship', 'Target', "richData/rdrichvalue.xml")) {
+                _rel = etree.SubElement(this.workbookRels, 'Relationship');
+                _rel.set('Id', `rId${wbrelsidMax + 1}`);
+                _rel.set('Type', "http://schemas.microsoft.com/office/2017/06/relationships/rdRichValue");
+                _rel.set('Target', "richData/rdrichvalue.xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.workbookRels, 'Relationship', 'Target', "richData/richValueRel.xml")) {
+                _rel = etree.SubElement(this.workbookRels, 'Relationship');
+                _rel.set('Id', `rId${wbrelsidMax + 2}`);
+                _rel.set('Type', "http://schemas.microsoft.com/office/2022/10/relationships/richValueRel");
+                _rel.set('Target', "richData/richValueRel.xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.workbookRels, 'Relationship', 'Target', "metadata.xml")) {
+                _rel = etree.SubElement(this.workbookRels, 'Relationship');
+                _rel.set('Id', `rId${wbrelsidMax + 3}`);
+                _rel.set('Type', "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sheetMetadata");
+                _rel.set('Target', "metadata.xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.workbookRels, 'Relationship', 'Target', "richData/rdRichValueTypes.xml")) {
+                _rel = etree.SubElement(this.workbookRels, 'Relationship');
+                _rel.set('Id', `rId${wbrelsidMax + 4}`);
+                _rel.set('Type', "http://schemas.microsoft.com/office/2017/06/relationships/rdRichValueTypes");
+                _rel.set('Target', "richData/rdRichValueTypes.xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.contentTypes, 'Override', 'PartName', "/xl/metadata.xml")) {
+                var ctOverride = etree.SubElement(this.contentTypes, 'Override');
+                ctOverride.set('PartName', "/xl/metadata.xml");
+                ctOverride.set('ContentType', "application/vnd.openxmlformats-officedocument.spreadsheetml.sheetMetadata+xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.contentTypes, 'Override', 'PartName', "/xl/richData/richValueRel.xml")) {
+                ctOverride = etree.SubElement(this.contentTypes, 'Override');
+                ctOverride.set('PartName', "/xl/richData/richValueRel.xml");
+                ctOverride.set('ContentType', "application/vnd.ms-excel.richvaluerel+xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.contentTypes, 'Override', 'PartName', "/xl/richData/rdrichvalue.xml")) {
+                ctOverride = etree.SubElement(this.contentTypes, 'Override');
+                ctOverride.set('PartName', "/xl/richData/rdrichvalue.xml");
+                ctOverride.set('ContentType', "application/vnd.ms-excel.rdrichvalue+xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.contentTypes, 'Override', 'PartName', "/xl/richData/rdrichvaluestructure.xml")) {
+                ctOverride = etree.SubElement(this.contentTypes, 'Override');
+                ctOverride.set('PartName', "/xl/richData/rdrichvaluestructure.xml");
+                ctOverride.set('ContentType', "application/vnd.ms-excel.rdrichvaluestructure+xml");
+            }
+            if (!this.writeRichDataAlreadyExist(this.contentTypes, 'Override', 'PartName', "/xl/richData/rdRichValueTypes.xml")) {
+                ctOverride = etree.SubElement(this.contentTypes, 'Override');
+                ctOverride.set('PartName', "/xl/richData/rdRichValueTypes.xml");
+                ctOverride.set('ContentType', "application/vnd.ms-excel.rdrichvaluetypes+xml");
+            }
+            this._rebuild()
+        }
+    }
+
+    substituteImageInCell(cell, substitution) {
+        if (substitution == null || substitution == "") {
+            this.insertCellValue(cell, "");
+            return true;
+        }
+        this.initRichData();
+        const maxFildId = this.findMaxFileId(/xl\/media\/image\d*.jpg/, /image(\d*)\.jpg/);
+        try {
+            substitution = this.imageToBuffer(substitution);
+        }
+        catch (error) {
+            if (this.option && this.option.handleImageError && typeof this.option.handleImageError === "function") {
+                this.option.handleImageError(substitution, error);
+            }
+            else {
+                throw error;
+            }
+        }
+        this.archive.file('xl/media/image' + maxFildId + '.jpg', this.toArrayBuffer(substitution), { binary: true, base64: false });
+        const maxIdRichData = this.findMaxId(this._relsrichValueRel, 'Relationship', 'Id', /rId(\d*)/);
+        const _rel = etree.SubElement(this._relsrichValueRel, 'Relationship');
+        _rel.set('Id', 'rId' + maxIdRichData);
+        _rel.set('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image');
+        _rel.set('Target', '../media/image' + maxFildId + '.jpg');
+        const currentCountrdRichValue = this.rdrichvalue.get('count');
+        this.rdrichvalue.set('count', parseInt(currentCountrdRichValue) + 1);
+        const rv = etree.SubElement(this.rdrichvalue, 'rv');
+        rv.set('s', "0");
+        const firstV = etree.SubElement(rv, 'v');
+        const secondV = etree.SubElement(rv, 'v');
+        firstV.text = currentCountrdRichValue;
+        secondV.text = "5";
+        const rel = etree.SubElement(this.richValueRel, 'rel');
+        rel.set("r:id", 'rId' + maxIdRichData);
+        const futureMetadataCount = this.metadata.find('futureMetadata').get('count');
+        this.metadata.find('futureMetadata').set('count', parseInt(futureMetadataCount) + 1);
+        const bk = etree.SubElement(this.metadata.find('futureMetadata'), 'bk');
+        const extLst = etree.SubElement(bk, 'extLst');
+        const ext = etree.SubElement(extLst, 'ext');
+        ext.set("uri", "{3e2802c4-a4d2-4d8b-9148-e3be6c30e623}");
+        const xlrd_rvb = etree.SubElement(ext, 'xlrd:rvb');
+        xlrd_rvb.set("i", futureMetadataCount);
+        const valueMetadataCount = this.metadata.find('valueMetadata').get('count');
+        this.metadata.find('valueMetadata').set('count', parseInt(valueMetadataCount) + 1);
+        const bk_VM = etree.SubElement(this.metadata.find('valueMetadata'), 'bk');
+        const rc = etree.SubElement(bk_VM, 'rc');
+        rc.set("t", "1");
+        rc.set("v", valueMetadataCount);
+        cell.set("t", "e");
+        cell.set("vm", parseInt(currentCountrdRichValue) + 1);
+        this.insertCellValue(cell, "#VALUE!");
+        return true;
+    };
+
     substituteImage(cell, string, placeholder, substitution, drawing) {
         var self = this;
         var self = this;
