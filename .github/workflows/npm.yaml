@@ -1,7 +1,7 @@
 name: CI validation
 on:
   push:
-    branches: [ 'master' ]
+    branches: [ 'master', 'image_in_cell_table' ]
   pull_request:
     branches: [ 'master' ]
 
