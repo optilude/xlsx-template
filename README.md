@@ -83,6 +83,29 @@ those objects have keys `name` and `age`, you may end up with something like:
 If a particular value is an array, then it will be repeated across columns as
 above.
 
+### Images in cell
+
+> **⚠️ Warning :**  This functionality is avaible only from new Excel version (2308 - maybe more recent but 2302 does not work).
+
+*images in cell* automatically match cell size (merge cell size) and formatted cell (alignment, colorization etc.)
+
+You can insert *images in cell* with   
+    | My image: | ${imageincell:imageName} |
+
+Given data
+
+    var template = { imageName: "helloImage.jpg"}
+
+You can insert a list of images with   
+
+    | My images | ${table:images.name:imageincell} |
+
+Given data
+
+    var template = { images: [{name : "helloImage1.jpg"}, {name : "helloImage2.jpg"}]}   
+
+support the same format as 'image' just below
+
 ### Images
 
 You can insert images with   
