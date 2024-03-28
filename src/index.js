@@ -1013,6 +1013,8 @@ class Workbook {
                         newCellsInserted = self.substituteArray(cells, cell, value);
                     } else if (placeholder.subType == 'image' && value != "") {
                         self.substituteImage(cell, placeholder.placeholder, placeholder, value, drawing);
+                    } else if (placeholder.subType === "imageincell" && value != "") {
+                        self.substituteImageInCell(cell, value);
                     } else {
                         self.insertCellValue(cell, value);
                     }
@@ -1045,6 +1047,9 @@ class Workbook {
                         self.updateRowSpan(newRow, newCellsInsertedOnNewRow);
                     } else if (placeholder.subType == 'image' && value != '') {
                         self.substituteImage(newCell, placeholder.placeholder, placeholder, value, drawing);
+                    } else if (placeholder.subType === "imageincell" && value != "") {
+                        self.substituteImageInCell(newCell, value);
+                        newRow.append(newCell);
                     } else {
                         self.insertCellValue(newCell, value);
 
