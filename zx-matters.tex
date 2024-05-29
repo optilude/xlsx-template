@@ -10,7 +10,9 @@
 \textheight 8.9in 
 \textwidth 6.25in 
  
-\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+%\usepackage[english]{babel}
 \usepackage{amsmath,amsthm,amssymb}      
 \usepackage[svgnames]{xcolor}  
 \usepackage{rotating} 
@@ -134,11 +136,11 @@
 \newcommand{\COMMd}[1]{\marginpar{\scriptsize\bG \textbf{COMM:} #1\e}} 
 \newcommand{\COMMh}[1]{\marginpar{\scriptsize\bC \textbf{COMM:} #1\e}} 
 
-\title{Kindergarden quantum mechanics graduates\vspace{2mm}
+\title{Випускники дітсадкової квантової механіки\vspace{2mm}
 % \title{ZX-calculus: why it (now)  matters}
 % \title{First Grade Quantum Mechanics 
 % \\ \large\it\bR ...or how my LEGO days ended when playing with ZX-calculus on quantum computers\e}
-\\ \large\it ...or how I learned to stop gluing LEGO together and love the ZX-calculus}
+\\ \large\it ...або як я навчився зупинятися об'єднувати LEGO до купи і полюбив ZX-обчислення}
 
 \author{Bob Coecke${}^\dagger$, Dominic Horsman${}^\star$, Aleks Kissinger${}^\ddagger$, Quanlong Wang${}^\dagger$\\
 \ \\ 
@@ -153,7 +155,7 @@ ${}^\ddagger$ Oxford University. \href{mailto:aleks.kissinger@cs.ox.ac.uk}{\tt a
 %\TODOb{Good to have subtitle with ZX, but not sure if I even understand this one; which author names" Harny too?} 
 
 \begin{abstract} 
-This paper is a `spiritual child' of the 2005 lecture notes \textit{Kindergarten Quantum Mechanics} \cite{Kindergarten}, which showed how a simple, pictorial extension of Dirac notation allowed several quantum  features to be easily expressed and derived, using language even a kindergartner can understand.  Central to that approach was the use of pictures and pictorial transformation rules to understand and derive features of quantum theory and computation.  However, this approach left many wondering `where's the beef?' In other words, was this new approach capable of producing new results, or was it simply an aesthetically pleasing way to restate stuff we already know?
+Ця стаття є «духовною дитиною» конспектів лекцій 2005 року \textit{Дітсадкова квантова механіка} \cite{Kindergarten}, які показали, як просте графічне розширення нотації Дірака дозволило легко виразити та вивести декілька квантових характеристик, використовуючи мову, зрозумілу навіть у дитсадку. Центральним у цьому підході було використання зображень і графічних правил перетворення зображень для розуміння та знаходження особливостей квантової теорії та квантових обчислень. Однак такий підхід змусив багатьох задуматися, «де м'ясо?» Іншими словами, чи міг цей новий підхід дати нові результати, чи це був просто естетично приємний спосіб переформулювати те, що ми вже знаємо?
 
 The aim of this sequel paper is to say `here's the beef!', and highlight some of the major results of the approach advocated in Kindergarten Quantum Mechanics, and how they are being applied to tackle practical problems on real quantum computers. Toward that end, we will focus mainly on what has become the Swiss army knife of the pictorial formalism: the \em ZX-calculus\em, a graphical tool for representing and manipulating complex linear maps on $2^N$ dimensional space. First we look at  
 some of the ideas behind the ZX-calculus,  comparing and contrasting it with the usual quantum circuit formalism.
