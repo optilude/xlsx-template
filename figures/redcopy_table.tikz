@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=gray dot] (0) at (0, 0) {};
+		\node [style=none] (1) at (1, 1) {};
+		\node [style=none] (2) at (-1, 1) {};
+		\node [style=none] (3) at (0, -1) {};
+		\node [style=none] (4) at (0, 1.25) {};
+		\node [style=none] (5) at (0, -1.25) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap, in=165, out=-90, looseness=1.00] (2) to (0);
+		\draw [style=swap, in=-90, out=15, looseness=1.00] (0) to (1);
+		\draw [style=swap] (0) to (3.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

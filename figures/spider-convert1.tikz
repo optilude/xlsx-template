@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0, 0) {$=$};  
+		\node [style=gray dot] (1) at (-2.75, 0) {};
+		\node [style=white phase dot] (2) at (-2.75, -1.5) {-$\frac\pi2$};
+		\node [style=white phase dot] (3) at (-3.75, 1.25) {$\frac\pi2$};
+		\node [style=white phase dot] (4) at (-1.75, 1.25) {$\frac\pi2$};
+		\node [style=none] (5) at (-2.75, -2.5) {};
+		\node [style=none] (6) at (-3.75, 2.25) {};
+		\node [style=none] (7) at (-1.75, 2.25) {}; 
+		\node [style=white phase dot] (8) at (2.75, 0) {-$\frac\pi2$};
+		\node [style=none] (9) at (1.75, 2.25) {};
+		\node [style=none] (10) at (3.75, 2.25) {}; 
+		\node [style=gray phase dot] (11) at (2.75, -1.5) {$\frac\pi2$}; 
+		\node [style=gray phase dot] (12) at (3.75, 1.25) {-$\frac\pi2$};
+		\node [style=gray phase dot] (13) at (1.75, 1.25) {-$\frac\pi2$};
+		\node [style=none] (14) at (2.75, -2.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (5.center) to (2);
+		\draw (2) to (1);
+		\draw [bend right, looseness=1.00] (1) to (4);
+		\draw (4) to (7.center);
+		\draw [bend left, looseness=1.00] (1) to (3); 
+		\draw (3) to (6.center);
+		\draw (14.center) to (11);
+		\draw (11) to (8);
+		\draw [bend right, looseness=1.00] (8) to (12);
+		\draw (12) to (10.center);
+		\draw [bend left, looseness=1.00] (8) to (13);
+		\draw (13) to (9.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

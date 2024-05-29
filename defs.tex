@@ -1,0 +1,1429 @@
+\newcommand\nuclear{\omding\char195\xspace}
+\newcommand\goodskull{\omding\char194\xspace}
+\newcommand\frowny{\raisebox{-0.5mm}{\scalebox{1.4}{\omding\char197}}\xspace}
+\newcommand\smily{\raisebox{-0.5mm}{\scalebox{1.4}{\omding\char196}}\xspace}
+
+\newcommand*{\threesim}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+
+\newcommand{\smallsum}{\textstyle{\sum\limits_i}\xspace}
+\newcommand{\smallsumi}[1]{\textstyle{\sum\limits_{#1}}\xspace}
+
+\newcommand{\emptydiag}{\,\tikz{\node[style=empty diagram] (x) {};}\,}
+\newcommand{\scalar}[1]{\,\tikz{\node[style=scalar] (x) {$#1$};}\,}
+\newcommand{\dscalar}[1]{\,\tikz{\node[style=scalar, doubled] (x) {$#1$};}\,}
+\newkeycommand{\boxmap}[style=small box][1]{\,\tikz{\node[style=\commandkey{style}] (x) {$#1$};\draw(0,-1.25)--(x)--(0,1.25);}\,}
+\newkeycommand{\dboxmap}[style=dbox][1]{\,\tikz{\node[style=\commandkey{style}] (x) {$#1$};\draw[boldedge] (0,-1.25)--(x)--(0,1.25);}\,}
+\newcommand{\dhadamard}{\,\tikz{\node[style=dhadamard] (x) {$H$};\draw[boldedge] (0,-1.25)--(x)--(0,1.25);}\,}
+\newcommand{\tboxmap}[3]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=small box] (0) at (0, 0) {$#1$};
+    \node [style=none] (1) at (0, -0.5) {};
+    \node [style=none] (2) at (0, -1.25) {};
+    \node [style=none] (3) at (0, 1.25) {};
+    \node [style=none] (4) at (0, 0.5) {};
+    \node [style=right label] (5) at (0.25, -1) {$#2$};
+    \node [style=right label] (6) at (0.25, 1) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (2.center) to (1.center);
+    \draw (4.center) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}}
+\newcommand{\boxstate}[1]{\,\tikz{\node[style=small box] (x) {$#1$};\draw(x)--(0,1.25);}\,}
+\newcommand{\boxeffect}[1]{\,\tikz{\node[style=small box] (x) {$#1$};\draw(0,-1.25)--(x);}\,}
+\newcommand{\boxmapTWOtoONE}[1]{\,\tikz{\node[style=small box] (x) {$#1$};\draw(-0.8,-1)--(x)--(0,1);\draw (0.8,-1)--(x);}\,}
+\newcommand{\boxmapONEtoTWO}[1]{\,\tikz{\node[style=small box] (x) {$#1$};\draw(0,-1)--(x)--(-1,1);\draw (x)--(1,1);}\,}
+
+\newcommand{\doubleop}{\ensuremath{\textsf{double}}\xspace}
+
+\newcommand{\kscalar}[1]{\,\tikz{\node[style=kscalar] (x) {$#1$};}\,}
+\newcommand{\kscalarconj}[1]{\,\tikz{\node[style=kscalarconj] (x) {$#1$};}\,}
+
+\newcommand{\dmap}[1]{\,\tikz{\node[style=dmap] (x) {$#1$};\draw[boldedge] (0,-1.3)--(x)--(0,1.3);}\,}
+\newcommand{\dmapdag}[1]{\,\tikz{\node[style=dmapdag] (x) {$#1$};\draw[boldedge] (0,-1.3)--(x)--(0,1.3);}\,}
+\newcommand{\dmaptrans}[1]{\,\tikz{\node[style=dmaptrans] (x) {$#1$};\draw[boldedge] (0,-1.3)--(x)--(0,1.3);}\,}
+\newcommand{\dmapconj}[1]{\,\tikz{\node[style=dmapconj] (x) {$#1$};\draw[boldedge] (0,-1.3)--(x)--(0,1.3);}\,}
+
+\newcommand{\map}[1]{\,\tikz{\node[style=map] (x) {$#1$};\draw(0,-1.3)--(x)--(0,1.3);}\,}
+
+\newcommand{\maptypes}[3]{\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=map] (0) at (0, 0) {$#1$};
+    \node [style=none] (1) at (0, -1.5) {};
+    \node [style=none] (2) at (0, 1.5) {};
+    \node [style=right label] (3) at (0.25, -1.25) {$#2$};
+    \node [style=right label] (4) at (0.25, 1) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1.center) to (0);
+    \draw (0) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}}
+
+\newcommand{\mapdag}[1]{\,\tikz{\node[style=mapdag] (x) {$#1$};\draw(0,-1.3)--(x)--(0,1.3);}\,}
+
+\newcommand{\maptrans}[1]{\,\tikz{\node[style=maptrans] (x) {$#1$};\draw(0,-1.3)--(x)--(0,1.3);}\,}
+
+\newcommand{\mapconj}[1]{\,\tikz{\node[style=mapconj] (x) {$#1$};\draw(0,-1.3)--(x)--(0,1.3);}\,}
+
+\newcommand{\mapONEtoTWO}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=map] (0) at (0, 0) {$#1$};
+    \node [style=none] (1) at (0, -0.5) {};
+    \node [style=none] (2) at (-0.75, 0.5) {};
+    \node [style=none] (3) at (-0.75, 1.25) {};
+    \node [style=none] (4) at (0, -1.25) {};
+    \node [style=none] (5) at (0.75, 0.5) {};
+    \node [style=none] (6) at (0.75, 1.25) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (4.center) to (1.center);
+    \draw (2.center) to (3.center);
+    \draw (5.center) to (6.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\classicalstate}[1]{%
+\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=dkpoint] (0) at (0, -0.75) {$#1$};
+    \node [style=white dot] (1) at (0, 0.25) {};
+    \node [style=none] (2) at (0, 1) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\wirelabel}[style=white label]{\,\tikz{\node[style=\commandkey{style}]{};}\,\xspace}
+
+\newkeycommand{\pointmap}[style=point][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.3) {$#1$};\node [style=none] (3) at (0, 0.9) {};\node [style=none] (3) at (0, -0.9) {};\draw (x)--(0,0.7);}\,}
+
+%% these are the new ones, prefer to point/copoint
+\newkeycommand{\point}[style=point,estyle=][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.05) {$#1$};\draw [\commandkey{estyle}] (x)--(0,1.05);}\,}
+
+\newcommand{\pointdag}[1]{\,\tikz{\node[style=copoint] (x) at (0,0.05) {$#1$};\draw (x)--(0,-1.05);}\,}
+
+\newcommand{\graypointmap}[1]{\pointmap[style=gray point]{#1}}
+
+\newkeycommand{\copointmap}[style=copoint][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,0.3) {$#1$};\draw (x)--(0,-0.7);}\,}
+
+\newcommand{\graycopointmap}[1]{\copointmap[style=gray copoint]{#1}}
+
+\newcommand{\dpointmap}[1]{\,\tikz{\node[style=point,doubled] (x) at (0,-0.3) {$#1$};\draw[boldedge] (x)--(0,0.7);}\,}
+
+\newcommand{\dcopointmap}[1]{\,\tikz{\node[style=copoint, doubled] (x) at (0,0.3) {$#1$};\draw[boldedge] (x)--(0,-0.7);}\,}
+
+\newcommand{\graydcopointmap}[1]{\,\tikz{\node[style=gray copoint, doubled] (x) at (0,0.3) {$#1$};\draw[boldedge] (x)--(0,-0.7);}\,}
+
+\newkeycommand{\dpoint}[style=point][1]{\,\tikz{\node[style=\commandkey{style},doubled] (x) at (0,-0.3) {$#1$};\draw[boldedge] (x)--(0,0.7);}\,}
+\newcommand{\dcopoint}[1]{\,\tikz{\node[style=copoint, doubled] (x) at (0,0.3) {$#1$};\draw[boldedge] (x)--(0,-0.7);}\,}
+
+\newkeycommand{\kpoint}[style=kpoint,estyle=][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.05) {$#1$};\draw [\commandkey{estyle}] (x)--(0,1.05);}\,}
+
+\newkeycommand{\kpointgray}[style=gray kpoint,estyle=][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.05) {$#1$};\draw [\commandkey{estyle}] (x)--(0,1.05);}\,}
+
+\newcommand{\kpointgrayconj}[1]{\,\tikz{\node[style=gray kpointconj] (x) at (0,-0.05) {$#1$};\draw (x)--(0,1.05);}\,}
+
+\newcommand{\kpointgrayadj}[1]{\,\tikz{\node[style=gray kpointadj] (x) at (0,0.05) {$#1$};\draw (x)--(0,-1.05);}\,}
+
+\newcommand{\kpointconj}[1]{\,\tikz{\node[style=kpoint conjugate] (x) at (0,-0.05) {$#1$};\draw (x)--(0,1.05);}\,}
+
+\newcommand{\kpointdag}[1]{\,\tikz{\node[style=kpoint adjoint] (x) at (0,0.05) {$#1$};\draw (x)--(0,-1.05);}\,}
+\newcommand{\kpointadj}[1]{\kpointdag{#1}}
+\newcommand{\kpointtrans}[1]{\,\tikz{\node[style=kpoint transpose] (x) at (0,0.05) {$#1$};\draw (x)--(0,-1.05);}\,}
+
+\newkeycommand{\typedkpoint}[style=kpoint,edgestyle=][2]{%
+\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, -0.75) {$#2$};
+    \node [style=right label] (2) at (0.25, 0.5) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{edgestyle}] (1) to (0.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\typedkpointdag}[style=kpoint adjoint,edgestyle=][2]{%
+\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0.75) {$#2$};
+    \node [style=right label] (2) at (0.25, -0.5) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{edgestyle}] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\typedpoint}[2]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=point] (1) at (0, -0.5) {$#2$};
+    \node [style=right label] (2) at (0.25, 0.5) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1) to (0.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\bistate}[style=kpoint][1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style}, minimum width=1 cm, inner sep=2pt] (0) at (0, -0.25) {$#1$};
+    \node [style=none] (1) at (-0.75, 0) {};
+    \node [style=none] (2) at (0.75, 0) {};
+    \node [style=none] (3) at (-0.75, 0.88) {};
+    \node [style=none] (4) at (0.75, 0.88) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1.center) to (3.center);
+    \draw (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\bistatebig}[style=kpoint][1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style}, minimum width=, minimum width=1.26 cm, inner sep=2pt] (0) at (0, -0.25) {$#1$};
+    \node [style=none] (1) at (-1, 0) {};
+    \node [style=none] (2) at (1, 0) {};
+    \node [style=none] (3) at (-1, 0.88) {};
+    \node [style=none] (4) at (1, 0.88) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1.center) to (3.center);
+    \draw (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+
+\newkeycommand{\dbistate}[style=dkpoint][1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style}, minimum width=1 cm, inner sep=2pt] (0) at (0, -0.25) {$#1$};
+    \node [style=none] (1) at (-0.75, 0) {};
+    \node [style=none] (2) at (0.75, 0) {};
+    \node [style=none] (3) at (-0.75, 1.0) {};
+    \node [style=none] (4) at (0.75, 1.0) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (1.center) to (3.center);
+    \draw [boldedge] (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\bistateadj}[1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=kpointadj, minimum width=1 cm, inner sep=2pt] (0) at (0, 0.5) {$#1$};
+    \node [style=none] (1) at (-0.75, 0.25) {};
+    \node [style=none] (2) at (0.75, 0.25) {};
+    \node [style=none] (3) at (-0.75, -0.63) {};
+    \node [style=none] (4) at (0.75, -0.63) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1.center) to (3.center);
+    \draw (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\dbistateadj}[1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=kpointadj, doubled, minimum width=1 cm, inner sep=2pt] (0) at (0, 0.5) {$#1$};
+    \node [style=none] (1) at (-0.75, 0.25) {};
+    \node [style=none] (2) at (0.75, 0.25) {};
+    \node [style=none] (3) at (-0.75, -0.5) {};
+    \node [style=none] (4) at (0.75, -0.5) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (1.center) to (3.center);
+    \draw [boldedge] (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\bistatebraket}[style1=kpoint,style2=kpointadj][2]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}, minimum width=1 cm, inner sep=2pt] (0) at (0, -0.75) {$#1$};
+    \node [style=none] (1) at (-0.75, -0.5) {};
+    \node [style=none] (2) at (0.75, -0.5) {};
+    \node [style=none] (3) at (-0.75, 0.5) {};
+    \node [style=none] (4) at (0.75, 0.5) {};
+    \node [style=\commandkey{style2}, minimum width=1 cm, inner sep=2pt] (5) at (0, 0.75) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (1.center) to (3.center);
+    \draw (2.center) to (4.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\binop}[2]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0.75, -1.25) {};
+    \node [style=right label, xshift=1 mm] (1) at (0.75, -1) {$#1$};
+    \node [style=none] (2) at (0, 1.25) {};
+    \node [style=white dot] (3) at (0, 0) {$#2$};
+    \node [style=none] (4) at (-0.75, -1.25) {};
+    \node [style=right label] (5) at (-0.5, -1) {$#1$};
+    \node [style=right label] (6) at (0.25, 1) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [bend right=15, looseness=1.00] (0.center) to (3);
+    \draw [bend left=15, looseness=1.00] (4.center) to (3);
+    \draw (3) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\weight}[style=dkpoint][1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style}] (0) at (0, -0.5) {$#1$};
+    \node [style=upground] (1) at (0, 0.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\weightmap}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.25) {};
+    \node [style=dmap] (1) at (0, 0) {$#1$};
+    \node [style=upground] (2) at (0, 1.5) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0.center) to (1);
+    \draw [style=boldedge] (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\weightdag}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=downground] (0) at (0, -0.75) {};
+    \node [style=dkpointdag] (1) at (0, 0.75) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\mapbent}[1]{\,\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=map] (0) at (1, 0) {$#1$};
+		\node [style=none] (1) at (1, 1.25) {};
+		\node [style=none] (2) at (-0.5, -0.5) {};
+		\node [style=none] (3) at (-0.5, 1.25) {};
+		\node [style=none] (4) at (1, -0.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (1.center);
+		\draw [in=-90, out=-90, looseness=1.75] (4.center) to (2.center);
+		\draw (2.center) to (3.center);
+		\draw (4.center) to (0);
+	\end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\qproc}[1]{\left(\vphantom{\widehat X}#1\right)}
+
+\newcommand{\dmapdiscard}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=dmap] (0) at (0, 0) {$#1$};
+    \node [style=none] (1) at (0, -1.25) {};
+    \node [style=upground] (2) at (0, 1.50) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0) to (1.center);
+    \draw [style=boldedge] (0) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\dkpoint}[style=dkpoint][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.1) {$#1$};\draw[boldedge] (x)--(0,1);}\,}
+\newkeycommand{\dkpointadj}[style=dkpointadj][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,0.1) {$#1$};\draw[boldedge] (x)--(0,-1);}\,}
+\newkeycommand{\dkpointtrans}[style=dkpointtrans][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,0.1) {$#1$};\draw[boldedge] (x)--(0,-1);}\,}
+\newkeycommand{\dkpointconj}[style=dkpointconj][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.1) {$#1$};\draw[boldedge] (x)--(0,1);}\,}
+
+\newkeycommand{\blackkpoint}[style=black kpoint][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.1) {$#1$};\draw (x)--(0,1);}\,}
+\newkeycommand{\blackkpointadj}[style=black kpointadj][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,0.1) {$#1$};\draw (x)--(0,-1);}\,}
+\newkeycommand{\blackdkpoint}[style=black dkpoint][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.1) {$#1$};\draw[boldedge] (x)--(0,1);}\,}
+\newkeycommand{\blackdkpointadj}[style=black dkpointadj][1]{\,\tikz{\node[style=\commandkey{style}] (x) at (0,0.1) {$#1$};\draw[boldedge] (x)--(0,-1);}\,}
+
+\newcommand{\trace}{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -0.60) {};
+    \node [style=upground] (1) at (0, 0.40) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=none] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\spider}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=#1] (0) at (0, 0) {};
+    \node [style=none] (1) at (1.5, 1.25) {};
+    \node [style=none] (2) at (-1, 1.25) {};
+    \node [style=none] (3) at (1.25, -1.25) {};
+    \node [style=none] (4) at (-0.75, -1.25) {};
+    \node [style=none] (5) at (0.25, 1) {$\cdot\cdot\cdot\cdot\cdot$};
+    \node [style=none] (6) at (0.25, -1) {$\cdot\cdot\cdot$};
+    \node [style=none] (7) at (-1.5, 1.25) {};
+    \node [style=none] (8) at (-1.25, -1.25) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=swap, in=135, out=-90, looseness=0.75] (2.center) to (0);
+    \draw [style=swap, in=-90, out=45, looseness=0.75] (0) to (1.center);
+    \draw [style=swap, in=90, out=-45, looseness=0.75] (0) to (3.center);
+    \draw [style=swap, in=90, out=-135, looseness=0.75] (0) to (4.center);
+    \draw [style=swap, in=-153, out=90, looseness=0.50] (8.center) to (0);
+    \draw [style=swap, in=149, out=-90, looseness=0.50] (7.center) to (0);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand\discard\trace
+
+\newcommand\D{\textrm{\footnotesize $D$}\xspace}
+\newcommand\sqrtD{\textrm{\footnotesize $\sqrt{D}$}\xspace}
+\newcommand\oneoverD{\ensuremath{{\textstyle{1\over{D}}}}\xspace}
+\newcommand\oneoversqrtD{\ensuremath{{\textstyle{1\over{\sqrt{D}}}}}\xspace}
+\newcommand\oneoversqrttwo{\ensuremath{{\textstyle{1\over{\sqrt{2}}}}}\xspace}
+
+\newcommand{\maxmix}{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (-0.25, 0.60) {};
+    \node [style=downground] (1) at (-0.25, -0.40) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=none] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\namedeq}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 0.75) {\footnotesize $#1$};
+    \node [style=none] (1) at (0, 0) {$=$};
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+\newcommand{\namedmapsto}[1]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 0.75) {\footnotesize $#1$};
+    \node [style=none] (1) at (0, 0) {$\mapsto$};
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\scalareq}{\ensuremath{\approx}\xspace}
+\newcommand{\scalareqalt}{\ensuremath{\threesim}\xspace}
+%
+%\ensuremath{\overset{\diamond}{=}}\xspace}
+
+% \newkeycommand{\pointketbra}[style1=copoint,style2=point][2]{\,%
+% \begin{tikzpicture}
+%   \begin{pgfonlayer}{nodelayer}
+%     \node [style=none] (0) at (0, -1.9) {};
+%     \node [style=\commandkey{style1}] (1) at (0, -0.95) {$#1$};
+%     \node [style=\commandkey{style2}] (2) at (0, 0.95) {$#2$};
+%     \node [style=none] (3) at (0, 1.9) {};
+%   \end{pgfonlayer}
+%   \begin{pgfonlayer}{edgelayer}
+%     \draw (0.center) to (1);
+%     \draw (2) to (3.center);
+%   \end{pgfonlayer}
+% \end{tikzpicture}\,}
+
+\newkeycommand{\pointketbra}[style1=copoint,style2=point,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=\commandkey{style1}] (1) at (0, -0.75) {$#1$};
+    \node [style=\commandkey{style2}] (2) at (0, 0.75) {$#2$};
+    \node [style=none] (3) at (0, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0.center) to (1);
+    \draw [\commandkey{estyle}] (2) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\twocopointketbra}[style1=copoint,style2=copoint,style3=point][3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (-0.75, -1.75) {};
+    \node [style=none] (1) at (0.75, -1.75) {};
+    \node [style=\commandkey{style1}] (2) at (-0.75, -0.75) {$#1$};
+    \node [style=\commandkey{style2}] (3) at (0.75, -0.75) {$#2$};
+    \node [style=\commandkey{style3}] (4) at (0, 0.75) {$#3$};
+    \node [style=none] (5) at (0, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (2);
+    \draw (1.center) to (3);
+    \draw (4) to (5.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\graytwocopointketbra}{\twocopointketbra[style1=gray copoint,style2=gray copoint,style3=gray point]}
+
+\newkeycommand{\twopointketbra}[style1=copoint,style2=point,style3=point][3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=none] (1) at (-0.75, 1.75) {};
+    \node [style=\commandkey{style1}] (2) at (0, -0.75) {$#1$};
+    \node [style=\commandkey{style2}] (3) at (-0.75, 0.75) {$#2$};
+    \node [style=\commandkey{style3}] (4) at (0.75, 0.75) {$#3$};
+    \node [style=none] (5) at (0.75, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (2);
+    \draw (1.center) to (3);
+    \draw (4) to (5.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\graytwopointketbra}{\twopointketbra[style1=gray copoint,style2=gray point,style3=gray point]}
+
+\newcommand{\idwire}{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.5) {};
+    \node [style=none] (3) at (0, 1.5) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\didwire}{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.5) {};
+    \node [style=none] (3) at (0, 1.5) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (0.center) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\didwirelong}{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -2) {};
+    \node [style=none] (3) at (0, 2) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (0.center) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\shortidwire}{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1) {};
+    \node [style=none] (3) at (0, 1) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\pointbraket}[style1=point,style2=copoint,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -0.625) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.625) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\graypointbraket}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=gray point] (0) at (0, -0.625) {$#1$};
+    \node [style=gray copoint] (1) at (0, 0.625) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\dpointbraket}[2]{\kpointbraket[style1=dpoint,style2=dcopoint,estyle=boldedge]{#1}{#2}}
+
+\newcommand{\dkpointbraket}[2]{\kpointbraket[style1=dkpoint,style2=dkpointdag,estyle=boldedge]{#1}{#2}}
+
+\newcommand{\dpointbraketx}[2]{\kpointbraketx[style1=dpoint,style2=dcopoint,estyle=boldedge]{#1}{#2}}
+
+\newcommand{\dkpointbraketx}[2]{\kpointbraketx[style1=dkpoint,style2=dkpointdag,estyle=boldedge]{#1}{#2}}
+
+\newkeycommand{\kpointketbra}[style1=kpointdag,style2=kpoint,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.9) {};
+    \node [style=\commandkey{style1}] (1) at (0, -0.95) {$#1$};
+    \node [style=\commandkey{style2}] (2) at (0, 0.95) {$#2$};
+    \node [style=none] (3) at (0, 1.9) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0.center) to (1);
+    \draw [\commandkey{estyle}] (2) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\dkpointketbra}[2]{\kpointketbra[style1=dkpointdag,style2=dkpoint,estyle=boldedge]{#1}{#2}}
+
+\newcommand{\kpointketbratwocols}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.9) {};
+    \node [style=kpointdag] (1) at (0, -0.85) {$#1$};
+    \node [style=kpoint,fill=gray!40!white] (2) at (0, 0.85) {$#2$};
+    \node [style=none] (3) at (0, 1.9) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer} 
+    \draw (0.center) to (1);
+    \draw (2) to (3.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\boxpointmap}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=point] (0) at (0, -1) {$#1$};
+    \node [style=map] (1) at (0, 0.5) {$#2$};
+    \node [style=none] (2) at (0, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newcommand{\boxtranspointmap}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=point] (0) at (0, -1.50) {$#1$};
+    \node [style=maptrans] (1) at (0, 0) {$#2$};
+    \node [style=none] (2) at (0, 1.25) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\kpointmap}[style1=kpoint,style2=map][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.1) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.5) {$#2$};
+    \node [style=none] (2) at (0, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\kpointmaptrans}[style1=kpointconj,style2=mapadj][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.1) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.5) {$#2$};
+    \node [style=none] (2) at (0, 1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\kpointmapadj}[style1=kpointadj,style2=map][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, 1.1) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, -0.5) {$#2$};
+    \node [style=none] (2) at (0, -1.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\dkpointmap}[style1=dkpoint,style2=dmap][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.2) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.4) {$#2$};
+    \node [style=none] (2) at (0, 1.7) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw[style=boldedge] (0) to (1);
+    \draw[style=boldedge] (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\dkpointmapx}[style1=dkpoint,style2=dmap][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.4) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.6) {$#2$};
+    \node [style=none] (2) at (0, 1.9) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw[style=boldedge] (0) to (1);
+    \draw[style=boldedge] (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newcommand{\boxpointmapdag}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=point] (0) at (0, -1.50) {$#1$};
+    \node [style=mapdag] (1) at (0, 0) {$#2$};
+    \node [style=none] (2) at (0, 1.25) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newcommand{\boxcopointmap}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=map] (1) at (0, -0.5) {$#1$};
+    \node [style=copoint] (2) at (0, 1) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\boxcopointmapdag}[style1=map,style2=copoint][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=\commandkey{style1}] (1) at (0, -0.5) {$#1$};
+    \node [style=\commandkey{style2}] (2) at (0, 1) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\kpointdagmap}[style1=map,style2=kpointdag][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=\commandkey{style1}] (1) at (0, -0.5) {$#1$};
+    \node [style=\commandkey{style2}] (2) at (0, 1.1) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newcommand{\kpointdagmapdag}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1.75) {};
+    \node [style=mapdag] (1) at (0, -0.5) {$#1$};
+    \node [style=kpointdag] (2) at (0, 1.1) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+\,}
+
+\newkeycommand{\sandwichmap}[style1=point,style2=map,style3=copoint][3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.50) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0) {$#2$};
+    \node [style=\commandkey{style3}] (2) at (0, 1.50) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newkeycommand{\kpointsandwichmap}[style1=kpoint,style2=map,style3=kpointdag][3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.5) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0) {$#2$};
+    \node [style=\commandkey{style3}] (2) at (0, 1.5) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\dkpointsandwichmap}[3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=dkpoint] (0) at (0, -1.5) {$#1$};
+    \node [style=dmap] (1) at (0, 0) {$#2$};
+    \node [style=dkpointdag] (2) at (0, 1.5) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (0) to (1);
+    \draw [boldedge] (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\dkpointsandwichmapx}[3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=dkpoint] (0) at (0, -1.85) {$#1$};
+    \node [style=dmap] (1) at (0, 0) {$#2$};
+    \node [style=dkpointdag] (2) at (0, 1.85) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [boldedge] (0) to (1);
+    \draw [boldedge] (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\kpointsandwichmapdag}[3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=kpoint] (0) at (0, -1.5) {$#1$};
+    \node [style=mapdag] (1) at (0, 0) {$#2$};
+    \node [style=kpointdag] (2) at (0, 1.5) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\sandwichmapdag}[3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=point] (0) at (0, -1.50) {$#1$};
+    \node [style=mapdag] (1) at (0, 0) {$#2$};
+    \node [style=copoint] (2) at (0, 1.50) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\sandwichmaptrans}[3]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=point] (0) at (0, -1.50) {$#1$};
+    \node [style=maptrans] (1) at (0, 0) {$#2$};
+    \node [style=copoint] (2) at (0, 1.50) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newkeycommand{\sandwichmapconj}[style1=point,style2=mapconj,style3=copoint][3]{\,% 
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -1.50) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0) {$#2$};
+    \node [style=\commandkey{style3}] (2) at (0, 1.50) {$#3$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+    \draw (1) to (2);
+  \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newkeycommand{\sandwichtwo}[style1=point,style2=map,style3=map,style4=copoint][4]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style2}] (0) at (0, -1) {$#2$};
+    \node [style=\commandkey{style3}] (1) at (0, 1) {$#3$};
+    \node [style=\commandkey{style1}] (2) at (0, -2.6) {$#1$};
+    \node [style=\commandkey{style4}] (3) at (0, 2.6) {$#4$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (2) to (0);
+    \draw (0) to (1);
+    \draw (1) to (3);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\longbraket}[style1=point,style2=copoint][2]{\,% 
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -2.6) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 2.6) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\onb}[style=point]{\ensuremath{\{\,\tikz{\node[style=\commandkey{style}] (x) at (0,-0.3) {$j$};\draw (x)--(0,0.7);}\,\}}\xspace}
+
+\newcommand{\whiteonb}{\onb[style=point]}
+
+\newcommand{\grayonb}{\onb[style=gray point]}
+
+\newcommand{\redonb}{\onb[style=red point]}
+
+\newcommand{\greenonb}{\onb[style=green point]}
+
+\newcommand{\whiteonbi}{\ensuremath{\left\{\raisebox{1mm}{\pointmap{i}}\right\}_i}\xspace}
+\newcommand{\grayonbi}{\ensuremath{\left\{\raisebox{1mm}{\graypointmap{i}}\right\}_i}\xspace}
+\newcommand{\greyonbi}{\ensuremath{\left\{\raisebox{1mm}{\graypointmap{i}}\right\}_i}\xspace}
+
+\newcommand{\redpointmap}[1]{\,\tikz{\node[style=red point] (x) at (0,-0.3) {$#1$};\draw (x)--(0,0.7);}\,}
+
+\newcommand{\redcopointmap}[1]{\,\tikz{\node[style=red copoint] (x) at (0,0.3) {$#1$};\draw (x)--(0,-0.7);}\,}
+
+\newcommand{\greenpointmap}[1]{\,\tikz{\node[style=green point] (x) at (0,-0.3) {$#1$};\draw (x)--(0,0.7);}\,}
+
+\newcommand{\greencopointmap}[1]{\,\tikz{\node[style=green copoint] (x) at (0,0.3) {$#1$};\draw (x)--(0,-0.7);}\,}
+
+\newcommand{\meas}{\ensuremath{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=white dot] (0) at (0, 0) {};
+    \node [style=none] (1) at (0, 0.75) {};
+    \node [style=none] (2) at (0, -0.75) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=swap] (1.center) to (0);
+    \draw [style=boldedge] (0) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}\xspace}
+
+\newcommand{\encode}{\ensuremath{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -0.75) {};
+    \node [style=none] (1) at (0, 0.75) {};
+    \node [style=white dot] (2) at (0, 0) {};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=swap] (2.center) to (0);
+    \draw [style=boldedge] (1) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}\xspace}
+
+% \newkeycommand{\comult}[style=white dot]{\,\begin{tikzpicture}
+%   \begin{pgfonlayer}{nodelayer}
+%     \node [style=none] (0) at (0, -1) {};
+%     \node [style=none] (1) at (-0.75, 1) {};
+%     \node [style=\commandkey{style}] (2) at (0, 0) {};
+%     \node [style=none] (3) at (0.75, 1) {};
+%   \end{pgfonlayer}
+%   \begin{pgfonlayer}{edgelayer}
+%     \draw [bend left=15, looseness=1.00] (2) to (1.center);
+%     \draw (0.center) to (2);
+%     \draw [bend right=15, looseness=1.00] (2) to (3.center);
+%   \end{pgfonlayer}
+% \end{tikzpicture}\,\xspace}
+
+% \newkeycommand{\mult}[style=white dot]{\,\begin{tikzpicture}
+%   \begin{pgfonlayer}{nodelayer}
+%     \node [style=none] (0) at (0, 1) {};
+%     \node [style=none] (1) at (-0.75, -1) {};
+%     \node [style=\commandkey{style}] (2) at (0, 0) {};
+%     \node [style=none] (3) at (0.75, -1) {};
+%   \end{pgfonlayer}
+%   \begin{pgfonlayer}{edgelayer}
+%     \draw [bend right=15, looseness=1.00] (2) to (1.center);
+%     \draw (0.center) to (2);
+%     \draw [bend left=15, looseness=1.00] (2) to (3.center);
+%   \end{pgfonlayer}
+% \end{tikzpicture}\,\xspace}
+
+\newcommand{\grayphasemult}[2]{\,\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=gray dot] (0) at (0, 0.5) {};
+		\node [style=gray phase dot] (1) at (0.75, -0.75) {$#1$};
+		\node [style=gray phase dot] (2) at (-0.75, -0.75) {$#2$};
+		\node [style=none] (3) at (0, 1.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=-165, out=90, looseness=1.00] (2) to (0);
+		\draw [in=-15, out=90, looseness=1.00] (1) to (0);
+		\draw (0) to (3.center);
+	\end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\grayphasemultbis}[2]{\,\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=gray dot] (0) at (0, 0.5) {};
+		\node [style=point] (1) at (0.75, -0.75) {$#1$};
+		\node [style=point] (2) at (-0.75, -0.75) {$#2$};
+		\node [style=none] (3) at (0, 1.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=-165, out=90, looseness=1.00] (2) to (0);
+		\draw [in=-15, out=90, looseness=1.00] (1) to (0);
+		\draw (0) to (3.center);
+	\end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\phasepointmult}[2]{\,\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=white dot] (0) at (0, 0.5) {};
+    \node [style=white dot] (1) at (-0.75, -0.75) {$#1$};
+    \node [style=none] (2) at (0, 1.5) {};
+    \node [style=white dot] (3) at (0.75, -0.75) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [in=-165, out=90, looseness=1.00] (1) to (0);
+    \draw [in=-15, out=90, looseness=1.00] (3) to (0);
+    \draw (0) to (2.center);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+
+\newcommand{\grayphasepoint}[1]{\phasepoint[style=gray phase dot]{#1}}
+\newcommand{\grayphasecopoint}[1]{\phasecopoint[style=gray phase dot]{#1}}
+
+\newcommand{\graysquarepoint}[1]{\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=gray square point] (0) at (0, -0.5) {};
+        \node [style=none] (1) at (0, 0.75) {};
+        \node [style=none] (2) at (0.75, -0.5) {$#1$};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (0) to (1.center);
+    \end{pgfonlayer}
+\end{tikzpicture}}
+
+\newkeycommand{\phase}[style=white phase dot][1]{\,\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (0, 1) {};
+        \node [style=\commandkey{style}] (2) at (0, -0) {$#1$}; 
+        \node [style=none] (3) at (0, -1) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (2) to (0.center);
+        \draw (3.center) to (2);
+    \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+% \newcommand{\whitephase}[1]{\phase{#1}}
+% \newcommand{\greyphase}[1]{\phase[style=gray dot]{#1}}
+% \newcommand{\grayphase}[1]{\phase[style=gray dot]{#1}}
+
+\newkeycommand{\dphase}[style=white phase ddot][1]{\,\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (0, 1.25) {};
+        \node [style=\commandkey{style}] (2) at (0, -0) {$#1$};
+        \node [style=none] (3) at (0, -1.25) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw [boldedge] (2) to (0.center);
+        \draw [boldedge] (3.center) to (2);
+    \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\dphasegray}[1]{\dphase[style=gray phase ddot]{#1}}
+
+\newkeycommand{\dphasepoint}[style=white phase ddot][1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\dphasepointgray}[style=gray phase ddot][1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\dphasecopoint}[style=white phase ddot][1]{\,\begin{tikzpicture}[yshift=3mm,yscale=-1]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\dphasepointsm}[style=white phase ddot][1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {\footnotesize\!$#1$\!};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [style=boldedge] (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\measure}[1]{\,\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (0, 0.75) {};
+        \node [style=#1] (2) at (0, -0) {};
+        \node [style=none] (3) at (0, -0.75) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (2) to (0.center);
+        \draw[doubled] (3.center) to (2);
+    \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\nondemmeasure}[1]{\,\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (1, 1) {};
+		\node [style=none] (1) at (1, 1.25) {};
+		\node [style=none] (2) at (0.75, 0.5) {};
+		\node [style=#1] (3) at (0, -0.25) {};
+		\node [style=none] (4) at (0, 1.25) {};
+		\node [style=none] (5) at (0, -1.25) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0.center) to (1.center);
+		\draw (3) to (2.center);
+		\draw [in=-90, out=45, looseness=1.00] (2.center) to (0.center);
+		\draw [style=boldedge] (5.center) to (3);
+		\draw [style=boldedge] (3) to (4.center);
+	\end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\prepare}[1]{\,\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (0, 0.75) {};
+        \node [style=#1] (2) at (0, -0) {};
+        \node [style=none] (3) at (0, -0.75) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[doubled] (2) to (0.center);
+        \draw (3.center) to (2);
+    \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\whitephase}[1]{\phase[style=white phase dot]{#1}}
+\newcommand{\whitedphase}[1]{\dphase[style=white phase ddot]{#1}}
+\newcommand{\greyphase}[1]{\phase[style=grey phase dot]{#1}}
+\newcommand{\greydphase}[1]{\dphase[style=grey phase ddot]{#1}}
+
+
+\newkeycommand{\phasepoint}[style=white phase dot][1]{\,\begin{tikzpicture}[yshift=-3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, 1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\phasecopoint}[style=white phase dot][1]{\,\begin{tikzpicture}[yshift=3mm]
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=none] (0) at (0, -1) {};
+    \node [style=\commandkey{style}] (1) at (0, 0) {$#1$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0.center) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+
+\newcommand{\pointcopointmap}[2]{\,\tikz{
+  \node[style=copoint] (x) at (0,-0.7) {$#2$};\draw (x)--(0,-1.5);
+  \node[style=point] (y) at (0,0.7) {$#1$};\draw (0,1.5)--(y);
+}\,}
+
+\newcommand{\innerprodmap}[2]{\,\tikz{
+\node[style=copoint] (y) at (0,0.625) {$#1$};
+\node[style=point] (x) at (0,-0.625) {$#2$};
+\draw (x)--(y);}\,}
+
+\newkeycommand{\kpointbraket}[style1=kpoint,style2=kpoint adjoint,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -0.735) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.735) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\kkpointbraket}[style1=kpoint,style2=kpoint adjoint,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -0.685) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.685) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newkeycommand{\kpointbraketx}[style1=kpoint,style2=kpoint adjoint,estyle=][2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=\commandkey{style1}] (0) at (0, -0.885) {$#1$};
+    \node [style=\commandkey{style2}] (1) at (0, 0.885) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw [\commandkey{estyle}] (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\kpointbraketconj}[2]{\,%
+\begin{tikzpicture}
+  \begin{pgfonlayer}{nodelayer}
+    \node [style=kpoint conjugate] (0) at (0, -0.735) {$#1$};
+    \node [style=kpoint transpose] (1) at (0, 0.735) {$#2$};
+  \end{pgfonlayer}
+  \begin{pgfonlayer}{edgelayer}
+    \draw (0) to (1);
+  \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\newcommand{\wginnerprodmap}[2]{\,\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=point] (0) at (0, -0.75) {$#2$};
+        \node [style=gray copoint] (1) at (0, 0.75) {$#1$};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (0) to (1);
+    \end{pgfonlayer}
+\end{tikzpicture}\,}
+
+\def\alpvec{[\vec{\alpha}]}
+\def\alpprevec{\vec{\alpha}}
+\def\betvec{[\vec{\beta}_j]}
+\def\betprevec{\vec{\beta}_j}
+
+\def\blackmu{\mu_{\smallblackdot}} 
+\def\graymu {\mu_{\smallgraydot}}
+\def\whitemu{\mu_{\smallwhitedot}}
+
+\def\blacketa{\eta_{\smallblackdot}} 
+\def\grayeta {\eta_{\smallgraydot}}
+\def\whiteeta{\eta_{\smallwhitedot}}
+
+\def\blackdelta{\delta_{\smallblackdot}} 
+\def\graydelta {\delta_{\smallgraydot}}
+\def\whitedelta{\delta_{\smallwhitedot}}
+
+\def\blackepsilon{\epsilon_{\smallblackdot}} 
+\def\grayepsilon {\epsilon_{\smallgraydot}}
+\def\whiteepsilon{\epsilon_{\smallwhitedot}}
+
+% \def\whiteeta{\eta_{\!\smallwhitedot}}
+% \def\whitevarepsilon{\varepsilon_{\!\smallwhitedot}}
+
+\def\whitePhi{\Phi_{\!\smallwhitedot}}
+\def\graymeas{m_{\!\smallgraydot}}
+
+\newcommand{\Owg}{\ensuremath{{\cal O}_{\!\smallwhitedot\!,\!\smallgraydot}}}
+\newcommand{\whiteK}{\ensuremath{{\cal  K}_{\!\smallwhitedot}}}
+\newcommand{\grayK}{\ensuremath{{\cal  K}_{\!\smallgraydot}}}
+
+
+% BRAS AND KETS
+\newcommand{\bra}[1]{\ensuremath{\left\langle #1 \right|}}
+\newcommand{\ket}[1]{\ensuremath{\left|  #1 \right\rangle}}
+\newcommand{\roundket}[1]{\ensuremath{\left|  #1 \right)}}
+\newcommand{\braket}[2]{\ensuremath{\langle#1|#2\rangle}}
+\newcommand{\ketbra}[2]{\ensuremath{\ket{#1}\!\bra{#2}}}
+
+\newcommand{\ketGHZ} {\ket{\textit{GHZ}\,}}
+\newcommand{\ketW}   {\ket{\textit{W\,}}}
+\newcommand{\ketBell}{\ket{\textit{Bell\,}}}
+\newcommand{\ketEPR} {\ket{\textit{EPR\,}}}
+\newcommand{\ketGHZD}{\ket{\textrm{GHZ}^{(D)}}}
+\newcommand{\ketWD}  {\ket{\textrm{W}^{(D)}}}
+
+\newcommand{\braGHZ} {\bra{\textit{GHZ}\,}}
+\newcommand{\braW}   {\bra{\textit{W\,}}}
+\newcommand{\braBell}{\bra{\textit{Bell\,}}}
+\newcommand{\braEPR} {\bra{\textit{EPR\,}}}
+
+
+% CATEGORY VARIABLES
+\newcommand{\catC}{\ensuremath{\mathcal{C}}\xspace}
+\newcommand{\catCop}{\ensuremath{\mathcal{C}^{\mathrm{op}}}\xspace}
+\newcommand{\catD}{\ensuremath{\mathcal{D}}\xspace}
+\newcommand{\catDop}{\ensuremath{\mathcal{D}^{\mathrm{op}}}\xspace}
+
+
+% STANDARD CATEGORIES
+\newcommand{\catSet}{\ensuremath{\textrm{\bf Set}}\xspace}
+\newcommand{\catRel}{\ensuremath{\textrm{\bf Rel}}\xspace}
+\newcommand{\catFRel}{\ensuremath{\textrm{\bf FRel}}\xspace}
+\newcommand{\catVect}{\ensuremath{\textrm{\bf Vect}}\xspace}
+\newcommand{\catFVect}{\ensuremath{\textrm{\bf FVect}}\xspace}
+\newcommand{\catFHilb}{\ensuremath{\textrm{\bf FHilb}}\xspace}
+\newcommand{\catHilb}{\ensuremath{\textrm{\bf Hilb}}\xspace}
+\newcommand{\catSuperHilb}{\ensuremath{\textrm{\bf SuperHilb}}\xspace}
+\newcommand{\catAb}{\ensuremath{\textrm{\bf Ab}}\xspace}
+\newcommand{\catTop}{\ensuremath{\textrm{\bf Top}}\xspace}
+\newcommand{\catCHaus}{\ensuremath{\textrm{\bf CHaus}}\xspace}
+\newcommand{\catHaus}{\ensuremath{\textrm{\bf Haus}}\xspace}
+\newcommand{\catGraph}{\ensuremath{\textrm{\bf Graph}}\xspace}
+\newcommand{\catMat}{\ensuremath{\textrm{\bf Mat}}\xspace}
+\newcommand{\catGr}{\ensuremath{\textrm{\bf Gr}}\xspace}
+\newcommand{\catSpek}{\ensuremath{\textrm{\bf Spek}}\xspace}
+
+
+
+
+% ========================
+% = COMMUTATIVE DIAGRAMS =
+% ========================
+
+\tikzstyle{cdiag}=[matrix of math nodes, row sep=3em, column sep=3em, text height=1.5ex, text depth=0.25ex,inner sep=0.5em]
+\tikzstyle{arrow above}=[transform canvas={yshift=0.5ex}]
+\tikzstyle{arrow below}=[transform canvas={yshift=-0.5ex}]
+
+\newcommand{\csquare}[8]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #2 \\
+    #3 \& #4  \\};
+    \path [arrs] (m-1-1) edge node {$#5$} (m-1-2)
+                 (m-2-1) edge node {$#6$} (m-2-2)
+                 (m-1-1) edge node [swap] {$#7$} (m-2-1)
+                 (m-1-2) edge node {$#8$} (m-2-2);
+\end{tikzpicture}
+}
+
+% commands for putting pushout/pullback brackets on commutative diags
+\newcommand{\NWbracket}[1]{%
+\draw #1 +(-0.25,0.5) -- +(-0.5,0.5) -- +(-0.5,0.25);}
+\newcommand{\NEbracket}[1]{%
+\draw #1 +(0.25,0.5) -- +(0.5,0.5) -- +(0.5,0.25);}
+\newcommand{\SWbracket}[1]{%
+\draw #1 +(-0.25,-0.5) -- +(-0.5,-0.5) -- +(-0.5,-0.25);}
+\newcommand{\SEbracket}[1]{%
+\draw #1 +(0.25,-0.5) -- +(0.5,-0.5) -- +(0.5,-0.25);}
+\newcommand{\THETAbracket}[2]{%
+\draw [rotate=#1] #2 +(0.25,0.5) -- +(0.5,0.5) -- +(0.5,0.25);}
+
+\newcommand{\posquare}[8]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #2 \\
+    #3 \& #4  \\};
+    \path [arrs] (m-1-1) edge node {$#5$} (m-1-2)
+                 (m-2-1) edge node [swap] {$#6$} (m-2-2)
+                 (m-1-1) edge node [swap] {$#7$} (m-2-1)
+                 (m-1-2) edge node {$#8$} (m-2-2);
+    \NWbracket{(m-2-2)}
+\end{tikzpicture}
+}
+
+\newcommand{\pbsquare}[8]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #2 \\
+    #3 \& #4  \\};
+    \path [arrs] (m-1-1) edge node {$#5$} (m-1-2)
+                 (m-2-1) edge node [swap] {$#6$} (m-2-2)
+                 (m-1-1) edge node [swap] {$#7$} (m-2-1)
+                 (m-1-2) edge node {$#8$} (m-2-2);
+  \SEbracket{(m-1-1)}
+\end{tikzpicture}
+}
+
+\newcommand{\ctri}[6]{
+    \begin{tikzpicture}[-latex]
+        \matrix (m) [cdiag,ampersand replacement=\&] { #1 \& #2 \\ #3 \& \\ };
+        \path [arrs] (m-1-1) edge node {$#4$} (m-1-2)
+              (m-1-1) edge node [swap] {$#5$} (m-2-1)
+              (m-2-1) edge node [swap] {$#6$} (m-1-2);
+    \end{tikzpicture}
+}
+
+% \newcommand{\crun}[5]{
+% \ensuremath{#1 \overset{#2}{\longrightarrow} #3 \overset{#4}{\longrightarrow} #5}
+% }
+
+\newcommand{\carr}[3]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #3 \\};
+    \path [arrs] (m-1-1) edge node {$#2$} (m-1-2);
+\end{tikzpicture}
+}
+
+\newcommand{\crun}[5]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #3 \& #5 \\};
+    \path [arrs] (m-1-1) edge node {$#2$} (m-1-2)
+                 (m-1-2) edge node {$#4$} (m-1-3);
+\end{tikzpicture}
+}
+
+\newcommand{\cspan}[5]{
+\ensuremath{#1 \overset{#2}{\longleftarrow} #3
+               \overset{#4}{\longrightarrow} #5}
+}
+
+\newcommand{\ccospan}[5]{
+\ensuremath{#1 \overset{#2}{\longrightarrow} #3
+               \overset{#4}{\longleftarrow} #5}
+}
+
+\newcommand{\cpair}[4]{
+\begin{tikzpicture}
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #2 \\};
+    \path [arrs] (m-1-1.20) edge node {$#3$} (m-1-2.160)
+                 (m-1-1.-20) edge node [swap] {$#4$} (m-1-2.-160);
+\end{tikzpicture}
+}
+
+\newcommand{\csquareslant}[9]{
+\begin{tikzpicture}[-latex]
+    \matrix(m)[cdiag,ampersand replacement=\&]{
+    #1 \& #2 \\
+    #3 \& #4  \\};
+    \path [arrs] (m-1-1) edge node {$#5$} (m-1-2)
+                 (m-2-1) edge node {$#6$} (m-2-2)
+                 (m-1-1) edge node [swap] {$#7$} (m-2-1)
+                 (m-1-2) edge node {$#8$} (m-2-2)
+                 (m-1-2) edge node [swap] {$#9$} (m-2-1);
+\end{tikzpicture}
+}
+
+

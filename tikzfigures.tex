@@ -1,0 +1,297 @@
+% define in-prose representations for lots of generators
+
+%%%%REVERSED BY BOB %%%%%%%%
+
+\newcommand{\bigcounit}[1]{%
+\,\begin{tikzpicture}[dotpic,scale=2,yshift=-1mm]
+\node [#1] (a) at (0,0.25) {}; 
+\draw (0,-0.2)--(a);
+\end{tikzpicture}\,}
+\newcommand{\bigunit}[1]{%
+\,\begin{tikzpicture}[dotpic,scale=2,yshift=1.5mm]
+\node [#1] (a) at (0,-0.25) {}; 
+\draw (a)--(0,0.2);
+\end{tikzpicture}\,}
+\newcommand{\bigcomult}[1]{%
+\,\begin{tikzpicture}[dotpic,scale=2,yshift=0.5mm]
+	\node [#1] (a) {};
+	\draw (-90:0.55)--(a);
+	\draw (a) -- (45:0.6);
+	\draw (a) -- (135:0.6);
+\end{tikzpicture}\,}
+\newcommand{\bigmult}[1]{%
+\,\begin{tikzpicture}[dotpic,scale=2]
+	\node [#1] (a) {};
+	\draw (a) -- (90:0.55);
+	\draw (a) (-45:0.6) -- (a);
+	\draw (a) (-135:0.6) -- (a);
+\end{tikzpicture}\,}
+
+
+\newcommand{\dotcounit}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=-1mm]
+\node [#1] (a) at (0,0.35) {}; 
+\draw (0,-0.3)--(a);
+\end{tikzpicture}\,}
+\newcommand{\dotunit}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=1.5mm]
+\node [#1] (a) at (0,-0.35) {}; 
+\draw (a)--(0,0.3);
+\end{tikzpicture}\,}
+\newcommand{\dotcomult}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=0.5mm]
+	\node [#1] (a) {};
+	\draw (-90:0.55)--(a);
+	\draw (a) -- (45:0.6);
+	\draw (a) -- (135:0.6);
+\end{tikzpicture}\,}
+\newcommand{\dotmult}[1]{%
+\,\begin{tikzpicture}[dotpic]
+	\node [#1] (a) {};
+	\draw (a) -- (90:0.55);
+	\draw (a) (-45:0.6) -- (a);
+	\draw (a) (-135:0.6) -- (a);
+\end{tikzpicture}\,}
+
+\newcommand{\ddotmult}[1]{%
+\,\begin{tikzpicture}[dotpic]
+	\node [#1] (a) {};
+	\draw [boldedge] (a) -- (90:0.55);
+	\draw [boldedge] (a) (-45:0.6) -- (a);
+	\draw [boldedge] (a) (-135:0.6) -- (a);
+\end{tikzpicture}\,}
+
+% \newcommand{\spider}[2]{%
+% \begin{tikzpicture}[dotpic]
+% 	\begin{pgfonlayer}{nodelayer}
+% 		\node [style=#1] (0) at (0, 0) {};
+% 		\node [style=none] (1) at (1.25, 1) {};
+% 		\node [style=none] (2) at (-0.75, 1) {};
+% 		\node [style=none] (3) at (1, -1) {};
+% 		\node [style=none] (4) at (-0.75, -1) {};
+% 		\node [style=none] (5) at (0.25, 0.75) {$\cdot\cdot\cdot$};
+% 		\node [style=none] (6) at (0, -0.75) {$\cdot\cdot\cdot$};
+% 		\node [style=none] (7) at (-1.25, 1) {};
+% 		\node [style=none] (8) at (-1.25, -1) {};
+% 		\node [style=none, anchor=west] (9) at (0.75, 0) {$#2$};
+% 	\end{pgfonlayer}
+% 	\begin{pgfonlayer}{edgelayer}
+% 		\draw [style=swap, in=135, out=-90, looseness=0.75] (2.center) to (0);
+% 		\draw [style=swap, in=-90, out=45, looseness=0.75] (0) to (1.center);
+% 		\draw [style=swap, in=90, out=-45, looseness=0.75] (0) to (3.center);
+% 		\draw [style=swap, in=90, out=-135, looseness=0.75] (0) to (4.center);
+% 		\draw [style=swap, in=-153, out=90, looseness=0.50] (8.center) to (0);
+% 		\draw [style=swap, in=149, out=-90, looseness=0.50] (7.center) to (0);
+% 	\end{pgfonlayer}
+% \end{tikzpicture}
+% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\dotidualiser}[1]{%
+\begin{tikzpicture}[dotpic,yshift=1.5mm]
+	\node [#1] (a) {};
+	\draw [medium diredge] (a) to (-90:0.35);
+	\draw [medium diredge] (a) to (90:0.35);
+\end{tikzpicture}}
+\newcommand{\dotdualiser}[1]{%
+\begin{tikzpicture}[dotpic,yshift=1.5mm]
+	\node [#1] (a) {};
+	\draw [medium diredge] (-90:0.35) to (a);
+	\draw [medium diredge] (90:0.35) to (a);
+\end{tikzpicture}}
+\newcommand{\dottickunit}[1]{%
+\begin{tikzpicture}[dotpic,yshift=-1mm]
+\node [#1] (a) at (0,0.35) {}; 
+\draw [postaction=decorate,
+       decoration={markings, mark=at position 0.3 with \edgetick},
+       decoration={markings, mark=at position 0.85 with \edgearrow}] (a)--(0,-0.25);
+\end{tikzpicture}}
+\newcommand{\dottickcounit}[1]{%
+\begin{tikzpicture}[dotpic,yshift=1mm]
+\node [#1] (a) at (0,-0.35) {}; 
+\draw [postaction=decorate,
+       decoration={markings, mark=at position 0.8 with \edgetick},
+       decoration={markings, mark=at position 0.45 with \edgearrow}] (0,0.25) -- (a);
+\end{tikzpicture}}
+\newcommand{\dotonly}[1]{%
+\,\begin{tikzpicture}[dotpic]
+\node [#1] (a) at (0,0) {};
+\end{tikzpicture}\,}
+%NEW:
+\newcommand{\smalldotonly}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=-0.15mm]
+\node [#1] (a) at (0,0) {};
+\end{tikzpicture}\,}
+%
+\newcommand{\dotthreestate}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=2.5mm]
+	\node [#1] (a) at (0,0) {};
+	\draw (a) -- (0,-0.6);
+	\draw [bend right] (a) to (-0.4,-0.6) (0.4,-0.6) to (a);
+\end{tikzpicture}\,}
+\newcommand{\dotcap}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=2.5mm]
+	\node [#1] (a) at (0,0) {};
+	\draw [bend right,medium diredge] (a) to (-0.4,-0.6);
+	\draw [bend left,medium diredge] (a) to (0.4,-0.6);
+\end{tikzpicture}\,}
+\newcommand{\dotcup}[1]{%
+\,\begin{tikzpicture}[dotpic,yshift=4mm]
+	\node [#1] (a) at (0,-0.6) {};
+	\draw [bend right,medium diredge] (-0.4,0) to (a);
+	\draw [bend left,medium diredge] (0.4,0) to (a);
+\end{tikzpicture}\,}
+
+% this doesn't have a colour
+\newcommand{\tick}{%
+\,\,\begin{tikzpicture}[dotpic]
+	\node [style=none] (a) at (0,0.35) {};
+	\node [style=none] (b) at (0,-0.35) {};
+	\draw [dirtickedge] (a) -- (b);
+\end{tikzpicture}\,\,}
+
+% these only make sense in black
+\newcommand{\lolli}{%
+\,\begin{tikzpicture}[dotpic,yshift=-1mm]
+	\path [use as bounding box] (-0.25,-0.25) rectangle (0.25,0.5);
+	\node [style=dot] (a) at (0, 0.15) {};
+	\node [style=none] (b) at (0, -0.25) {};
+	\draw [medium diredge] (a) to (b.center);
+	\draw [diredge, out=45, looseness=1.00, in=135, loop] (a) to ();
+\end{tikzpicture}\,}
+
+\newcommand{\cololli}{%
+\,\begin{tikzpicture}[dotpic]
+	\path [use as bounding box] (-0.25,-0.5) rectangle (0.25,0.5);
+	\node [style=none] (a) at (0, 0.5) {};
+	\node [style=dot] (b) at (0, 0) {};
+	\draw [diredge, in=-45, looseness=2.00, out=-135, loop] (b) to ();
+	\draw [medium diredge] (a.center) to (b);
+\end{tikzpicture}\,}
+
+\newcommand{\unit}{\dotunit{dot}}
+\newcommand{\counit}{\dotcounit{dot}}
+\newcommand{\mult}{\dotmult{dot}}
+\newcommand{\comult}{\dotcomult{dot}}
+
+% BLACK DOTS
+\newcommand{\blackdot}{\dotonly{black dot}\xspace}
+\newcommand{\smallblackdot}{\smalldotonly{smalldot}\xspace}%NEW
+\newcommand{\blackunit}{\dotunit{black dot}\xspace}
+\newcommand{\blackcap}{\dotcap{black dot}\xspace}
+\newcommand{\blackcup}{\dotcup{black dot}\xspace}
+
+
+
+\newcommand{\tickunit}{\dottickunit{dot}}
+\newcommand{\tickcounit}{\dottickcounit{dot}}
+\newcommand{\dualiser}{\dotdualiser{dot}}
+\newcommand{\idualiser}{\dotidualiser{dot}}
+\newcommand{\threestate}{\dotthreestate{dot}}
+
+\newcommand{\blackobs}{\ensuremath{\mathcal O_{\!\smallblackdot}}\xspace}
+
+% WHITE DOTS
+\newcommand{\whitedot}{\dotonly{white dot}\xspace}
+\newcommand{\smallwhitedot}{\smalldotonly{small white dot}\xspace}
+\newcommand{\whiteunit}{\dotunit{white dot}\xspace}
+\newcommand{\whitecounit}{\dotcounit{white dot}\xspace}
+\newcommand{\whitemult}{\dotmult{white dot}\xspace}
+\newcommand{\whitecomult}{\dotcomult{white dot}\xspace}
+\newcommand{\whitetickunit}{\dottickunit{white dot}\xspace}
+\newcommand{\whitetickcounit}{\dottickcounit{white dot}\xspace}
+\newcommand{\whitecap}{\dotcap{white dot}\xspace}
+\newcommand{\whitecup}{\dotcup{white dot}\xspace}
+
+% GREEN DOTS
+\newcommand{\greendot}{\dotonly{green dot}}
+\newcommand{\greenunit}{\dotunit{green dot}}
+\newcommand{\greencounit}{\dotcounit{green dot}}
+\newcommand{\greenmult}{\dotmult{green dot}}
+\newcommand{\greencomult}{\dotcomult{green dot}}
+\newcommand{\greentickunit}{\dottickunit{green dot}}
+\newcommand{\greentickcounit}{\dottickcounit{green dot}}
+\newcommand{\greencap}{\dotcap{green dot}}
+\newcommand{\greencup}{\dotcup{green dot}}
+
+\newcommand{\whiteobs}{\ensuremath{\mathcal O_{\!\smallwhitedot}}\xspace}
+
+
+% ALTERNATE WHITE DOTS
+\newcommand{\altwhitedot}{\dotonly{alt white dot}}
+\newcommand{\altwhiteunit}{\dotunit{alt white dot}}
+\newcommand{\altwhitecounit}{\dotcounit{alt white dot}}
+\newcommand{\altwhitemult}{\dotmult{alt white dot}}
+\newcommand{\altwhitecomult}{\dotcomult{alt white dot}}
+\newcommand{\altwhitetickunit}{\dottickunit{alt white dot}}
+\newcommand{\altwhitetickcounit}{\dottickcounit{alt white dot}}
+\newcommand{\altwhitecap}{\dotcap{alt white dot}}
+\newcommand{\altwhitecup}{\dotcup{alt white dot}}
+
+% GRAY DOTS
+\newcommand{\graydot}{\dotonly{gray dot}\xspace}
+\newcommand{\smallgraydot}{\smalldotonly{small gray dot}\xspace}
+\newcommand{\grayunit}{\dotunit{gray dot}\xspace}
+\newcommand{\graycounit}{\dotcounit{gray dot}\xspace}
+\newcommand{\graymult}{\dotmult{gray dot}\xspace}
+\newcommand{\dgraymult}{\ddotmult{gray ddot}\xspace}
+\newcommand{\graycomult}{\dotcomult{gray dot}\xspace}
+\newcommand{\graytickunit}{\dottickunit{gray dot}\xspace}
+\newcommand{\graytickcounit}{\dottickcounit{gray dot}\xspace}
+\newcommand{\graycap}{\dotcap{gray dot}\xspace}
+\newcommand{\graycup}{\dotcup{gray dot}\xspace}
+
+\newcommand{\grayobs}{\ensuremath{\mathcal O_{\!\smallgraydot}}\xspace}
+
+
+\newcommand{\blacktranspose}{\ensuremath{{\,\blackdot\!\textrm{\rm\,T}}}}
+\newcommand{\whitetranspose}{\ensuremath{{\!\!\altwhitedot\!\!}}}
+\newcommand{\graytranspose}{\ensuremath{{\,\graydot\!\textrm{\rm\,T}}}}
+
+\newcommand{\whiteconjugate}{\ensuremath{{\!\!\altwhitedot\!\!}}}
+
+% \newcommand{\spider}[4][dot]{\node [#1] (#2) at (0,0) {};
+% \node [bn] (#2_d1) at (-1,1) {};
+% \node [bn] (#2_d2) at (-0.5,1) {};
+% \node [bn] (#2_dm) at (1,1) {};
+% \node [bn] (#2_c1) at (-1,-1) {};
+% \node [bn] (#2_c2) at (-0.5,-1) {};
+% \node [bn] (#2_cn) at (1,-1) {};
+
+% \node [anchor=west] at (#2_dm.east) {$#3$};
+% \node [anchor=west] at (#2_cn.east) {$#4$};
+% \node at (0.2,0.7) {\small{...}};
+% \node at (0.2,-0.7) {\small{...}};
+
+% \draw (#2)--(#2_d1) (#2)--(#2_d2) (#2)--(#2_dm);
+% \draw (#2)--(#2_c1) (#2)--(#2_c2) (#2)--(#2_cn);}
+
+\newcommand{\circl}{\begin{tikzpicture}[dotpic]
+		\node [style=none] (a) at (-0.25, 0.25) {};
+		\node [style=none] (b) at (0.25, 0.25) {};
+		\node [style=none] (c) at (-0.25, -0.25) {};
+		\node [style=none] (d) at (0.25, -0.25) {};
+		\draw [in=45, out=135] (b.center) to (a.center);
+		\draw [in=135, out=225] (a.center) to (c.center);
+		\draw [in=225, out=-45] (c.center) to (d.center);
+		\draw [style=diredge, in=-45, out=45] (d.center) to (b.center);
+\end{tikzpicture}}
+
+% \newcommand{\icircl}{\begin{tikzpicture}[dotpic]
+% 	\node [circle,draw=black,inner sep=1pt] {\footnotesize\sf{}{$-$}};
+% \end{tikzpicture}}
+
+% \newcommand{\rtcircl}{\ensuremath{\sqrt{\begin{tikzpicture}[dotpic]
+% 	\node [circle,draw=black,inner sep=1pt] {\tiny\sf\phantom{$-$}};
+% \end{tikzpicture}}}}
+% \newcommand{\rticircl}{\ensuremath{\sqrt{\begin{tikzpicture}[dotpic]
+% 	\node [circle,draw=black,inner sep=1pt] {\tiny\bf\sf{}{$-$}};
+% \end{tikzpicture}}}}
+
+% \newcommand{\dcircl}{\begin{tikzpicture}[dotpic]
+% 	\draw [use as bounding box,draw=none] (-0.15,-0.3) rectangle (0.15,0.3);
+% 	\node [small dot] (0) {};
+% 	\draw [uploop] (0) to ();
+% 	\draw [downloop] (0) to ();
+% \end{tikzpicture}}

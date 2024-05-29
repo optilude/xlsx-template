@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-0.75, 1) {};
+		\node [style=Z dot] (1) at (-0.75, 0) {};
+		\node [style=none] (2) at (-0.75, -1) {};
+		\node [style=none] (3) at (0.75, -1) {};
+		\node [style=none] (4) at (0.75, 1) {};
+		\node [style=X dot] (5) at (0.75, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1) to (0.center);
+		\draw (2.center) to (1);
+		\draw (5) to (4.center);
+		\draw (3.center) to (5);
+		\draw (1) to (5);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z phase dot] (0) at (0, 0.25) {$\ \alpha\!+\!\pi\ $};
+		\node [style=none] (1) at (0, -0.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1.center) to (0);
+	\end{pgfonlayer}
+\end{tikzpicture}

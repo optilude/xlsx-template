@@ -1,0 +1,609 @@
+\usepackage[svgnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shapes.geometric}
+\pagestyle{empty}
+
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{edgelayer,nodelayer,main}
+
+\tikzstyle{none}=[inner sep=0pt]
+\definecolor{hexcolor0xff0000}{rgb}{1.000,0.000,0.000}
+\definecolor{hexcolor0x000000}{rgb}{0.000,0.000,0.000}
+\definecolor{hexcolor0x00ff00}{rgb}{0.000,1.000,0.000}
+\definecolor{hexcolor0x000000}{rgb}{0.000,0.000,0.000}
+\definecolor{hexcolor0xffff00}{rgb}{1.000,1.000,0.000}
+\definecolor{hexcolor0xffffff}{rgb}{1.000,1.000,1.000}
+
+\tikzstyle{rn}=[circle,fill=hexcolor0xff0000,draw=hexcolor0x000000,line width=0.8 pt]
+\tikzstyle{gn}=[circle,fill=hexcolor0x00ff00,draw=hexcolor0x000000,line width=0.8 pt]
+\tikzstyle{yn}=[circle,fill=hexcolor0xffff00,draw=hexcolor0x000000,line width=0.8 pt]
+\tikzstyle{wn}=[circle,fill=hexcolor0xffffff,draw=hexcolor0x000000,line width=0.8 pt]
+\tikzstyle{wnthick}=[circle,fill=hexcolor0xffffff,draw=hexcolor0x000000,line width=2.500]
+
+
+\tikzstyle{simple}=[-,draw=hexcolor0x000000,line width=2.000]
+\tikzstyle{arrow}=[-,draw=hexcolor0x000000,postaction={decorate},decoration={markings,mark=at position .5 with {\arrow{>}}},line width=2.000]
+\tikzstyle{tick}=[-,draw=hexcolor0x000000,postaction={decorate},decoration={markings,mark=at position .5 with {\draw (0,-0.1) -- (0,0.1);}},line width=2.000]
+\tikzstyle{halfthickness}=[-,draw=hexcolor0x000000,line width=0.500]
+\tikzstyle{thick}=[-,draw=hexcolor0x000000,line width=2.500]
+\tikzstyle{thicker}=[-,draw=hexcolor0x000000,line width=4.000]
+
+
+
+
+
+
+
+
+
+
+
+%MY GROUND:
+\tikzstyle{env}=[copoint,regular polygon rotate=0,minimum width=0.2cm, fill=black]
+
+\tikzstyle{probs}=[shape=semicircle,fill=white,draw=black,shape border rotate=180,minimum width=1.2cm]
+
+
+%SIMON'S GROUND:
+%
+%\newcommand{\ground}[2]{
+%\node[inner sep=0mm] (#1) at (#2) {};
+%\draw[thick]  ($(#2)+(0.3,-0.01)$) -- ($(#2)+(-0.3,-0.01)$);
+%\draw[thick]  ($(#2)+(0.23,0.069)$) -- ($(#2)+(-0.22,0.069)$);se
+%\draw[thick]  ($(#2)+(0.16,0.139)$) -- ($(#2)+(-0.16,0.139)$);
+%\draw[thick]  ($(#2)+(0.09,0.209)$) -- ($(#2)+(-0.09,0.209)$);
+%\draw[thick]  ($(#2)+(0.02,0.279)$) -- ($(#2)+(-0.02,0.279)$);
+%}
+%
+%\newcommand{\sground}[2]{
+%\node[inner sep=0mm] (#1) at (#2) {};
+%\draw[thick]  ($(#2)+(0.2,-0.01)$) -- ($(#2)+(-0.2,-0.01)$);
+%\draw[thick]  ($(#2)+(0.12,0.069)$) -- ($(#2)+(-0.12,0.069)$);
+%\draw[thick]  ($(#2)+(0.04,0.139)$) -- ($(#2)+(-0.04,0.139)$);
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tikzstyle{every picture}=[baseline=-0.25em,scale=0.5]
+\tikzstyle{dotpic}=[] % for backwards-compatibility
+\tikzstyle{diredges}=[every to/.style={diredge}]
+\tikzstyle{math matrix}=[matrix of math nodes,left delimiter=(,right delimiter=),inner sep=2pt,column sep=1em,row sep=0.5em,nodes={inner sep=0pt},text height=1.5ex, text depth=0.25ex]
+
+% ==========
+% = LABELS =
+% ==========
+
+\tikzstyle{inline text}=[text height=1.5ex, text depth=0.25ex,yshift=0.5mm]
+\tikzstyle{label}=[font=\footnotesize,text height=1.5ex, text depth=0.25ex,yshift=0.5mm]
+\tikzstyle{left label}=[label,anchor=east,xshift=1.5mm]
+\tikzstyle{right label}=[label,anchor=west,xshift=-1.5mm]
+
+% create a white box of the given tikz size
+\newcommand{\phantombox}[1]{\tikz[baseline=(current bounding box).east]{\path [use as bounding box] (0,0) rectangle #1;}}
+\tikzstyle{braceedge}=[decorate,decoration={brace,amplitude=2mm,raise=-1mm}]
+\tikzstyle{small braceedge}=[decorate,decoration={brace,amplitude=1mm,raise=-1mm}]
+
+\tikzstyle{doubled}=[line width=1.6pt] % set the line width for all doubled (quantum) maps/wires
+\tikzstyle{boldedge}=[doubled,shorten <=-0.17mm,shorten >=-0.17mm]
+\tikzstyle{boldedgegray}=[doubled,gray,shorten <=-0.17mm,shorten >=-0.17mm]
+
+\tikzstyle{semidoubled}=[line width=1.4pt] % set the line width for all doubled (quantum) maps/wires
+\tikzstyle{semiboldedgegray}=[semidoubled,gray,shorten <=-0.17mm,shorten >=-0.17mm]
+
+\tikzstyle{boldedgedashed}=[very thick,dashed,shorten <=-0.17mm,shorten >=-0.17mm]
+\tikzstyle{vboldedgedashed}=[doubled,dashed,shorten <=-0.17mm,shorten >=-0.17mm]
+\tikzstyle{left hook arrow}=[left hook-latex]
+\tikzstyle{right hook arrow}=[right hook-latex]
+\tikzstyle{sembracket}=[line width=0.5pt,shorten <=-0.07mm,shorten >=-0.07mm]
+
+\tikzstyle{causal edge}=[->,thick,gray]
+\tikzstyle{causal nondir}=[thick,gray]
+\tikzstyle{timeline}=[thick,gray, dashed]
+
+% edges for (symmetric) correspondences/correlations
+\tikzstyle{cedge}=[<->,thick,gray!70!white]
+
+\tikzstyle{empty diagram}=[draw=gray!40!white,dashed,shape=rectangle,minimum width=1cm,minimum height=1cm]
+\tikzstyle{empty diagram small}=[draw=gray!50!white,dashed,shape=rectangle,minimum width=0.6cm,minimum height=0.5cm]
+
+\newcommand{\measurement}{\tikz[scale=0.6]{ \draw [use as bounding box,draw=none] (0,-0.1) rectangle (1,0.7); \draw [fill=white] (1,0) arc (0:180:5mm); \draw (0,0) -- (1,0) (0.5,0) -- +(60:7mm);}}
+
+% ================
+% = VARIOUS DOTS =
+% ================
+
+\tikzstyle{dot}=[inner sep=0mm,minimum width=2mm,minimum height=2mm,draw,shape=circle]
+% \tikzstyle{ddot}=[inner sep=0.6mm, double=white, very thick, double distance=1pt, minimum width=2.5mm,minimum height=2.5mm,draw,shape=circle]
+\tikzstyle{ddot}=[inner sep=0mm, doubled, minimum width=2.5mm,minimum height=2.5mm,draw,shape=circle]
+
+\tikzstyle{black dot}=[dot,fill=black]
+\tikzstyle{white dot}=[dot,fill=green,,text depth=-0.2mm]
+\tikzstyle{green dot}=[white dot] % for backwards-compatibility
+\tikzstyle{gray dot}=[dot,fill=red,,text depth=-0.2mm]
+\tikzstyle{red dot}=[gray dot] % for backwards-compatibility
+
+% \tikzstyle{red point}=[point,fill=red,font=\color{white}]
+% \tikzstyle{red dpoint}=[dpoint,fill=red,font=\color{white}]
+% \tikzstyle{red dot}=[dot,fill=red,font=\color{white}]
+% \tikzstyle{red ddot}=[ddot,fill=red,font=\color{white}]
+
+\tikzstyle{black ddot}=[ddot,fill=black]
+\tikzstyle{white ddot}=[ddot,fill=white]
+\tikzstyle{gray ddot}=[ddot,fill=gray!40!white]
+
+\tikzstyle{gray edge}=[gray!40!white]
+
+
+\tikzstyle{small dot}=[inner sep=0.5mm,minimum width=0pt,minimum height=0pt,draw,shape=circle]
+
+\tikzstyle{small black dot}=[small dot,fill=black]
+\tikzstyle{small white dot}=[small dot,fill=white]
+\tikzstyle{small gray dot}=[small dot,fill=gray!40!white]
+
+\tikzstyle{causal dot}=[inner sep=0.4mm,minimum width=0pt,minimum height=0pt,draw=white,shape=circle,fill=gray!40!white]
+
+%\tikzstyle{phase dimensions}=[font=\footnotesize,inner sep=0.5pt,minimum width=5mm,minimum height=5mm]
+
+\tikzstyle{phase dimensions}=[minimum size=5mm,font=\footnotesize,rectangle,rounded corners=2.5mm,inner sep=0.2mm,outer sep=-2mm]
+%,outer sep=-2mm,text height=1ex, text depth=0.25ex,
+\tikzstyle{dphase dimensions}=[minimum size=5mm,font=\footnotesize,rectangle,rounded corners=2.5mm,inner sep=0.2mm,outer sep=-2mm]
+%\tikzstyle{dphase dimensions}=[minimum size=5mm,font=\footnotesize,rectangle,rounded corners=2.5mm,inner sep=0.2mm,outer sep=-2mm]
+
+\tikzstyle{white phase dot}=[dot,fill=green,phase dimensions]
+\tikzstyle{white phase ddot}=[ddot,fill=white,dphase dimensions]
+
+\tikzstyle{white rect ddot}=[draw=black,fill=white,doubled,minimum size=5mm,font=\footnotesize,rectangle,rounded corners=2.5mm,inner sep=0.2mm]
+\tikzstyle{gray rect ddot}=[draw=black,fill=gray!40!white,doubled,minimum size=6mm,font=\footnotesize,rectangle,rounded corners=3mm]
+
+\tikzstyle{gray phase dot}=[dot,fill=red,phase dimensions]
+\tikzstyle{gray phase ddot}=[ddot,fill=gray!40!white,dphase dimensions]
+\tikzstyle{grey phase dot}=[gray phase dot]
+\tikzstyle{grey phase ddot}=[gray phase ddot]
+
+\tikzstyle{small phase dimensions}=[minimum size=4mm,font=\tiny,rectangle,rounded corners=2mm,inner sep=0.2mm,outer sep=-2mm]
+\tikzstyle{small dphase dimensions}=[minimum size=4mm,font=\tiny,rectangle,rounded corners=2mm,inner sep=0.2mm,outer sep=-2mm]
+
+\tikzstyle{small gray phase dot}=[dot,fill=gray!40!white,small phase dimensions]
+\tikzstyle{small gray phase ddot}=[ddot,fill=gray!40!white,small dphase dimensions]
+
+% =======================
+% = OTHER KINDS OF MAPS =
+% =======================
+
+\tikzstyle{small map}=[draw,shape=rectangle,minimum height=4mm,minimum width=4mm,fill=white]
+
+\tikzstyle{cnot}=[fill=white,shape=circle,inner sep=-1.4pt]
+
+\tikzstyle{asym hadamard}=[fill=white,draw,shape=NEbox,inner sep=0.6mm,font=\footnotesize,minimum height=4mm]
+\tikzstyle{asym hadamard conj}=[fill=white,draw,shape=NWbox,inner sep=0.6mm,font=\footnotesize,minimum height=4mm]
+\tikzstyle{asym hadamard dag}=[fill=white,draw,shape=SEbox,inner sep=0.6mm,font=\footnotesize,minimum height=4mm]
+
+
+\tikzstyle{hadamard}=[fill=white,draw,inner sep=0.6mm,font=\footnotesize,minimum height=4mm,minimum width=4mm]
+\tikzstyle{small hadamard}=[fill=white,draw,inner sep=0.6mm,minimum height=1.5mm,minimum width=1.5mm]
+\tikzstyle{dhadamard}=[hadamard,doubled]
+\tikzstyle{small dhadamard}=[small hadamard,doubled]
+\tikzstyle{small dhadamard rotate}=[small hadamard,doubled,rotate=45]
+\tikzstyle{antipode}=[white dot,inner sep=0.3mm,font=\footnotesize]
+
+\tikzstyle{scalar}=[diamond,draw,inner sep=0.5pt,font=\small]
+\tikzstyle{dscalar}=[diamond,doubled, draw,inner sep=0.5pt,font=\small]
+
+\tikzstyle{small box}=[rectangle,inline text,fill=white,draw,minimum height=5mm,yshift=-0.5mm,minimum width=5mm,font=\small]
+\tikzstyle{small gray box}=[small box,fill=gray!30]
+\tikzstyle{medium box}=[rectangle,inline text,fill=white,draw,minimum height=5mm,yshift=-0.5mm,minimum width=10mm,font=\small]
+\tikzstyle{square box}=[small box] % for backwards-compatibility
+\tikzstyle{medium gray box}=[small box,fill=gray!30]
+\tikzstyle{semilarge box}=[rectangle,inline text,fill=white,draw,minimum height=5mm,yshift=-0.5mm,minimum width=12.5mm,font=\small]
+\tikzstyle{large box}=[rectangle,inline text,fill=white,draw,minimum height=5mm,yshift=-0.5mm,minimum width=15mm,font=\small]
+\tikzstyle{large gray box}=[small box,fill=gray!30]
+
+\tikzstyle{Bayes box}=[rectangle,fill=black,draw, minimum height=3mm, minimum width=3mm]
+
+\tikzstyle{gray square point}=[small box,fill=gray!50]
+
+\tikzstyle{dphase box white}=[dhadamard]
+\tikzstyle{dphase box gray}=[dhadamard,fill=gray!50!white]
+
+% \tikzstyle{point}=[regular polygon,regular polygon sides=3,draw,inner sep=-0.65pt,minimum width=8mm,fill=white,regular polygon rotate=180]
+% \tikzstyle{copoint}=[regular polygon,regular polygon sides=3,draw,inner sep=-0.65pt,minimum width=8mm,fill=white]
+\tikzstyle{point}=[regular polygon,regular polygon sides=3,draw,scale=0.75,inner sep=-0.5pt,minimum width=9mm,fill=white,regular polygon rotate=180]
+\tikzstyle{copoint}=[regular polygon,regular polygon sides=3,draw,scale=0.75,inner sep=-0.5pt,minimum width=9mm,fill=white]
+\tikzstyle{dpoint}=[point,doubled]
+\tikzstyle{dcopoint}=[copoint,doubled]
+
+\tikzstyle{wide copoint}=[fill=white,draw,shape=isosceles triangle,shape border rotate=90,isosceles triangle stretches=true,inner sep=0pt,minimum width=1.5cm,minimum height=6.12mm]
+\tikzstyle{wide point}=[fill=white,draw,shape=isosceles triangle,shape border rotate=-90,isosceles triangle stretches=true,inner sep=0pt,minimum width=1.5cm,minimum height=6.12mm,yshift=-0.0mm]
+\tikzstyle{wide point plus}=[fill=white,draw,shape=isosceles triangle,shape border rotate=-90,isosceles triangle stretches=true,inner sep=0pt,minimum width=1.74cm,minimum height=7mm,yshift=-0.0mm]
+
+\tikzstyle{wide dpoint}=[fill=white,doubled,draw,shape=isosceles triangle,shape border rotate=-90,isosceles triangle stretches=true,inner sep=0pt,minimum width=1.5cm,minimum height=6.12mm,yshift=-0.0mm]
+\tikzstyle{wide dcopoint}=[fill=white,doubled,draw,shape=isosceles triangle,shape border rotate=90,isosceles triangle stretches=true,inner sep=0pt,minimum width=1.5cm,minimum height=6.12mm,yshift=-0.0mm]
+
+\tikzstyle{tinypoint}=[regular polygon,regular polygon sides=3,draw,scale=0.55,inner sep=-0.15pt,minimum width=6mm,fill=white,regular polygon rotate=180]
+
+\tikzstyle{white point}=[point]
+\tikzstyle{white dpoint}=[dpoint]
+\tikzstyle{green point}=[white point] % for backwards-compatibility
+\tikzstyle{white copoint}=[copoint]
+\tikzstyle{gray point}=[point,fill=gray!40!white]
+\tikzstyle{gray dpoint}=[gray point,doubled]
+\tikzstyle{red point}=[gray point] % for backwards-compatibility
+\tikzstyle{gray copoint}=[copoint,fill=gray!40!white]
+\tikzstyle{gray dcopoint}=[gray copoint,doubled]
+
+\tikzstyle{white point guide}=[regular polygon,regular polygon sides=3,font=\scriptsize,draw,scale=0.65,inner sep=-0.5pt,minimum width=9mm,fill=white,regular polygon rotate=180]
+
+\tikzstyle{black point}=[point,fill=black,font=\color{white}]
+\tikzstyle{black copoint}=[copoint,fill=black,font=\color{white}]
+
+\tikzstyle{tiny gray point}=[tinypoint,fill=gray!40!white]
+
+\tikzstyle{diredge}=[->]
+\tikzstyle{ddiredge}=[<->]
+\tikzstyle{rdiredge}=[<-]
+\tikzstyle{thickdiredge}=[->, very thick]
+\tikzstyle{pointer edge}=[->,very thick,gray]
+\tikzstyle{pointer edge part}=[very thick,gray]
+\tikzstyle{dashed edge}=[dashed]
+\tikzstyle{thick dashed edge}=[very thick,dashed]
+\tikzstyle{thick gray dashed edge}=[thick dashed edge,gray!40]
+\tikzstyle{thick map edge}=[very thick,|->]
+
+% =======================
+% = PARALLELAGRAM BOXES =
+% =======================
+
+\makeatletter
+\newcommand{\boxshape}[3]{%
+\pgfdeclareshape{#1}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\@tempdima=#2
+\@tempdimb=#3
+
+\pgfpathmoveto{\pgfpoint{\pgf@xa - 5pt + \@tempdima}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 5pt - \@tempdima}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 5pt + \@tempdimb}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 5pt - \@tempdimb}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 5pt + \@tempdima}{\pgf@ya}}
+\pgfpathclose
+}
+}}
+
+\boxshape{NEbox}{0pt}{5pt}
+\boxshape{SEbox}{0pt}{-5pt}
+\boxshape{NWbox}{5pt}{0pt}
+\boxshape{SWbox}{-5pt}{0pt}
+\boxshape{EBox}{-3pt}{3pt}
+\boxshape{WBox}{3pt}{-3pt}
+\makeatother
+
+\tikzstyle{cloud}=[shape=cloud,draw,minimum width=1.5cm,minimum height=1.5cm]
+
+\tikzstyle{map}=[draw,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{dashedmap}=[draw,dashed,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{mapdag}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{mapadj}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{maptrans}=[draw,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{mapconj}=[draw,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white]
+
+\tikzstyle{medium map}=[draw,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium map dag}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium map adj}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium map trans}=[draw,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium map conj}=[draw,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{semilarge map}=[draw,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge map trans}=[draw,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge map adj}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge map dag}=[draw,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge map conj}=[draw,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{large map}=[draw,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{large map conj}=[draw,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{very large map}=[draw,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=17mm]
+
+\tikzstyle{medium dmap}=[draw,doubled,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium dmap dag}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium dmap adj}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium dmap trans}=[draw,doubled,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{medium dmap conj}=[draw,doubled,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=7mm]
+\tikzstyle{semilarge dmap}=[draw,doubled,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge dmap trans}=[draw,doubled,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge dmap adj}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge dmap dag}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{semilarge dmap conj}=[draw,doubled,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=9.5mm]
+\tikzstyle{large dmap}=[draw,doubled,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{large dmap conj}=[draw,doubled,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{large dmap trans}=[draw,doubled,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{large dmap adj}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{large dmap dag}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=12mm]
+\tikzstyle{very large dmap}=[draw,doubled,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white,minimum width=19.5mm]
+
+\tikzstyle{muxbox}=[draw,shape=rectangle,minimum height=3mm,minimum width=3mm,fill=white]
+\tikzstyle{dmuxbox}=[muxbox,doubled]
+
+\tikzstyle{box}=[draw,shape=rectangle,inner sep=2pt,minimum height=6mm,minimum width=6mm,fill=white]
+\tikzstyle{dbox}=[draw,doubled,shape=rectangle,inner sep=2pt,minimum height=6mm,minimum width=6mm,fill=white]
+\tikzstyle{dmap}=[draw,doubled,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{dmapdag}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{dmapadj}=[draw,doubled,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{dmaptrans}=[draw,doubled,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{dmapconj}=[draw,doubled,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white]
+
+\tikzstyle{ddmap}=[draw,doubled,dashed,shape=NEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{ddmapdag}=[draw,doubled,dashed,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{ddmapadj}=[draw,doubled,dashed,shape=SEbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{ddmaptrans}=[draw,doubled,dashed,shape=SWbox,inner sep=2pt,minimum height=6mm,fill=white]
+\tikzstyle{ddmapconj}=[draw,doubled,dashed,shape=NWbox,inner sep=2pt,minimum height=6mm,fill=white]
+
+\boxshape{sNEbox}{0pt}{3pt}
+\boxshape{sSEbox}{0pt}{-3pt}
+\boxshape{sNWbox}{3pt}{0pt}
+\boxshape{sSWbox}{-3pt}{0pt}
+\tikzstyle{smap}=[draw,shape=sNEbox,fill=white]
+\tikzstyle{smapdag}=[draw,shape=sSEbox,fill=white]
+\tikzstyle{smapadj}=[draw,shape=sSEbox,fill=white]
+\tikzstyle{smaptrans}=[draw,shape=sSWbox,fill=white]
+\tikzstyle{smapconj}=[draw,shape=sNWbox,fill=white]
+
+\tikzstyle{dsmap}=[draw,dashed,shape=sNEbox,fill=white]
+\tikzstyle{dsmapdag}=[draw,dashed,shape=sSEbox,fill=white]
+\tikzstyle{dsmaptrans}=[draw,dashed,shape=sSWbox,fill=white]
+\tikzstyle{dsmapconj}=[draw,dashed,shape=sNWbox,fill=white]
+
+\boxshape{mNEbox}{0pt}{10pt}
+\boxshape{mSEbox}{0pt}{-10pt}
+\boxshape{mNWbox}{10pt}{0pt}
+\boxshape{mSWbox}{-10pt}{0pt}
+\tikzstyle{mmap}=[draw,shape=mNEbox]
+\tikzstyle{mmapdag}=[draw,shape=mSEbox]
+\tikzstyle{mmaptrans}=[draw,shape=mSWbox]
+\tikzstyle{mmapconj}=[draw,shape=mNWbox]
+
+\tikzstyle{mmapgray}=[draw,fill=gray!40!white,shape=mNEbox]
+\tikzstyle{smapgray}=[draw,fill=gray!40!white,shape=sNEbox]
+
+
+
+\makeatletter
+\pgfdeclareshape{cornerpoint}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\pgfmathsetmacro{\pgf@shorten@left}{\pgfkeysvalueof{/tikz/shorten left}}
+\pgfmathsetmacro{\pgf@shorten@right}{\pgfkeysvalueof{/tikz/shorten right}}
+
+\pgfpathmoveto{\pgfpoint{0.5 * (\pgf@xa + \pgf@xb)}{\pgf@ya - 5pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt + \pgf@shorten@left}{\pgf@yb - 1.5 * \pgf@shorten@left}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt + \pgf@shorten@left}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@yb - 1.5 * \pgf@shorten@right}}
+\pgfpathclose
+}
+}
+
+\pgfdeclareshape{cornercopoint}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\pgfmathsetmacro{\pgf@shorten@left}{\pgfkeysvalueof{/tikz/shorten left}}
+\pgfmathsetmacro{\pgf@shorten@right}{\pgfkeysvalueof{/tikz/shorten right}}
+
+\pgfpathmoveto{\pgfpoint{0.5 * (\pgf@xa + \pgf@xb)}{\pgf@yb + 5pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt + \pgf@shorten@left}{\pgf@ya + 1.5 * \pgf@shorten@left}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt + \pgf@shorten@left}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@ya + 1.5 * \pgf@shorten@right}}
+\pgfpathclose
+}
+}
+
+%%%%%%%%%%%%%%%Bob
+\pgfdeclareshape{langpoint}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\pgfmathsetmacro{\pgf@shorten@left}{\pgfkeysvalueof{/tikz/shorten left}}
+\pgfmathsetmacro{\pgf@shorten@right}{\pgfkeysvalueof{/tikz/shorten right}}
+
+\pgfpathmoveto{\pgfpoint{0.5 * (\pgf@xa + \pgf@xb)}{\pgf@ya - 2pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt}{\pgf@yb - 3 * \pgf@shorten@left + 5pt}} 
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt}{\pgf@yb -1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@yb -1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@yb - 3 * \pgf@shorten@left + 5pt}}%NEW POINT
+%\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@ya + 1.5 * \pgf@shorten@right}}
+\pgfpathclose
+}
+}
+
+\pgfdeclareshape{langcopoint}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\pgfmathsetmacro{\pgf@shorten@left}{\pgfkeysvalueof{/tikz/shorten left}}
+\pgfmathsetmacro{\pgf@shorten@right}{\pgfkeysvalueof{/tikz/shorten right}}
+
+\pgfpathmoveto{\pgfpoint{0.5 * (\pgf@xa + \pgf@xb)}{\pgf@yb +0pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt}{\pgf@ya + 3 * \pgf@shorten@left - 5pt}} 
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt}{\pgf@ya + 1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@ya + 1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@ya + 3 * \pgf@shorten@left - 5pt}}%NEW POINT
+%\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@ya + 1.5 * \pgf@shorten@right}}
+\pgfpathclose
+}
+}
+
+\pgfdeclareshape{langrect}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+
+\pgfmathsetmacro{\pgf@shorten@left}{\pgfkeysvalueof{/tikz/shorten left}}
+\pgfmathsetmacro{\pgf@shorten@right}{\pgfkeysvalueof{/tikz/shorten right}}
+
+\pgfpathmoveto{\pgfpoint{\pgf@xa - 8pt}{\pgf@ya + 3 * \pgf@shorten@left - 5pt}} 
+\pgfpathlineto{\pgfpoint{\pgf@xa - 8pt}{\pgf@ya + 1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@ya + 1pt}}
+\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt}{\pgf@ya + 3 * \pgf@shorten@left - 5pt}}%NEW POINT
+%\pgfpathlineto{\pgfpoint{\pgf@xb + 8pt - \pgf@shorten@right}{\pgf@ya + 1.5 * \pgf@shorten@right}}
+\pgfpathclose
+}
+}
+%%%%%%%%%%%%%%%Bob
+
+\makeatother
+
+\pgfkeyssetvalue{/tikz/shorten left}{0pt}
+\pgfkeyssetvalue{/tikz/shorten right}{0pt}
+
+\tikzstyle{kpoint common}=[draw,fill=white,inner sep=1pt,minimum height=4mm]
+
+%%%%%%%%%%%%%%%%%%%BOB
+\tikzstyle{langstate}=[shape=langcopoint,shorten left=5pt,kpoint common,font=\footnotesize]
+\tikzstyle{langeffect}=[shape=langpoint,shorten left=5pt,kpoint common,font=\footnotesize]
+%\tikzstyle{langbox}=[rectangle,inline text,fill=white,draw,minimum height=0mm,minimum width=5mm,font=\footnotesize] 
+\tikzstyle{langbox}=[shape=langrect,shorten left=5pt,kpoint common,font=\footnotesize] 
+%%%%%%%%%%%%%%%%%%%BOB
+
+\tikzstyle{kpoint}=[shape=cornerpoint,shorten left=5pt,kpoint common]
+\tikzstyle{kpoint adjoint}=[shape=cornercopoint,shorten left=5pt,kpoint common]
+
+\tikzstyle{kpoint conjugate}=[shape=cornerpoint,shorten right=5pt,kpoint common]
+\tikzstyle{kpoint transpose}=[shape=cornercopoint,shorten right=5pt,kpoint common]
+\tikzstyle{kpoint symm}=[shape=cornerpoint,shorten left=5pt,shorten right=5pt,kpoint common]
+
+\tikzstyle{black kpoint}=[shape=cornerpoint,shorten left=5pt,kpoint common,fill=black,font=\color{white}]
+\tikzstyle{black kpoint adjoint}=[shape=cornercopoint,shorten left=5pt,kpoint common,fill=black,font=\color{white}]
+\tikzstyle{black kpointadj}=[shape=cornercopoint,shorten left=5pt,kpoint common,fill=black,font=\color{white}]
+
+\tikzstyle{black dkpoint}=[shape=cornerpoint,shorten left=5pt,kpoint common,fill=black, doubled,font=\color{white}]
+\tikzstyle{black dkpoint adjoint}=[shape=cornercopoint,shorten left=5pt,kpoint common,fill=black, doubled,font=\color{white}]
+\tikzstyle{black dkpointadj}=[shape=cornercopoint,shorten left=5pt,kpoint common,fill=black, doubled,font=\color{white}]
+
+\tikzstyle{kpointdag}=[kpoint adjoint]
+\tikzstyle{kpointadj}=[kpoint adjoint]
+\tikzstyle{kpointconj}=[kpoint conjugate]
+\tikzstyle{kpointtrans}=[kpoint transpose]
+
+\tikzstyle{big kpoint}=[kpoint, minimum width=1.2 cm, minimum height=8mm, inner sep=4pt, text depth=3mm]
+
+\tikzstyle{wide kpoint}=[kpoint, minimum width=1 cm, inner sep=2pt]%, text depth=-0.7 mm]
+\tikzstyle{wide kpointdag}=[kpointdag, minimum width=1 cm, inner sep=2pt]%, text depth=0.7 mm]
+\tikzstyle{wide kpointconj}=[kpointconj, minimum width=1 cm, inner sep=2pt]%, text depth=-0.7 mm]
+\tikzstyle{wide kpointtrans}=[kpointtrans, minimum width=1 cm, inner sep=2pt]%, text depth=0.7 mm]
+
+\tikzstyle{gray kpoint}=[kpoint,fill=gray!50!white]
+\tikzstyle{gray kpointdag}=[kpointdag,fill=gray!50!white]
+\tikzstyle{gray kpointadj}=[kpointadj,fill=gray!50!white]
+\tikzstyle{gray kpointconj}=[kpointconj,fill=gray!50!white]
+\tikzstyle{gray kpointtrans}=[kpointtrans,fill=gray!50!white]
+
+\tikzstyle{gray dkpoint}=[kpoint,fill=gray!50!white,doubled]
+\tikzstyle{gray dkpointdag}=[kpointdag,fill=gray!50!white,doubled]
+\tikzstyle{gray dkpointadj}=[kpointadj,fill=gray!50!white,doubled]
+\tikzstyle{gray dkpointconj}=[kpointconj,fill=gray!50!white,doubled]
+\tikzstyle{gray dkpointtrans}=[kpointtrans,fill=gray!50!white,doubled]
+
+\tikzstyle{white label}=[draw,fill=white,rectangle,inner sep=0.7 mm]
+\tikzstyle{gray label}=[draw,fill=gray!50!white,rectangle,inner sep=0.7 mm]
+\tikzstyle{black label}=[draw,fill=black,rectangle,inner sep=0.7 mm]
+
+\tikzstyle{dkpoint}=[kpoint,doubled]
+\tikzstyle{wide dkpoint}=[wide kpoint,doubled]
+\tikzstyle{dkpointdag}=[kpoint adjoint,doubled]
+\tikzstyle{wide dkpointdag}=[wide kpointdag,doubled]
+\tikzstyle{dkcopoint}=[kpoint adjoint,doubled]
+\tikzstyle{dkpointadj}=[kpoint adjoint,doubled]
+\tikzstyle{dkpointconj}=[kpoint conjugate,doubled]
+\tikzstyle{dkpointtrans}=[kpoint transpose,doubled]
+
+\tikzstyle{kscalar}=[kpoint common, shape=EBox, inner xsep=-1pt, inner ysep=3pt,font=\small]
+\tikzstyle{kscalarconj}=[kpoint common, shape=WBox, inner xsep=-1pt, inner ysep=3pt,font=\small]
+
+% ========================
+% = GROUND =
+% ========================
+
+
+ \tikzstyle{upground}=[circuit ee IEC,ground,rotate=90,scale=2.5]
+ \tikzstyle{downground}=[circuit ee IEC,ground,rotate=-90,scale=2.5]
+ %\tikzstyle{ground}=[regular polygon,regular polygon sides=3,draw=gray,scale=0.50,inner sep=-0.5pt,minimum width=5mm,fill=gray]
+ \tikzstyle{bigground}=[regular polygon,regular polygon sides=3,draw=gray,scale=0.50,inner sep=-0.5pt,minimum width=10mm,fill=gray]
+ %\tikzstyle{grounddag}=[regular polygon,regular polygon sides=3,draw=gray,scale=0.50,inner sep=-0.5pt,minimum width=5mm,fill=gray,regular polygon rotate=180]
+
+% ========================
+% = COMMUTATIVE DIAGRAMS =
+% ========================
+
+\tikzstyle{arrs}=[-latex,font=\small,auto]
+\tikzstyle{arrow plain}=[arrs]
+\tikzstyle{arrow dashed}=[dashed,arrs]
+\tikzstyle{arrow bold}=[very thick,arrs]
+\tikzstyle{arrow hide}=[draw=white!0,-]
+\tikzstyle{arrow reverse}=[latex-]
+\tikzstyle{cdnode}=[]
+
+%%%%%%%%%%%%%%%%%%%Harny
+\tikzstyle{gbox}=[rectangle,fill=green,draw=black,xscale=1.0,yscale=1.0, inner sep=1.pt]
+\tikzstyle{triangle}=[fill=yellow,draw=black,shape=isosceles triangle,shape border rotate=90,isosceles triangle stretches=true,inner sep=0.8pt,minimum width=0.25cm,minimum height=2mm]

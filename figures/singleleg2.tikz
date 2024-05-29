@@ -1,0 +1,18 @@
+\begin{tikzpicture}[scale=0.80]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (1.25, -1.5) {};
+		\node [style=none] (1) at (-1.25, -1.5) {};
+		\node [style=none] (2) at (-1.25, 1.5) {};
+		\node [style=none] (3) at (1.25, 1.5) {};
+		\node [style=none] (4) at (0, 1.25) {\ldots};
+		\node [style=none] (5) at (0, -1) {\ldots};
+		\node [style=black dot] (6) at (0, 0) {};
+		\node [style=none] (7) at (0, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap, in=135, out=-90, looseness=1.00] (2.center) to (6);
+		\draw [style=swap, in=45, out=-90, looseness=1.00] (3.center) to (6);
+		\draw [style=swap, in=90, out=-45, looseness=1.00] (6) to (0.center);
+		\draw [style=swap, in=90, out=-135, looseness=1.00] (6) to (1.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

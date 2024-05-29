@@ -1,0 +1,704 @@
+\begin{thebibliography}{100}
+
+\bibitem{AC1}
+S.~Abramsky and B.~Coecke.
+\newblock A categorical semantics of quantum protocols.
+\newblock In {\em Proceedings of the 19th Annual IEEE Symposium on Logic in
+  Computer Science (LICS)}, pages 415--425, 2004.
+\newblock {a}rXiv:quant-ph/0402130.
+
+\bibitem{cnotdihedral}
+M.~Amy, J.~Chen, and N.~J. Ross.
+\newblock A finite presentation of cnot-dihedral operators.
+\newblock In Bob Coecke and Aleks Kissinger, editors, {\em {\rm Proceedings
+  14th International Conference on} Quantum Physics and Logic, {\rm Nijmegen,
+  The Netherlands, 3-7 July 2017}}, volume 266 of {\em Electronic Proceedings
+  in Theoretical Computer Science}, pages 84--97. Open Publishing Association,
+  2018.
+
+\bibitem{Backens}
+M.~Backens.
+\newblock The {ZX}-calculus is complete for stabilizer quantum mechanics.
+\newblock {\em New Journal of Physics}, 16:093021, 2014.
+\newblock {arXiv:1307.7025}.
+
+\bibitem{Backens2}
+M.~Backens.
+\newblock The {ZX}-calculus is complete for the single-qubit {Clifford+T}
+  group.
+\newblock In B.~Coecke, I.~Hasuo, and P.~Panangaden, editors, {\em Proceedings
+  of the 11th workshop on Quantum Physics and Logic}, volume 172 of {\em
+  Electronic Proceedings in Theoretical Computer Science}, pages 293--303. Open
+  Publishing Association, 2014.
+
+\bibitem{backens_making_2015}
+M.~Backens.
+\newblock Making the stabilizer {ZX}-calculus complete for scalars.
+\newblock {\em Electronic Proceedings in Theoretical Computer Science},
+  195:17--32, November 2015.
+
+\bibitem{backens2020there}
+M.~Backens, H.~Miller-Bakewell, G.~de~Felice, and J.~van~de Wetering.
+\newblock There and back again: A circuit extraction tale.
+\newblock {\em arXiv preprint arXiv:2003.01664}, 2020.
+
+\bibitem{MiriamSpek}
+M.~Backens and A.~Nabi~Duman.
+\newblock A complete graphical calculus for {S}pekkens' toy bit theory.
+\newblock {\em Foundations of Physics}, 2015.
+\newblock arXiv:1411.1618.
+
+\bibitem{bpw2020}
+M.~Backens, S.~Perdrix, and Q.~Wang.
+\newblock {Towards a Minimal Stabilizer {ZX}-calculus}.
+\newblock {\em {Logical Methods in Computer Science}}, {Volume 16, Issue 4},
+  December 2020.
+\newblock arXiv:1709.08903.
+
+\bibitem{Baez2014a}
+J.~C. Baez and J.~Erbele.
+\newblock Categories in control, 2014.
+\newblock arXiv:1405.6881.
+
+\bibitem{BaezFongElec}
+J.~C. Baez and B.~Fong.
+\newblock A compositional framework for passive linear networks.
+\newblock {\em arXiv:1504.05625}, 2015.
+
+\bibitem{BB84}
+C.~H. Bennett and G.~Brassard.
+\newblock Quantum cryptography: Public key distribution and coin tossing.
+\newblock In {\em Proceedings of IEEE International Conference on Computers,
+  Systems and Signal Processing}, pages 175--179. IEEE, 1984.
+
+\bibitem{BvN}
+G.~Birkhoff and J.~von Neumann.
+\newblock The logic of quantum mechanics.
+\newblock {\em Annals of Mathematics}, 37:823--843, 1936.
+
+\bibitem{ConcSpacI}
+J.~Bolt, B.~Coecke, F.~Genovese, M.~Lewis, D.~Marsden, and R.~Piedeleu.
+\newblock Interacting conceptual spaces {I}.
+\newblock In M.~Kaipainen, A.~Hautam\"aki, P.~G\"ardenfors, and F.~Zenker,
+  editors, {\em Concepts and their Applications}, Synthese Library, Studies in
+  Epistemology, Logic, Methodology, and Philosophy of Science. Springer, 2018.
+\newblock to appear.
+
+\bibitem{bonchi2020string}
+F.~Bonchi, F.~Gadducci, A.~Kissinger, P.~Sobocinski, and F.~Zanasi.
+\newblock String diagram rewrite theory i: Rewriting with frobenius structure.
+\newblock {\em arXiv preprint arXiv:2012.01847}, 2020.
+
+\bibitem{bonchi2019concurrent}
+F.~Bonchi, J.~Holland, R.~Piedeleu, P.~Soboci{\'n}ski, and F.~Zanasi.
+\newblock Diagrammatic algebra: from linear to concurrent systems.
+\newblock {\em Proceedings of the ACM on Programming Languages}, 3(POPL):1--28,
+  2019.
+
+\bibitem{bonchi2019graphical}
+F.~Bonchi, R.~Piedeleu, P.~Soboci{\'n}ski, and F.~Zanasi.
+\newblock Graphical affine algebra.
+\newblock In {\em 2019 34th Annual ACM/IEEE Symposium on Logic in Computer
+  Science (LICS)}, pages 1--12. IEEE, 2019.
+
+\bibitem{signalflownew}
+F.~Bonchi, R.~Piedeleu, P.~Soboci{\'{n}}ski, and F.~Zanasi.
+\newblock Contextual equivalence for signal flow graphs.
+\newblock In Jean Goubault-Larrecq and Barbara K{\"o}nig, editors, {\em
+  Foundations of Software Science and Computation Structures}, pages 77--96,
+  Cham, 2020. Springer International Publishing.
+
+\bibitem{PawelRel}
+F.~Bonchi, P.~Sobocinski, and F.~Zanasi.
+\newblock Interacting bialgebras are {F}robenius.
+\newblock In {\em 17th International Conference on Foundations of Software
+  Science and Computation Structures ({FOSSACS})}, pages 351--365, 2014.
+
+\bibitem{Bonchi2015}
+F~Bonchi, P.~Soboci\'{n}ski, and F.~Zanasi.
+\newblock Full abstraction for signal flow graphs.
+\newblock In {\em Principles of Programming Languages, POPL`15.}, 2015.
+
+\bibitem{bonchi2017interacting}
+F.~Bonchi, P.~Soboci{\'n}ski, and F.~Zanasi.
+\newblock Interacting hopf algebras.
+\newblock {\em Journal of Pure and Applied Algebra}, 221(1):144--184, 2017.
+
+\bibitem{CarboniWalters}
+A.~Carboni and R.~F.~C. Walters.
+\newblock Cartesian bicategories {I}.
+\newblock {\em Journal of Pure and Applied Algebra}, 49:11--32, 1987.
+
+\bibitem{cartier2007primer}
+P.~Cartier.
+\newblock A primer of {H}opf algebras.
+\newblock In {\em Frontiers in number theory, physics, and geometry II}, pages
+  537--615. Springer, 2007.
+
+\bibitem{Kindergarten}
+B.~Coecke.
+\newblock Kindergarten quantum mechanics.
+\newblock In A.~Khrennikov, editor, {\em Quantum Theory: Reconsiderations of
+  the Foundations III}, pages 81--98. AIP Press, 2005.
+\newblock {a}rXiv:quant-ph/0510032.
+
+\bibitem{ContPhys}
+B.~Coecke.
+\newblock Quantum picturalism.
+\newblock {\em Contemporary Physics}, 51:59--83, 2009.
+\newblock {a}rXiv:0908.1787.
+
+\bibitem{JTF}
+B.~Coecke.
+\newblock A universe of processes and some of its guises.
+\newblock In H.~Halvorson, editor, {\em Deep Beauty: Understanding the Quantum
+  World through Mathematical Innovation}, pages 129--186. Cambridge University
+  Press, 2011.
+\newblock {arXiv:1009.3786}.
+
+\bibitem{coecke2016terminality}
+B.~Coecke.
+\newblock Terminality implies no-signalling... and much more than that.
+\newblock {\em New Generation Computing}, 34:69--85, 2016.
+
+\bibitem{QNLP-foundations}
+B.~Coecke, G.~de~Felice, K.~Meichanetzidis, and A.~Toumi.
+\newblock Foundations for near-term quantum natural language processing.
+\newblock {\em arXiv preprint arXiv:2012.03755}, 2020.
+
+\bibitem{CD0}
+B.~Coecke and R.~Duncan.
+\newblock A graphical calculus for quantum observables.
+\newblock {\em zxcalculus.com/publications.html}, 2007.
+
+\bibitem{CD1}
+B.~Coecke and R.~Duncan.
+\newblock Interacting quantum observables.
+\newblock In {\em Proceedings of the 37th International Colloquium on Automata,
+  Languages and Programming (ICALP)}, Lecture Notes in Computer Science, 2008.
+
+\bibitem{CD2}
+B.~Coecke and R.~Duncan.
+\newblock Interacting quantum observables: categorical algebra and
+  diagrammatics.
+\newblock {\em New Journal of Physics}, 13:043016, 2011.
+\newblock {arXiv:quant-ph/09064725}.
+
+\bibitem{coecke2012tutorial}
+B.~Coecke and R.~Duncan.
+\newblock Tutorial: Graphical calculus for quantum circuits.
+\newblock In {\em International Workshop on Reversible Computation}, pages
+  1--13. Springer, 2012.
+
+\bibitem{CDKZ}
+B.~Coecke, R.~Duncan, A.~Kissinger, and Q.~Wang.
+\newblock Strong complementarity and non-locality in categorical quantum
+  mechanics.
+\newblock In {\em Proceedings of the 27th Annual IEEE Symposium on Logic in
+  Computer Science (LICS)}, 2012.
+\newblock arXiv:1203.4988.
+
+\bibitem{CDKZ2}
+B.~Coecke, R.~Duncan, A.~Kissinger, and Q.~Wang.
+\newblock Generalised compositional theories and diagrammatic reasoning.
+\newblock In G.~Chiribella and R.~W. Spekkens, editors, {\em Quantum Theory:
+  Informational Foundations and Foils}, Fundamental Theories of Physics.
+  Springer, 2016.
+\newblock {arXiv:1203.4988}.
+
+\bibitem{CEGHZW}
+B.~Coecke and B.~Edwards.
+\newblock Three qubit entanglement within graphical {Z/X}-calculus.
+\newblock {\em Electronic Proceedings in Theoretical Computer Science},
+  52:22--33, 2010.
+
+\bibitem{CEToy}
+B.~Coecke and B.~Edwards.
+\newblock Toy quantum categories.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 270(1):29 --
+  40, 2011.
+\newblock {a}rXiv:0808.1037.
+
+\bibitem{CES}
+B.~Coecke, B.~Edwards, and R.~W. Spekkens.
+\newblock Phase groups and the origin of non-locality for qubits.
+\newblock {\em Electronic Notes in Theoretical Computer Science},
+  270(2):15--36, 2011.
+\newblock {a}rXiv:1003.5005.
+
+\bibitem{CoeckeGogioso2018}
+B.~Coecke and S.~Gogioso.
+\newblock Quantum theory in pictures, 2020.
+\newblock Tutorial.
+
+\bibitem{CK}
+B.~Coecke and A.~Kissinger.
+\newblock {The compositional structure of multipartite quantum entanglement}.
+\newblock In {\em Automata, Languages and Programming}, Lecture Notes in
+  Computer Science, pages 297--308. Springer, 2010.
+\newblock {a}r{X}iv:1002.2540.
+
+\bibitem{CKbook}
+B.~Coecke and A.~Kissinger.
+\newblock {\em Picturing Quantum Processes. A First Course in Quantum Theory
+  and Diagrammatic Reasoning}.
+\newblock Cambridge University Press, 2017.
+
+\bibitem{CKMR}
+B.~Coecke, A.~Kissinger, A.~Merry, and S.~Roy.
+\newblock The {GHZ/W}-calculus contains rational arithmetic.
+\newblock {\em Electronic Proceedings in Theoretical Computer Science},
+  52:34--48, 2010.
+
+\bibitem{CPV}
+B.~Coecke, D.~Pavlovi{\'c}, and J.~Vicary.
+\newblock A new description of orthogonal bases.
+\newblock {\em Mathematical Structures in Computer Science, to appear},
+  23:555--567, 2013.
+\newblock {a}rXiv:quant-ph/0810.1037.
+
+\bibitem{CSC}
+B.~Coecke, M.~Sadrzadeh, and S.~Clark.
+\newblock Mathematical foundations for a compositional distributional model of
+  meaning.
+\newblock In J.~van Benthem, M.~Moortgat, and W.~Buszkowski, editors, {\em A
+  Festschrift for Jim Lambek}, volume~36 of {\em Linguistic Analysis}, pages
+  345--384. 2010.
+\newblock ar{x}iv:1003.4394.
+
+\bibitem{DBLP:conf/rc/CoeckeW18}
+B.~Coecke and Q.~Wang.
+\newblock {ZX}-rules for 2-qubit {C}lifford+{T} quantum circuits.
+\newblock In Jarkko Kari and Irek Ulidowski, editors, {\em Reversible
+  Computation - 10th International Conference, {RC} 2018, Leicester, UK,
+  September 12-14, 2018, Proceedings}, volume 11106 of {\em Lecture Notes in
+  Computer Science}, pages 144--161. Springer, 2018.
+
+\bibitem{de2020fast}
+N.~de~Beaudrap, X.~Bian, and Q.~Wang.
+\newblock Fast and effective techniques for t-count reduction via spider nest
+  identities.
+\newblock In {\em 15th Conference on the Theory of Quantum Computation,
+  Communication and Cryptography (TQC 2020)}. Schloss Dagstuhl-Leibniz-Zentrum
+  f{\"u}r Informatik, 2020.
+\newblock arXiv:2004.05164.
+
+\bibitem{PauliFusion}
+N.~de~Beaudrap, R.~Duncan, D.~Horsman, and S.~Perdrix.
+\newblock Pauli fusion: a computational model to realise quantum
+  transformations from {ZX} terms.
+\newblock In Bob Coecke and Matthew Leifer, editors, {\em {\rm Proceedings 16th
+  International Conference on} Quantum Physics and Logic, {\rm Chapman
+  University, Orange, CA, USA., 10-14 June 2019}}, volume 318 of {\em
+  Electronic Proceedings in Theoretical Computer Science}, pages 85--105. Open
+  Publishing Association, 2020.
+
+\bibitem{latticeZX}
+N.~de~Beaudrap and D.~Horsman.
+\newblock The {ZX} calculus is a language for surface code lattice surgery.
+\newblock {\em {Quantum}}, 4:218, January 2020.
+
+\bibitem{DK}
+L.~Dixon and A.~Kissinger.
+\newblock Open-graphs and monoidal theories.
+\newblock {\em Mathematical Structures in Computer Science}, 23(02):308--359,
+  2013.
+
+\bibitem{RossKevin}
+R.~Duncan and K.~Dunne.
+\newblock Interacting frobenius algebras are hopf.
+\newblock In {\em Proceedings of the 31st Annual IEEE Symposium on Logic in
+  Computer Science (LICS)}, 2016.
+\newblock {arXiv:1601.04964}.
+
+\bibitem{clifford-simp}
+R.~Duncan, A.~Kissinger, S.~Perdrix, and J.~Van De~Wetering.
+\newblock Graph-theoretic simplification of quantum circuits with the
+  {ZX}-calculus.
+\newblock {\em Quantum}, 4:279, 2020.
+
+\bibitem{duncan2009graph}
+R.~Duncan and S.~Perdrix.
+\newblock Graph states and the necessity of euler decomposition.
+\newblock In {\em Conference on Computability in Europe}, pages 167--177.
+  Springer, 2009.
+
+\bibitem{DP2}
+R.~Duncan and S.~Perdrix.
+\newblock {Rewriting measurement-based quantum computations with generalised
+  flow}.
+\newblock In {\em Proceedings of {ICALP}}, Lecture Notes in Computer Science,
+  pages 285--296. Springer, 2010.
+
+\bibitem{perdrixpivoting}
+R.~Duncan and S.~Perdrix.
+\newblock Pivoting makes the {ZX}-calculus complete for real stabilizers.
+\newblock In {\em Proceedings of the 10th International Workshop on Quantum
+  Physics and Logic}, 2013.
+\newblock arXiv:1307.7048.
+
+\bibitem{DurVC}
+W.~D{\"{u}}r, G.~Vidal, and J.~I. Cirac.
+\newblock Three qubits can be entangled in two inequivalent ways.
+\newblock {\em Physical Review A}, 62(062314), 2000.
+
+\bibitem{dpo-old}
+H.~Ehrig, M.~Pfender, and H.~J. Schneider.
+\newblock Graph-grammars: An algebraic approach.
+\newblock In {\em 14th Annual Symposium on Switching and Automata Theory (swat
+  1973)}, pages 167--180. IEEE, 1973.
+
+\bibitem{LatticeSurgeryNature}
+A.~Erhard, H.~Poulsen~Nautrup, M.~Meth, L.~Postler, R.~Stricker, M.~Stadler,
+  V.~Negnevitsky, M.~Ringbauer, P.~Schindler, H.~J. Briegel, R.~Blatt,
+  N.~Friis, and T.~Monz.
+\newblock Entangling logical qubits with lattice surgery.
+\newblock {\em Nature}, 589(7841):220--224, Jan 2021.
+
+\bibitem{ghani2016compositional}
+N.~Ghani and J.~Hedges.
+\newblock A compositional approach to economic game theory.
+\newblock {\em {arXiv preprint arXiv:1603.04641}}, 2016.
+
+\bibitem{GhicaCircuit}
+D.~R. Ghica and A.~Jung.
+\newblock Categorical semantics of digital circuits.
+\newblock In {\em 2016 Formal Methods in Computer-Aided Design (FMCAD)}, pages
+  41--48, Oct 2016.
+
+\bibitem{Gidney2019}
+C.~Gidney and A.~G. Fowler.
+\newblock Efficient magic state factories with a catalyzed {$|CCZ\rangle$} to
+  {$2|T\rangle$} transformation.
+\newblock {\em {Quantum}}, 3:135, April 2019.
+
+\bibitem{gogioso2015schroedinger}
+S.~Gogioso.
+\newblock Categorical semantics for schr\"odinger's equation.
+\newblock {\em arXiv:1501.06489}, 2015.
+
+\bibitem{gogioso2019diagrammatic}
+S.~Gogioso.
+\newblock A diagrammatic approach to quantum dynamics.
+\newblock In {\em 8th Conference on Algebra and Coalgebra in Computer Science},
+  2019.
+
+\bibitem{gogioso2018categorical}
+S.~Gogioso and C.~M. Scandolo.
+\newblock Categorical probabilistic theories.
+\newblock {\em EPTCS}, 266, 2018.
+
+\bibitem{gogioso2018density}
+S.~Gogioso and C.~M. Scandolo.
+\newblock Density hypercubes, higher order interference and hyper-decoherence:
+  a categorical approach.
+\newblock In {\em International Symposium on Quantum Interaction}, pages
+  141--160. Springer, 2018.
+
+\bibitem{gogioso2015fourier}
+S.~Gogioso and W.~Zeng.
+\newblock Fourier transforms from strongly complementary observables.
+\newblock {\em arXiv preprint arXiv:1501.04995}, 2015.
+
+\bibitem{gogioso2019generalised}
+S.~Gogioso and W.~Zeng.
+\newblock Generalised mermin-type non-locality arguments.
+\newblock {\em Logical Methods in Computer Science (LMCS)}, 15(2), 2019.
+
+\bibitem{GottesmanKnill}
+D.~Gottesman.
+\newblock The heisenberg representation of quantum computers.
+\newblock {\em arXiv:quant-ph/9807006}, 1998.
+
+\bibitem{Amar}
+A.~Hadzihasanovic.
+\newblock A diagrammatic axiomatisation for qubit entanglement.
+\newblock In {\em Proceedings of the 30th Annual IEEE Symposium on Logic in
+  Computer Science (LICS)}, 2015.
+\newblock {arXiv:1501.07082}.
+
+\bibitem{hadzihasanovic2017algebra}
+A.~Hadzihasanovic.
+\newblock {\em The algebra of entanglement and the geometry of composition}.
+\newblock PhD thesis, University of Oxford, 2017.
+
+\bibitem{hadzihasanovic2018two}
+A.~Hadzihasanovic, K.~F. Ng, and Q.~Wang.
+\newblock Two complete axiomatisations of pure-state qubit quantum computing.
+\newblock In {\em Proceedings of the 33rd Annual ACM/IEEE Symposium on Logic in
+  Computer Science}, pages 502--511. ACM, 2018.
+
+\bibitem{NemotoZXbraids}
+M.~Hanks, M.~P. Estarellas, W.~J. Munro, and K.~Nemoto.
+\newblock Effective compression of quantum braided circuits aided by
+  {ZX}-calculus.
+\newblock {\em Phys. Rev. X}, 10:041030, Nov 2020.
+
+\bibitem{Horsman2012}
+C.~Horsman, A.~G. Fowler, S.~Devitt, and R.~Van~Meter.
+\newblock Surface code quantum computing by lattice surgery.
+\newblock {\em New Journal of Physics}, 14(12):123011, dec 2012.
+
+\bibitem{jeandel2018complete}
+E.~Jeandel, S.~Perdrix, and R.~Vilmart.
+\newblock A complete axiomatisation of the {ZX}-calculus for {Clifford+T}
+  quantum mechanics.
+\newblock In {\em Proceedings of the 33rd Annual ACM/IEEE Symposium on Logic in
+  Computer Science}, pages 559--568, 2018.
+\newblock arXiv preprint arXiv:1705.11151.
+
+\bibitem{jeandel2018diagrammatic}
+E.~Jeandel, S.~Perdrix, and R.~Vilmart.
+\newblock Diagrammatic reasoning beyond {Clifford+T} quantum mechanics.
+\newblock {\em arXiv preprint arXiv:1801.10142}, 2018.
+
+\bibitem{jpvnormalform}
+E.~{Jeandel}, S.~{Perdrix}, and R.~{Vilmart}.
+\newblock A generic normal form for {ZX}-diagrams and application to the
+  rational angle completeness.
+\newblock In {\em 34th Annual ACM/IEEE Symposium on Logic in Computer Science
+  (LICS)}, pages 1--10, 2019.
+
+\bibitem{kissinger2017categorical}
+A.~Kissinger and S.~Uijlen.
+\newblock A categorical semantics for causal structure.
+\newblock In {\em 2017 32nd Annual ACM/IEEE Symposium on Logic in Computer
+  Science (LICS)}, pages 1--12. IEEE, 2017.
+
+\bibitem{Kissinger2019universalmbqc}
+A.~Kissinger and J.~van~de Wetering.
+\newblock Universal {MBQC} with generalised parity-phase interactions and
+  {P}auli measurements.
+\newblock {\em {Quantum}}, 3:134, April 2019.
+
+\bibitem{pyzx}
+A.~Kissinger and J.~van~de Wetering.
+\newblock Pyzx: Large scale automated diagrammatic reasoning.
+\newblock In Bob Coecke and Matthew Leifer, editors, {\em {\rm Proceedings 16th
+  International Conference on} Quantum Physics and Logic, {\rm Chapman
+  University, Orange, CA, USA., 10-14 June 2019}}, volume 318 of {\em
+  Electronic Proceedings in Theoretical Computer Science}, pages 229--241. Open
+  Publishing Association, 2020.
+
+\bibitem{KissingerTcount}
+A.~Kissinger and J.~van~de Wetering.
+\newblock Reducing the number of non-clifford gates in quantum circuits.
+\newblock {\em Phys. Rev. A}, 102:022406, Aug 2020.
+
+\bibitem{quanto-cade}
+A.~Kissinger and V.~Zamdzhiev.
+\newblock Quantomatic: A proof assistant for diagrammatic reasoning.
+\newblock In {\em International Conference on Automated Deduction}, pages
+  326--336. Springer, 2015.
+
+\bibitem{Lack}
+S.~Lack.
+\newblock Composing {PROP}s.
+\newblock {\em Theory and Applications of Categories}, 13:147--163, 2004.
+
+\bibitem{Lafont}
+Y.~Lafont.
+\newblock Towards an algebraic theory of boolean circuits.
+\newblock {\em Journal of Pure and Applied Algebra}, 184(2):257--310, 2003.
+
+\bibitem{LangC2}
+A.~Lang and B.~Coecke.
+\newblock Trichromatic open digraphs for understanding qubits.
+\newblock In {\em Proceedings of the 10th workshop on Quantum Physics and
+  Logic}, volume~95 of {\em Electronic Proceedings in Theoretical Computer
+  Science}, pages 193--209, 2012.
+
+\bibitem{lee2018no}
+C.~M. Lee and J.~H. Selby.
+\newblock A no-go theorem for theories that decohere to quantum mechanics.
+\newblock {\em Proceedings of the Royal Society A: Mathematical, Physical and
+  Engineering Sciences}, 474(2214):20170732, 2018.
+
+\bibitem{Litinski2019gameofsurfacecodes}
+D.~Litinski.
+\newblock A {G}ame of {S}urface {C}odes: {L}arge-{S}cale {Q}uantum {C}omputing
+  with {L}attice {S}urgery.
+\newblock {\em {Quantum}}, 3:128, March 2019.
+
+\bibitem{majid2000foundations}
+S.~Majid.
+\newblock {\em Foundations of quantum group theory}.
+\newblock Cambridge University Press, 2000.
+
+\bibitem{QPL-QNLP}
+K.~Meichanetzidis, S.~Gogioso, G.~de~Felice, A.~Toumi, N.~Chiappori, and
+  B.~Coecke.
+\newblock Quantum natural language processing on near-term quantum computers.
+\newblock {\em Accepted for QPL 2020}, 2020.
+\newblock arXiv preprint arXiv:2005.04147.
+
+\bibitem{Nature}
+K.~Meichanetzidis, A.~Toumi, G.~de~Felice, and B.~Coecke.
+\newblock Grammar-aware question-answering on quantum computers.
+\newblock {\em arXiv preprint arXiv:2012.03756}, 2020.
+
+\bibitem{ng2017universal}
+K.~F. Ng and Q.~Wang.
+\newblock A universal completion of the {ZX}-calculus.
+\newblock {\em arXiv preprint arXiv:1706.09877}, 2017.
+
+\bibitem{ngwang2}
+K.~F. Ng and Q.~Wang.
+\newblock Completeness of the {ZX}-calculus for pure qubit clifford+t quantum
+  mechanics.
+\newblock 2018.
+\newblock arXiv preprint arXiv:1801.07993.
+
+\bibitem{pavlovic2013monoidal}
+D.~Pavlovic.
+\newblock Monoidal computer i: Basic computability by string diagrams.
+\newblock {\em Information and computation}, 226:94--116, 2013.
+
+\bibitem{Penrose}
+R.~Penrose.
+\newblock Applications of negative dimensional tensors.
+\newblock In {\em Combinatorial Mathematics and its Applications}, pages
+  221--244. Academic Press, 1971.
+
+\bibitem{PerdrixWang}
+S.~Perdrix and Q.~Wang.
+\newblock {Supplementarity is Necessary for Quantum Diagram Reasoning}.
+\newblock In {\em 41st International Symposium on Mathematical Foundations of
+  Computer Science (MFCS 2016)}, volume~58 of {\em LIPIcs}, pages 76:1--76:14,
+  2016.
+
+\bibitem{pinzani2020giving}
+N.~Pinzani and S.~Gogioso.
+\newblock Giving operational meaning to the superposition of causal orders.
+\newblock {\em arXiv preprint arXiv:2003.13306}, 2020.
+
+\bibitem{pinzani2019categorical}
+N.~Pinzani, S.~Gogioso, and B.~Coecke.
+\newblock Categorical semantics for time travel.
+\newblock In {\em 2019 34th Annual ACM/IEEE Symposium on Logic in Computer
+  Science (LICS)}, pages 1--20. IEEE, 2019.
+
+\bibitem{MBQC2}
+R.~Raussendorf, D.E. Browne, and H.J. Briegel.
+\newblock Measurement-based quantum computation on cluster states.
+\newblock {\em Physical Review A}, 68(2):22312, 2003.
+
+\bibitem{FrobMeanI}
+M.~Sadrzadeh, S.~Clark, and B.~Coecke.
+\newblock The {F}robenius anatomy of word meanings {I}: subject and object
+  relative pronouns.
+\newblock {\em Journal of Logic and Computation}, 23:1293--1317, 2013.
+\newblock ar{X}iv:1404.5278.
+
+\bibitem{VladComp}
+C.~Schr{\"o}der~de Witt and V.~Zamdzhiev.
+\newblock The {ZX} calculus is incomplete for quantum mechanics.
+\newblock {arXiv:1404.3633}, 2014.
+
+\bibitem{Vladimir}
+C.~Schr\"oder~de Witt and V.~Zamdzhiev.
+\newblock The {ZX}-calculus is incomplete for quantum mechanics.
+\newblock {\em EPTCS}, 172:285--292, December 2014.
+
+\bibitem{selby2017leaks}
+J.~H. Selby and B.~Coecke.
+\newblock Leaks: quantum, classical, intermediate and more.
+\newblock {\em Entropy}, 19(4):174, 2017.
+
+\bibitem{selby2018reconstructing}
+J.~H. Selby, C.~M. Scandolo, and B.~Coecke.
+\newblock Reconstructing quantum theory from diagrammatic postulates.
+\newblock {\em arXiv preprint arXiv:1802.00367}, 2018.
+
+\bibitem{ptbian}
+P.~Selinger and X.~Bian.
+\newblock Relations for {Clifford+T} operators on two qubits.
+\newblock {\em talk available from https://www.mathstat.dal.ca/~xbian/talks/},
+  2015.
+
+\bibitem{BorunMSc}
+B.~Shi.
+\newblock Towards minimality of {Clifford+T} {ZX}-calculus.
+\newblock Master's thesis, University of Oxford, 2018.
+
+\bibitem{wangconscious}
+C.~M. Signorelli, Q.~Wang, and I.~Khan.
+\newblock A compositional model of consciousness based on consciousness-only.
+\newblock 2020.
+\newblock arXiv preprint arXiv:2007.16138.
+
+\bibitem{sivarajah2020t}
+S.~Sivarajah, S.~Dilkes, A.~Cowtan, W.~Simmons, A.~Edgington, and R.~Duncan.
+\newblock t$|$ket$>$: A retargetable compiler for {NISQ} devices.
+\newblock {\em arXiv preprint arXiv:2003.10611}, 2020.
+
+\bibitem{GLAmagiclego}
+P.~Sobocinski.
+\newblock Graphical linear algebra 4: Dumbing down and magic lego.
+\newblock
+  \url{https://graphicallinearalgebra.net/2015/04/29/dumbing-down-magic-lego-and-the-rules-of-the-game-part-1/}.
+
+\bibitem{Sobocinski:2010aa}
+P.~Sobocinski.
+\newblock Representations of petri net interactions.
+\newblock In {\em CONCUR 2010 - Concurrency Theory}, volume 6269 of {\em LNCS},
+  pages pp 554--568. Springer, 2010.
+
+\bibitem{seanconscious}
+S.~Tull and J.~Kleiner.
+\newblock Integrated information in process theories.
+\newblock 2020.
+\newblock arXiv preprint arXiv:2002.07654.
+
+\bibitem{JohnSurvey}
+J.~van~de Wetering.
+\newblock {ZX}-calculus for the working quantum computer scientist.
+\newblock {\em arXiv:2012.13966}, 2020.
+
+\bibitem{zxtri}
+R.~Vilmart.
+\newblock {A {ZX}-Calculus with Triangles for Toffoli-Hadamard, Clifford+T, and
+  Beyond}.
+\newblock In Peter Selinger and Giulio Chiribella, editors, {\em Proceedings of
+  the 15th International Conference on Quantum Physics and Logic, Halifax,
+  Canada, 3-7th June 2018}, volume 287 of {\em Electronic Proceedings in
+  Theoretical Computer Science}, pages 313--344. Open Publishing Association,
+  2019.
+
+\bibitem{vilmart2019near}
+R.~Vilmart.
+\newblock A near-minimal axiomatisation of {ZX}-calculus for pure qubit quantum
+  mechanics.
+\newblock In {\em 2019 34th Annual ACM/IEEE Symposium on Logic in Computer
+  Science (LICS)}, pages 1--10. IEEE, 2019.
+
+\bibitem{azxsemiring}
+Q.~Wang.
+\newblock Completeness of algebraic {ZX}-calculus over arbitrary commutative
+  rings and semirings.
+\newblock 2020.
+\newblock arXiv preprint arXiv:1912.01003.
+
+\bibitem{qwangslides}
+Q.~Wang.
+\newblock Enter a visual era: process theory embodied in {ZX}-calculus.
+\newblock {\em Slides available from 10.13140/RG.2.2.17289.67682}, 2020.
+
+\bibitem{yeung2020diagrammatic}
+R.~Yeung.
+\newblock Diagrammatic design and study of ans\"atze for quantum machine
+  learning.
+\newblock {\em arXiv preprint arXiv:2011.11073}, 2020.
+
+\bibitem{WillC}
+W.~Zeng and B.~Coecke.
+\newblock Quantum algorithms for compositional natural language processing.
+\newblock arXiv:1608.01406.
+
+\bibitem{zhao2021analyzing}
+C.~Zhao and X.-S. Gao.
+\newblock Analyzing the barren plateau phenomenon in training quantum neural
+  network with the {ZX}-calculus.
+\newblock {\em arXiv preprint arXiv:2102.01828}, 2021.
+
+\end{thebibliography}

@@ -1,0 +1,68 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=X dot] (0) at (-5, 1.5) {};
+		\node [style=none] (1) at (-5, 2.25) {};
+		\node [style=none, anchor=west] (2) at (-4.25, 1.75) {$=\  \ket{0}$};
+		\node [style=X phase dot] (3) at (-0.5, 1.5) {$\pi$};
+		\node [style=none] (4) at (-0.5, 2.25) {};
+		\node [style=none, anchor=west] (5) at (0.25, 1.75) {$=\  \ket{1}$};
+		\node [style=Z dot] (6) at (4, 1.5) {};
+		\node [style=none] (7) at (4, 2.25) {};
+		\node [style=none, anchor=west] (8) at (4.75, 1.75) {$=\  \ket{{+}}$};
+		\node [style=Z phase dot] (9) at (8.5, 1.5) {$\pi$};
+		\node [style=none] (10) at (8.5, 2.25) {};
+		\node [style=none, anchor=west] (11) at (9.25, 1.75) {$=\  \ket{{-}}$};
+		\node [style=X dot] (12) at (-5, -0.25) {};
+		\node [style=none] (13) at (-5, -1) {};
+		\node [style=none, anchor=west] (14) at (-4.25, -0.5) {$=\  \bra{0}$};
+		\node [style=X phase dot] (15) at (-0.5, -0.25) {$\pi$};
+		\node [style=none] (16) at (-0.5, -1) {};
+		\node [style=none, anchor=west] (17) at (0.25, -0.5) {$=\  \bra{1}$};
+		\node [style=Z dot] (18) at (4, -0.25) {};
+		\node [style=none] (19) at (4, -1) {};
+		\node [style=none, anchor=west] (20) at (4.75, -0.5) {$=\  \bra{{+}}$};
+		\node [style=Z phase dot] (21) at (8.5, -0.25) {$\pi$};
+		\node [style=none] (22) at (8.5, -1) {};
+		\node [style=none, anchor=west] (23) at (9.25, -0.5) {$=\  \bra{{-}}$};
+		\node [style=X dot] (24) at (-11.25, 1.5) {};
+		\node [style=none] (25) at (-12, 2.25) {};
+		\node [style=none] (26) at (-10.5, 2.25) {};
+		\node [style=none] (27) at (-8.75, 2.25) {};
+		\node [style=none] (28) at (-7.25, 2.25) {};
+		\node [style=none] (29) at (-9.75, 1.75) {$=$};
+		\node [style=Z dot] (30) at (-14.25, 1.5) {};
+		\node [style=none] (31) at (-15, 2.25) {};
+		\node [style=none] (32) at (-13.5, 2.25) {};
+		\node [style=none] (33) at (-12.75, 1.75) {$=$};
+		\node [style=X dot] (34) at (-11.25, -0.25) {};
+		\node [style=none] (35) at (-12, -1) {};
+		\node [style=none] (36) at (-10.5, -1) {};
+		\node [style=none] (37) at (-8.75, -1) {};
+		\node [style=none] (38) at (-7.25, -1) {};
+		\node [style=none] (39) at (-9.75, -0.5) {$=$};
+		\node [style=Z dot] (40) at (-14.25, -0.25) {};
+		\node [style=none] (41) at (-15, -1) {};
+		\node [style=none] (42) at (-13.5, -1) {};
+		\node [style=none] (43) at (-12.75, -0.5) {$=$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (1.center);
+		\draw (3) to (4.center);
+		\draw (6) to (7.center);
+		\draw (9) to (10.center);
+		\draw (12) to (13.center);
+		\draw (15) to (16.center);
+		\draw (18) to (19.center);
+		\draw (21) to (22.center);
+		\draw [in=165, out=-90] (25.center) to (24);
+		\draw [in=-90, out=15] (24) to (26.center);
+		\draw [in=-90, out=-90, looseness=2.00] (27.center) to (28.center);
+		\draw [in=165, out=-90] (31.center) to (30);
+		\draw [in=-90, out=15] (30) to (32.center);
+		\draw [in=-165, out=90] (35.center) to (34);
+		\draw [in=90, out=-15] (34) to (36.center);
+		\draw [in=90, out=90, looseness=2.00] (37.center) to (38.center);
+		\draw [in=-165, out=90] (41.center) to (40);
+		\draw [in=90, out=-15] (40) to (42.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

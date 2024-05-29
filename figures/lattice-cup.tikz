@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (31) at (-1.75, 0) {$=$};
+		\node [style=X dot] (33) at (-3.25, -0.5) {};
+		\node [style=X dot] (34) at (-4, -1.5) {};
+		\node [style=X dot] (36) at (-2.5, -1.5) {};
+		\node [style=none] (42) at (-2.5, 1.5) {};
+		\node [style=X dot] (43) at (-3.25, 0.5) {};
+		\node [style=none] (44) at (-4, 1.5) {};
+		\node [style=none] (47) at (0.75, 0.5) {};
+		\node [style=X dot] (48) at (0, -0.5) {};
+		\node [style=none] (49) at (-0.75, 0.5) {};
+		\node [style=none] (50) at (1.75, 0) {$=$};
+		\node [style=none] (51) at (4.25, 0.5) {};
+		\node [style=none] (53) at (2.75, 0.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=30, out=-90] (42.center) to (43);
+		\draw [style=swap, in=150, out=-90] (44.center) to (43);
+		\draw (33) to (43);
+		\draw [in=30, out=-90] (47.center) to (48);
+		\draw [style=swap, in=150, out=-90] (49.center) to (48);
+		\draw [in=-90, out=-90, looseness=2.00] (53.center) to (51.center);
+		\draw [in=-15, out=90] (36) to (33);
+		\draw [style=swap, in=-165, out=90] (34) to (33);
+	\end{pgfonlayer}
+\end{tikzpicture}

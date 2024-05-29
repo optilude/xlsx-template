@@ -1,0 +1,76 @@
+\begin{tikzpicture}[scale=1.20]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=triangle] (0) at (1, -2) {};
+		\node [style=none] (1) at (-1.75, 2) {$\cdots$};
+		\node [style=none] (2) at (0.5, -4.5) {};
+		\node [style=none] (3) at (1.5, 2) {$\cdots$};
+		\node [style=rn] (4) at (-1, 0) {};
+		\node [style=none] (5) at (3, -2) {};
+		\node [style=rn] (6) at (0.5, 0) {};
+		\node [style=none] (7) at (0.5, 2.5) {};
+		\node [style=gbox] (8) at (1.75, -4) {${\scriptstyle  a_{2^m-1}}$};
+		\node [style=none] (9) at (-0.25, -3.25) {$\cdots$};
+		\node [style=triangle] (10) at (-0.25, -2) {};
+		\node [style=triangle] (11) at (2.25, 1.25) {};
+		\node [style=none] (12) at (1, -3.25) {$\cdots$};
+		\node [style=none] (13) at (3, 2.5) {};
+		\node [style=triangle] (14) at (0.75, 1.25) {};
+		\node [style=triangle] (15) at (1.75, -3.25) {};
+		\node [style=gn, scale=1] (16) at (-2.5, -1.5) {};
+		\node [style=gray phase dot] (17) at (3, 2.5) {$\pi$};
+		\node [style=none] (18) at (-0.25, 2) {$\cdots$};
+		\node [style=gn, scale=1] (19) at (-2.5, 1.75) {};
+		\node [style=none] (20) at (-1.75, -0.5) {$\vdots$};
+		\node [style=none] (21) at (3, -4.5) {};
+		\node [style=gn, scale=1] (22) at (-1, -1.5) {};
+		\node [style=none] (23) at (-1, -4.5) {};
+		\node [style=triangle] (24) at (-1.5, -2) {};
+		\node [style=triangle] (25) at (2.5, -2) {};
+		\node [style=triangle] (26) at (-1.75, 1.25) {};
+		\node [style=none] (27) at (1.5, -0.5) {$\vdots$};
+		\node [style=triangle] (28) at (-0.25, 1.25) {};
+		\node [style=gn, scale=1] (29) at (-1, 1.75) {};
+		\node [style=gray phase dot] (30) at (-1, 2.5) {$\pi$};
+		\node [style=none] (31) at (-1.75, -3.25) {$\cdots$};
+		\node [style=none] (32) at (0.5, -2) {};
+		\node [style=gray phase dot] (33) at (0.5, 2.5) {$\pi$};
+		\node [style=gn, scale=1] (34) at (3, -1.5) {};
+		\node [style=none] (35) at (-0.25, -0.5) {$\vdots$};
+		\node [style=none] (36) at (-2.5, -4.5) {};
+		\node [style=gray phase dot] (37) at (-2.5, 2.5) {$\pi$};
+		\node [style=gbox, scale=1] (38) at (1.5, 0.75) {${\scriptstyle  a_{i}}$};
+		\node [style=gn, scale=1] (39) at (0.5, -1.5) {};
+		\node [style=gn, scale=1] (40) at (0.5, 1.75) {};
+		\node [style=gn, scale=1] (41) at (1.75, -2.5) {};
+		\node [style=none] (42) at (2, -3) {\ \tiny$-1$};
+		\node [style=gn, scale=1] (43) at (3, 1.75) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (41) to (15);
+		\draw (13.center) to (34);
+		\draw (7.center) to (39);
+		\draw (2.center) to (39);
+		\draw (34) to (21.center);
+		\draw (30) to (23.center);
+		\draw [bend right, looseness=1.00] (34) to (25);
+		\draw [bend right=45, looseness=0.75] (41) to (25);
+		\draw [bend right=45, looseness=0.75] (0) to (41);
+		\draw [bend right, looseness=1.00] (0) to (39);
+		\draw [bend left, looseness=0.75] (22) to (10);
+		\draw [bend left=45, looseness=0.50] (41) to (10);
+		\draw (15) to (8);
+		\draw [bend right=15, looseness=1.25] (43) to (11);
+		\draw [bend right=45, looseness=0.75] (38) to (11);
+		\draw [bend right=45, looseness=0.75] (14) to (38);
+		\draw [bend right=15, looseness=0.75] (14) to (40);
+		\draw [bend left=15, looseness=1.00] (29) to (28);
+		\draw [bend left, looseness=0.75] (38) to (28);
+		\draw [bend left=15, looseness=0.75] (38) to (6);
+		\draw (37) to (36.center);
+		\draw [bend left, looseness=0.50] (16) to (24);
+		\draw [bend left, looseness=0.50] (19) to (26);
+		\draw [bend right, looseness=0.75] (26) to (38);
+		\draw [bend right, looseness=0.75] (24) to (41);
+		\draw [bend right=15, looseness=0.75] (4) to (38);
+	\end{pgfonlayer}
+\end{tikzpicture}

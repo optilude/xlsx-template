@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0, 2.5) {};
+		\node [style=none] (1) at (0, -2.5) {};
+		\node [style=none] (2) at (0, 2.75) {};
+		\node [style=none] (3) at (0, -2.75) {};
+		\node [style=hadamard] (4) at (0, -1.5) {};
+		\node [style=hadamard] (5) at (0, 1.5) {};
+		\node [style=Z phase dot] (6) at (0, 0) {$\alpha$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap] (0.center) to (5);
+		\draw [style=swap] (5) to (6);
+		\draw [style=swap] (6) to (4);
+		\draw [style=swap] (4) to (1.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

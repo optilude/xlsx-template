@@ -1,0 +1,51 @@
+* Add a bit about states and measurements
+* incorporate Dom's stuff about experiment
+* incorporate scalable/!-box stuff
+
+=============
+"Kindergarten quantum mechanics graduates"
+
+somewhere we should say who the paper is for
+
+setting sota -> "obtaining state-of-the-art results", commercial and open-source quantum compilers
+
+little is know -> little is known
+
+seizes -> ceases
+
+connectedness -> connectivity
+
+self-congratulatory tone: "achievements", "successes", etc
+
+Other practical achievements for quantum computing
+->
+Measurement-based and fault-tolerant quantum computing
+
+better words about Conjectures
+
+change of some words about STOMP + picture of pyzx
+
+Cite pawel's blog
+
+citations in QNLP section
+
+
+OLD STUFF
+======================================================================
+ZX-calculus: what it is, and why it (now) matters
+
+What is it?
+
+A: a universal language for linear maps + a complete set of rules for linear map equality
+QC1: a new tool for circuit optimisation
+QC2: a native language for computation beyond the circuit model
+QF: a "factorisation" of QT into two parts, correlation (spiders) and phase (phase group)
+
+
+Why does it matter?
+
+A: efficient heuristics for proving equality beyond stablizers. Part of a new generation of "quantum static analysis" tools (along with Matt Amy's Feynmann tool), which find real bugs in quantum compilers. For example, we validated PyZX output and found bugs in our T-count competitors using these heuristics.
+QC1: getting better numbers than anyone in ancilla-free T-count
+QC2: new (at the time) results about circuit extraction for the one-way model (Duncan/Perdrix), and a totally new model of MBQC (Kissinger/vdWetering Quantum). First high-level langauge for lattice surgery (Horsman/de Beaudrap).
+QF: Spekkens toy model, and all of the machinery for working with it, obtained by "flipping the switch" from Z4 to Z2 x Z2.
+

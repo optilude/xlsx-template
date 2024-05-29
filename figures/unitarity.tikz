@@ -1,0 +1,31 @@
+\begin{tikzpicture}[dotpic]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-3, 0.5) {};
+		\node [style=white dot] (1) at (-3, -0.5) {};
+		\node [style=none] (2) at (-3, -1.5) {};
+		\node [style=none] (3) at (-1.5, -1.5) {};
+		\node [style=none] (4) at (-1.5, 0.5) {};
+		\node [style=gray dot] (5) at (-1.5, -0.5) {};
+		\node [style=white dot] (6) at (-3, 0.5) {};
+		\node [style=gray dot] (7) at (-1.5, 0.5) {};
+		\node [style=none] (8) at (-1.5, 1.5) {};
+		\node [style=none] (9) at (-3, 1.5) {};
+		\node [style=none] (10) at (0, 0) {$=$};
+		\node [style=none] (11) at (1.5, -1.5) {};
+		\node [style=none] (12) at (3, -1.5) {};
+		\node [style=none] (13) at (3, 1.5) {};
+		\node [style=none] (14) at (1.5, 1.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1) to (0.center);
+		\draw (2.center) to (1);
+		\draw (5) to (4.center);
+		\draw (3.center) to (5);
+		\draw (1) to (5);
+		\draw (6) to (7);
+		\draw [style=swap] (8.center) to (4.center);
+		\draw [style=swap] (9.center) to (6);
+		\draw [style=swap] (14.center) to (11.center);
+		\draw [style=swap] (13.center) to (12.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

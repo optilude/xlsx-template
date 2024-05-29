@@ -1,0 +1,31 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white dot] (0) at (-2.25, 1) {};
+		\node [style=gray dot] (1) at (-2.75, -0.75) {};
+		\node [style=none] (2) at (-2.5, 1.75) {};
+		\node [style=none] (3) at (-3.25, -1.5) {};
+		\node [style=none] (4) at (-2.75, 2.5) {};
+		\node [style=none] (5) at (-3.75, -2.25) {};
+		\node [style=none] (6) at (0, 0) {$\leadsto$};
+		\node [style=none] (7) at (3, 2.5) {};
+		\node [style=none] (8) at (2, -2.25) {};
+		\node [style=gray dot] (9) at (3, -0.75) {};
+		\node [style=none] (10) at (3.25, 1.75) {};
+		\node [style=white dot] (11) at (3.5, 1) {}; 
+		\node [style=none] (12) at (2.5, -1.5) {}; 
+		\node [style=none] (13) at (5, 0) {};
+		\node [style=none] (14) at (-5.25, 2.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap] (2.center) to (0);
+		\draw [style=swap] (1) to (3.center);
+		\draw [style=dashed] (3.center) to (5.center);
+		\draw [style=dashed] (4.center) to (2.center);
+		\draw [style=swap] (10.center) to (11);
+		\draw [style=swap] (9) to (12.center);
+		\draw [style=dashed] (12.center) to (8.center);
+		\draw [style=dashed] (7.center) to (10.center);
+		\draw [style=none, bend right=45, looseness=1.00] (0) to (1);
+		\draw [style=none, bend left=45, looseness=1.00] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}

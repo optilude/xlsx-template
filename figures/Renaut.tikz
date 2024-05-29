@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-2, 2.5) {};
+		\node [style=none] (1) at (-2, -2.5) {};
+		\node [style=white phase dot] (2) at (-2, -1.5) {$\alpha$};
+		\node [style=white phase dot] (3) at (-2, 1.5) {$\gamma$};
+		\node [style=gray phase dot] (4) at (-2, 0) {$\beta$};
+		\node [style=none] (5) at (2, 2.5) {};
+		\node [style=gray phase dot] (6) at (2, 1.5) {$\tilde\gamma$};
+		\node [style=white phase dot] (7) at (2, 0) {$\tilde\beta$};
+		\node [style=none] (8) at (2, -2.5) {};
+		\node [style=gray phase dot] (9) at (2, -1.5) {$\tilde\alpha$};
+		\node [style=none] (10) at (0, 0) {$=$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap] (0.center) to (3);
+		\draw [style=swap] (3) to (4);
+		\draw [style=swap] (4) to (2);
+		\draw [style=swap] (2) to (1.center);
+		\draw [style=swap] (5.center) to (6);
+		\draw [style=swap] (6) to (7);
+		\draw [style=swap] (7) to (9);
+		\draw [style=swap] (9) to (8.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

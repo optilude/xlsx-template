@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0, 1) {};
+		\node [style=none] (1) at (0, -1) {};
+		\node [style=small map] (2) at (0, 0) {H};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1.center) to (2);
+		\draw (2) to (0.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

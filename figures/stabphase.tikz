@@ -1,0 +1,46 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-7.5, 1) {};
+		\node [style=none] (1) at (-7.5, -1) {};
+		\node [style=white phase dot] (2) at (-7.5, 0) {$\pi\over 2$};
+		\node [style=white phase dot] (3) at (-10.5, 0) {$0$};
+		\node [style=none] (4) at (-10.5, -1) {};
+		\node [style=none] (5) at (-10.5, 1) {};
+		\node [style=white phase dot] (6) at (-1.5, 0) {$\pi$};
+		\node [style=none] (7) at (-1.5, 1) {};
+		\node [style=none] (8) at (-1.5, -1) {};
+		\node [style=none] (9) at (-4.5, -1) {};
+		\node [style=none] (10) at (-4.5, 1) {};
+		\node [style=white phase dot] (11) at (-4.5, 0) {$3 \pi\over 2$};
+		\node [style=gray phase dot] (12) at (10.5, 0) {$\pi$};
+		\node [style=none] (13) at (7.5, 1) {};
+		\node [style=none] (14) at (1.5, -1) {};
+		\node [style=gray phase dot] (15) at (4.5, 0) {$\pi\over 2$};
+		\node [style=none] (16) at (1.5, 1) {};
+		\node [style=none] (17) at (4.5, -1) {};
+		\node [style=gray phase dot] (18) at (7.5, 0) {$3 \pi\over 2$};
+		\node [style=none] (19) at (4.5, 1) {};
+		\node [style=none] (20) at (7.5, -1) {};
+		\node [style=none] (21) at (10.5, -1) {};
+		\node [style=gray phase dot] (22) at (1.5, 0) {$0$};
+		\node [style=none] (23) at (10.5, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1.center) to (2);
+		\draw (2) to (0.center);
+		\draw (4.center) to (3);
+		\draw (3) to (5.center);
+		\draw (8.center) to (6);
+		\draw (6) to (7.center);
+		\draw (9.center) to (11);
+		\draw (11) to (10.center);
+		\draw (17.center) to (15);
+		\draw (15) to (19.center);
+		\draw (14.center) to (22);
+		\draw (22) to (16.center);
+		\draw (21.center) to (12);
+		\draw (12) to (23.center);
+		\draw (20.center) to (18);
+		\draw (18) to (13.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

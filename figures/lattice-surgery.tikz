@@ -1,0 +1,54 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z dot] (4) at (-8.5, 1) {};
+		\node [style=none] (5) at (-8.5, 0) {};
+		\node [style=none] (6) at (-9.75, 3) {};
+		\node [style=none] (7) at (-7.25, 3) {};
+		\node [style=none] (27) at (-8.5, 2.5) {\small\color{gray} split!};
+		\node [style=none] (28) at (-6.75, 1) {};
+		\node [style=none] (29) at (-7.75, 1) {};
+		\node [style=none] (30) at (-6.25, 1) {\color{gray} Z};
+		\node [style=Z dot] (31) at (-1.75, 2) {};
+		\node [style=none] (32) at (-1.75, 3) {};
+		\node [style=none] (33) at (-3, 0) {};
+		\node [style=none] (34) at (-0.5, 0) {};
+		\node [style=none] (35) at (-1.75, 0.5) {\small\color{gray} merge!};
+		\node [style=none] (36) at (0, 2) {};
+		\node [style=none] (37) at (-1, 2) {};
+		\node [style=none] (38) at (0.5, 2) {\color{gray} Z};
+		\node [style=X dot] (39) at (4.75, 1) {};
+		\node [style=none] (40) at (4.75, 0) {};
+		\node [style=none] (41) at (3.5, 3) {};
+		\node [style=none] (42) at (6, 3) {};
+		\node [style=none] (43) at (4.75, 2.5) {\small\color{gray} split!};
+		\node [style=none] (44) at (6.5, 1) {};
+		\node [style=none] (45) at (5.5, 1) {};
+		\node [style=none] (46) at (7, 1) {\color{gray} X};
+		\node [style=X dot] (47) at (12, 2) {};
+		\node [style=none] (48) at (12, 3) {};
+		\node [style=none] (49) at (10.75, 0) {};
+		\node [style=none] (50) at (13.25, 0) {};
+		\node [style=none] (51) at (12, 0.5) {\small\color{gray} merge!};
+		\node [style=none] (52) at (13.75, 2) {};
+		\node [style=none] (53) at (12.75, 2) {};
+		\node [style=none] (54) at (14.25, 2) {\color{gray} X};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (5.center) to (4);
+		\draw [in=-90, out=150] (4) to (6.center);
+		\draw [in=-90, out=30] (4) to (7.center);
+		\draw [style=gray diredge] (28.center) to (29.center);
+		\draw (32.center) to (31);
+		\draw [in=90, out=-150] (31) to (33.center);
+		\draw [in=90, out=-30] (31) to (34.center);
+		\draw [style=gray diredge] (36.center) to (37.center);
+		\draw (40.center) to (39);
+		\draw [in=-90, out=150] (39) to (41.center);
+		\draw [in=-90, out=30] (39) to (42.center);
+		\draw [style=gray diredge] (44.center) to (45.center);
+		\draw (48.center) to (47);
+		\draw [in=90, out=-150] (47) to (49.center);
+		\draw [in=90, out=-30] (47) to (50.center);
+		\draw [style=gray diredge] (52.center) to (53.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

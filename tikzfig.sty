@@ -1,0 +1,50 @@
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{trees}
+\usetikzlibrary{topaths}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{fadings}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{matrix,backgrounds,folding}
+\usetikzlibrary{chains,scopes,positioning,fit}
+\usetikzlibrary{arrows,shadows}
+\usetikzlibrary{calc} 
+\usetikzlibrary{chains}
+\usetikzlibrary{shapes,shapes.geometric,shapes.misc}
+\usetikzlibrary{circuits.ee.IEC}
+
+\newcommand{\tikzfigTODO}[1]{\textbf{\color{red}(figure: #1)}}
+\newcommand{\ctikzfigTODO}[1]{\begin{center}
+\textbf{\color{red}(figure: #1)}
+\end{center}}
+
+
+%\newcommand{\tikzfig}[1]{%
+%\InputIfFileExists{#1.tikz}{}{\input{./figures/#1.tikz}}}
+%\newcommand{\ctikzfig}[1]{%
+%\begin{center}\rm
+%  \tikzfig{#1}
+%\end{center}}
+%\newcommand{\inlinetikzfig}[1]{\InputIfFileExists{#1.tikz}{}{\input{./figures/#1.tikz}}}
+
+\newcommand{\tikzfig}[1]{%
+\IfFileExists{#1.tikz}
+  {\input{#1.tikz}}
+  {%
+    \IfFileExists{./figures/#1.tikz}
+      {\input{./figures/#1.tikz}}
+      {\tikz[baseline=-0.5em]{\node[draw=red,font=\color{red},fill=red!10!white] {\textit{#1}};}}%
+  }%
+}
+\newcommand{\ctikzfig}[1]{%
+\begin{center}\rm
+  \tikzfig{#1}
+\end{center}}
+
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{background,edgelayer,nodelayer,main}
+\tikzstyle{none}=[inner sep=0mm]
+\tikzstyle{every loop}=[]
+\tikzstyle{mark coordinate}=[inner sep=0pt,outer sep=0pt,minimum size=3pt,fill=black,circle]

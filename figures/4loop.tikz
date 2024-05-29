@@ -1,0 +1,50 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white dot] (0) at (-4.25, 0.75) {};
+		\node [style=gray dot] (1) at (-4.25, -0.75) {};
+		\node [style=none] (2) at (-4.75, 1.25) {};
+		\node [style=none] (3) at (-4.75, -1.5) {};
+		\node [style=none] (4) at (-5.5, 2) {};
+		\node [style=none] (5) at (-5.25, -2.25) {};
+		\node [style=none] (6) at (0, 0) {$\leadsto$};
+		\node [style=gray dot] (7) at (-2.75, 0.75) {};
+		\node [style=none] (8) at (-1.75, 2.25) {};
+		\node [style=none] (9) at (-2.25, 1.5) {};
+		\node [style=none] (10) at (-1.25, -1.75) {};
+		\node [style=white dot] (11) at (-2.75, -0.75) {};
+		\node [style=none] (12) at (-2, -1.25) {};
+		\node [style=none] (13) at (4.75, -1.25) {};
+		\node [style=none] (14) at (1.25, 2) {};
+		\node [style=none] (15) at (2, -1.5) {};
+		\node [style=none] (16) at (4.5, 1.5) {};
+		\node [style=none] (17) at (2, 1.25) {};
+		\node [style=none] (18) at (5, 2.25) {};
+		\node [style=none] (19) at (5.5, -1.75) {};
+		\node [style=none] (20) at (1.5, -2.25) {};
+		\node [style=white dot] (21) at (2.5, -0.25) {};
+		\node [style=gray dot] (22) at (4, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap] (2.center) to (0);
+		\draw [style=swap] (1) to (3.center);
+		\draw [style=dashed] (3.center) to (5.center);
+		\draw [style=dashed] (4.center) to (2.center);
+		\draw [style=swap] (7) to (9.center);
+		\draw [style=dashed] (9.center) to (8.center);
+		\draw [style=swap] (12.center) to (11);
+		\draw [style=dashed] (10.center) to (12.center);
+		\draw [style=none, bend left=15, looseness=1.00] (0) to (7);
+		\draw [style=none, bend left=15, looseness=1.00] (7) to (11);
+		\draw [style=none, bend right=15, looseness=1.00] (1) to (11);
+		\draw [style=none, bend right=15, looseness=1.00] (0) to (1);
+		\draw [style=dashed] (15.center) to (20.center);
+		\draw [style=dashed] (14.center) to (17.center);
+		\draw [style=dashed] (16.center) to (18.center);
+		\draw [style=dashed] (19.center) to (13.center);
+		\draw [style=swap, in=60, out=-120, looseness=0.75] (16.center) to (21);
+		\draw [style=swap, in=60, out=-105, looseness=1.25] (21) to (15.center);
+		\draw [style=swap, in=135, out=-59, looseness=1.00] (22) to (13.center);
+		\draw [style=swap, in=135, out=-45, looseness=1.00] (17.center) to (22);
+		\draw [style=swap] (21) to (22);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,66 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white dot] (0) at (-8.5, 1.25) {};
+		\node [style=none] (1) at (-7, -2.25) {};
+		\node [style=none] (2) at (-8.5, 2.25) {};
+		\node [style=white dot] (3) at (-8.5, -1.25) {};
+		\node [style=none] (4) at (-7, 2.25) {};
+		\node [style=gray phase dot] (5) at (-8.5, 0) {$\frac\pi4$};
+		\node [style=none] (6) at (-8.5, -2.25) {};
+		\node [style=gray dot] (7) at (-7, -1.25) {};
+		\node [style=gray dot] (8) at (-7, 1.25) {};
+		\node [style=none] (9) at (-5.5, 0) {$=$};
+		\node [style=none] (10) at (0.5, 0) {$=$};
+		\node [style=white dot] (11) at (4.25, 0.75) {};
+		\node [style=gray phase dot] (12) at (2.25, 0) {$\frac\pi4$};
+		\node [style=gray dot] (13) at (6, 0) {};
+		\node [style=none] (14) at (6, 1.75) {};
+		\node [style=gray dot] (15) at (5, 0) {};
+		\node [style=none] (16) at (6, -1.75) {};
+		\node [style=none] (17) at (4.25, -1.75) {};
+		\node [style=white dot] (18) at (4.25, -0.75) {};
+		\node [style=none] (19) at (4.25, 1.75) {};
+		\node [style=gray dot] (20) at (3.5, 0) {};
+		\node [style=none] (21) at (-1, 2.25) {};
+		\node [style=gray dot] (22) at (-1, 0) {};
+		\node [style=none] (23) at (-1, -2.25) {};
+		\node [style=gray dot] (24) at (-2.5, 0) {};
+		\node [style=white dot] (25) at (-2.5, -1.25) {};
+		\node [style=gray dot] (26) at (-1, 0) {};
+		\node [style=white dot] (27) at (-2.5, 1.25) {}; 
+		\node [style=none] (28) at (-2.5, -2.25) {}; 
+		\node [style=none] (29) at (-2.5, 2.25) {};
+		\node [style=gray phase dot] (30) at (-3.75, 0) {$\frac\pi4$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap] (0) to (8);
+		\draw [style=swap] (3) to (7);
+		\draw [style=swap] (5) to (3);
+		\draw [style=swap] (8) to (7);
+		\draw [style=swap] (0) to (5);
+		\draw [style=swap] (2.center) to (0);
+		\draw [style=swap] (4.center) to (8);
+		\draw [style=swap] (7) to (1.center);
+		\draw [style=swap] (3) to (6.center);
+		\draw [style=swap] (18) to (15);
+		\draw [style=swap] (20) to (11);
+		\draw [style=swap] (15) to (11);
+		\draw [style=swap] (18) to (20);
+		\draw [style=swap] (12) to (20);
+		\draw [style=swap] (19.center) to (11);
+		\draw [style=swap] (15) to (13);
+		\draw [style=swap] (13) to (14.center);
+		\draw [style=swap] (13) to (16.center);
+		\draw [style=swap] (18) to (17.center);
+		\draw [style=swap] (27) to (26);
+		\draw [style=swap] (25) to (22);
+		\draw [style=swap] (24) to (25);
+		\draw [style=swap] (26) to (22);
+		\draw [style=swap] (27) to (24);
+		\draw [style=swap] (29.center) to (27);
+		\draw [style=swap] (21.center) to (26);
+		\draw [style=swap] (22) to (23.center);
+		\draw [style=swap] (25) to (28.center);
+		\draw [style=swap] (30) to (24);
+	\end{pgfonlayer}
+\end{tikzpicture}

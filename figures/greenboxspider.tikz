@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-0.75, 1) {};
+		\node [style=gbox] (1) at (0, 0) {$a$};
+		\node [style=none] (2) at (0.75, 1) {};
+		\node [style=none] (3) at (-0.25, 1) {};
+		\node [style=none] (4) at (-0.75, -1) {};
+		\node [style=none, yshift=1mm] (5) at (0.25, 0.75) {...};
+		\node [style=none] (6) at (-0.25, -1) {};
+		\node [style=none, yshift=-1mm] (7) at (0.25, -0.75) {...};
+		\node [style=none] (8) at (0.75, -1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=-144, out=90, looseness=1.00] (4.center) to (1);
+		\draw [in=-90, out=36, looseness=1.00] (1) to (2.center);
+		\draw [bend left=15, looseness=1.00] (6.center) to (1);
+		\draw [in=-36, out=90, looseness=1.00] (8.center) to (1);
+		\draw [in=-90, out=144, looseness=1.00] (1) to (0.center);
+		\draw [bend left=15, looseness=1.00] (1) to (3.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,54 @@
+\begin{tikzpicture}[scale=0.99]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white  dot] (0) at (-2.25, -1.5) {};
+		\node [style=none] (1) at (-2.25, -1.5) {};
+		\node [style=none] (2) at (-1.25, -0.5) {};
+		\node [style=none] (3) at (-3.25, -0.5) {};
+		\node [style=none] (4) at (-3.25, 1.5) {};
+		\node [style=none] (5) at (-4.75, 1.5) {};
+		\node [style=none] (6) at (-4.75, -0.5) {};
+		\node [style=none] (7) at (-5.25, 1.5) {};
+		\node [style=none] (8) at (-5.25, -0.5) {};
+		\node [style=white dot] (9) at (-4.25, 0.5) {};
+		\node [style=none, yshift=-1mm] (10) at (-4, -0.25) {...};
+		\node [style=none, yshift=1mm] (11) at (-4, 1.25) {...};
+		\node [style=none] (12) at (-3.25, -0.5) {};
+		\node [style=none, yshift=-1mm] (13) at (2.5, -0.75) {...};
+		\node [style=none] (14) at (1.75, -1) {};
+		\node [style=white dot] (15) at (2.25, 0) {};
+		\node [style=none] (16) at (1.25, 1) {};
+		\node [style=none, yshift=1mm] (17) at (2.5, 0.75) {...};
+		\node [style=none] (18) at (1.75, 1) {};
+		\node [style=none] (19) at (3.25, -1) {};
+		\node [style=none] (20) at (3.25, 1) {};
+		\node [style=none] (21) at (3.25, -1) {};
+		\node [style=none] (22) at (1.25, -1) {};
+		\node [style=none] (23) at (0, 0) {$=$};
+		\node [style=none] (24) at (-4.75, -1.5) {};
+		\node [style=none] (25) at (-5.25, -1.5) {};
+		\node [style=none] (26) at (-1.25, 1.5) {};
+		\node [style=none] (27) at (-4.25, -2.25) {$\underbrace{\qquad\ \ \ }_m$};
+		\node [style=none] (28) at (-4.25, 2.25) {$\overbrace{\qquad\ \ \ }^n$};
+		\node [style=none] (29) at (2.25, -1.75) {$\underbrace{\qquad\ \ \ }_{m-1}$};
+		\node [style=none] (30) at (2.25, 1.75) {$\overbrace{\qquad\ \ \ }^{n+1}$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap, bend right=45, looseness=1.00] (3.center) to (1.center);
+		\draw [style=swap, bend left=45, looseness=1.00] (2.center) to (1.center);
+		\draw [in=-150, out=90, looseness=1.00] (8.center) to (9);
+		\draw [in=-90, out=36, looseness=1.00] (9) to (4.center);
+		\draw [in=-132, out=90, looseness=1.00] (6.center) to (9);
+		\draw [in=-36, out=90, looseness=1.00] (12.center) to (9);
+		\draw [in=-90, out=150, looseness=1.00] (9) to (7.center);
+		\draw [in=-90, out=132, looseness=1.00] (9) to (5.center);
+		\draw [in=-150, out=90, looseness=1.00] (22.center) to (15);
+		\draw [in=-90, out=36, looseness=1.00] (15) to (20.center);
+		\draw [in=-132, out=90, looseness=1.00] (14.center) to (15);
+		\draw [in=-36, out=90, looseness=1.00] (21.center) to (15);
+		\draw [in=-90, out=150, looseness=1.00] (15) to (16.center);
+		\draw [in=-90, out=132, looseness=1.00] (15) to (18.center);
+		\draw [style=swap] (26.center) to (2.center);
+		\draw [style=swap] (6.center) to (24.center);
+		\draw [style=swap] (8.center) to (25.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

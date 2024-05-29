@@ -1,0 +1,54 @@
+\begin{tikzpicture}[scale=0.80]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-4.25, -0.5) {};
+		\node [style=langstate] (1) at (-4.25, 0.5) {\!\!\!{\tt Alice}\!\!\!};
+		\node [style=langstate] (2) at (4.25, 0.5) {\!\!\!{\tt Bob}\!\!\!};
+		\node [style=none] (3) at (4.25, -0.5) {};
+		\node [style=none] (4) at (1.75, -0.5) {};
+		\node [style=none] (5) at (-1.75, -0.5) {};
+		\node [style=none] (6) at (4.25, -0.5) {};
+		\node [style=none] (7) at (-1.75, -0.5) {};
+		\node [style=none] (8) at (1.75, -0.5) {};
+		\node [style=none] (9) at (1.75, -0.5) {};
+		\node [style=none] (10) at (-1.75, -0.5) {};
+		\node [style=none] (11) at (-4.25, -0.5) {};
+		\node [style=none] (12) at (-1.75, -0.5) {};
+		\node [style=none] (13) at (0.25, -0.5) {};
+		\node [style=none] (14) at (-1, 0.25) {};
+		\node [style=none] (15) at (1, 1) {};
+		\node [style=langstate] (16) at (0, 1.25) {\tt\!*hates*\!};
+		\node [style=none] (17) at (1, 0.25) {};
+		\node [style=none] (18) at (-0.25, -0.5) {};
+		\node [style=none] (19) at (1.75, -0.5) {};
+		\node [style=black dot] (20) at (1, 0.25) {};
+		\node [style=black dot] (21) at (-1, 0.25) {};
+		\node [style=none] (22) at (-1.75, -0.5) {};
+		\node [style=none] (23) at (-1, 1) {};
+		\node [style=none] (24) at (-0.25, -2) {};
+		\node [style=none] (25) at (0.25, -2) {};
+		\node [style=none] (26) at (0, 2) {};
+		\node [style=none] (27) at (-2.25, -0.5) {};
+		\node [style=none] (28) at (-2.25, 1.75) {};
+		\node [style=none] (29) at (2.25, -0.5) {};
+		\node [style=none] (30) at (2.25, 1.75) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap, bend right=90, looseness=1.50] (8.center) to (6.center);
+		\draw [style=swap, bend left=90, looseness=1.50] (7.center) to (11.center);
+		\draw [style=swap] (14.center) to (23.center);
+		\draw [style=swap, in=90, out=-15, looseness=1.00] (21) to (18.center);
+		\draw [style=swap, in=90, out=-165, looseness=1.00] (21) to (22.center);
+		\draw [style=swap] (17.center) to (15.center);
+		\draw [style=swap, in=90, out=-15, looseness=1.00] (20) to (19.center);
+		\draw [style=swap, in=90, out=-165, looseness=1.00] (20) to (13.center);
+		\draw [style=swap] (18.center) to (24.center);
+		\draw [style=swap] (13.center) to (25.center);
+		\draw [style=swap, dashed] (28.center) to (27.center);
+		\draw [style=swap, dashed] (27.center) to (29.center);
+		\draw [style=swap, dashed] (29.center) to (30.center);
+		\draw [style=swap, dashed] (26.center) to (28.center);
+		\draw [style=swap, dashed] (26.center) to (30.center);
+		\draw [style=swap] (1) to (0.center);
+		\draw [style=swap] (2) to (3.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

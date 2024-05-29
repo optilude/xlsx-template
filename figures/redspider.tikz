@@ -1,0 +1,21 @@
+\begin{tikzpicture}[scale=1.6]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0.75, 0.75) {};
+		\node [style=none] (1) at (-0.75, -0.75) {};
+		\node [style=none] (2) at (0.75, -0.75) {};
+		\node [style=none, yshift=1mm] (3) at (0.25, 0.5) {...};
+		\node [style=none] (4) at (-0.75, 0.75) {};
+		\node [style=none] (5) at (-0.25, 0.75) {};
+		\node [style=none] (6) at (-0.25, -0.75) {};
+		\node [style=gray phase dot] (7) at (0, 0) {$\alpha$};
+		\node [style=none, yshift=-1mm] (8) at (0.25, -0.5) {...};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=-144, out=90, looseness=1.00] (1.center) to (7);
+		\draw [in=-90, out=36, looseness=1.00] (7) to (0.center);
+		\draw [bend left=15, looseness=1.00] (6.center) to (7);
+		\draw [in=-36, out=90, looseness=1.00] (2.center) to (7); 
+		\draw [in=-90, out=144, looseness=1.00] (7) to (4.center);
+		\draw [bend left=15, looseness=1.00] (7) to (5.center);
+	\end{pgfonlayer}
+\end{tikzpicture} 

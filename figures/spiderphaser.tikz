@@ -1,0 +1,34 @@
+\begin{tikzpicture}[scale=0.80]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0, 0) {};
+		\node [style=none] (1) at (-2, 0) {};
+		\node [style=none] (2) at (-2, 2.5) {};
+		\node [style=none] (3) at (0, 2.5) {};
+		\node [style=none] (4) at (-1, 2.25) {\ldots};
+		\node [style=none] (5) at (-1, 0.25) {\ldots};
+		\node [style=gray phase  dot] (6) at (-1, 1.25) {$\alpha$};
+		\node [style=none] (7) at (-1, 1.25) {};
+		\node [style=none] (8) at (0, -2.5) {};
+		\node [style=none] (9) at (1, -1.25) {};
+		\node [style=none] (10) at (0, 0) {};
+		\node [style=none] (11) at (1, -0.25) {\ldots};
+		\node [style=none] (12) at (1, -2.25) {\ldots}; 
+		\node [style=gray phase  dot] (13) at (1, -1.25) {$\beta$};
+		\node [style=none] (14) at (2, -2.5) {};
+		\node [style=none] (15) at (2, 0) {};
+		\node [style=none] (16) at (-2, -2.5) {};
+		\node [style=none] (17) at (2, 2.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=swap, in=135, out=-90, looseness=1.00] (2.center) to (6); 
+		\draw [style=swap, in=45, out=-90, looseness=1.00] (3.center) to (6);
+		\draw [style=swap, in=90, out=-45, looseness=1.00] (6) to (0.center);
+		\draw [style=swap, in=90, out=-135, looseness=1.00] (6) to (1.center);
+		\draw [style=swap, in=135, out=-90, looseness=1.00] (10.center) to (13);
+		\draw [style=swap, in=45, out=-90, looseness=1.00] (15.center) to (13);
+		\draw [style=swap, in=90, out=-45, looseness=1.00] (13) to (14.center);
+		\draw [style=swap, in=90, out=-135, looseness=1.00] (13) to (8.center);
+		\draw [style=swap] (17.center) to (15.center);
+		\draw [style=swap] (1.center) to (16.center);
+	\end{pgfonlayer}
+\end{tikzpicture}
