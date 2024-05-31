@@ -77,14 +77,14 @@
 \newtheorem{corollary}[theorem]{Corollary} 
 \newtheorem{lemma}[theorem]{Lemma} 
 \newtheorem{prop}[theorem]{Proposition}
-\newtheorem{conj}[theorem]{Conjecture}
-\newtheorem{open}[theorem]{Open problem.}
-\newtheorem{defn}[theorem]{Definition}
-\newtheorem{fact}[theorem]{Fact}
-\newtheorem{example}[theorem]{Example} 
-\newtheorem{examples}[theorem]{Examples}
-\newtheorem{example*}[theorem]{Example*}
-\newtheorem{examples*}[theorem]{Examples*}
+\newtheorem{conj}[theorem]{Припущення}
+\newtheorem{open}[theorem]{Відкрита проблема.}
+\newtheorem{defn}[theorem]{Визначення}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{example}[theorem]{Приклад} 
+\newtheorem{examples}[theorem]{Приклади}
+\newtheorem{example*}[theorem]{Приклад*}
+\newtheorem{examples*}[theorem]{Приклади*}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{remark*}[theorem]{Remark*}
 \newtheorem{question}[theorem]{Question}
@@ -140,7 +140,7 @@
 % \title{ZX-calculus: why it (now)  matters}
 % \title{First Grade Quantum Mechanics 
 % \\ \large\it\bR ...or how my LEGO days ended when playing with ZX-calculus on quantum computers\e}
-\\ \large\it ...або як я навчився зупинятися об'єднувати LEGO до купи і полюбив ZX-обчислення}
+\\ \large\it ...або як я навчився зупинятися об'єднувати LEGO до купи і полюбив ZX-числення}
 
 \author{Bob Coecke${}^\dagger$, Dominic Horsman${}^\star$, Aleks Kissinger${}^\ddagger$, Quanlong Wang${}^\dagger$\\
 \ \\ 
@@ -149,6 +149,8 @@ ${}^\star$ Universit\'e Grenoble Alpes. \href{mailto:dom.horsman@gmail.com}{\tt 
 ${}^\ddagger$ Oxford University. \href{mailto:aleks.kissinger@cs.ox.ac.uk}{\tt aleks.kissinger@cs.ox.ac.uk}
 }
 %
+\date{{23 лютого 2021 р.}}
+
 
 \begin{document}  
 \maketitle 
@@ -160,9 +162,9 @@ ${}^\ddagger$ Oxford University. \href{mailto:aleks.kissinger@cs.ox.ac.uk}{\tt a
 Мета цієї статті-продовження — сказати «ось м'ясо!» і висвітлити деякі з основних результатів підходу, який пропагується в Дитсадковій квантовій механіці, і як вони застосовуються для вирішення практичних проблем на реальних квантових комп’ютерах. З цією метою ми зосередимося головним чином на тому, що стало швейцарським армійським ножем образотворчого формалізму: \em ZX-calculus\em, графічний інструмент для представлення та обробки складних лінійних карт у $2^N$ вимірному просторі. Спочатку подивимося
 на деякі ідеї, що лежать в основі ZX-числення, порівнюючи та протиставляючи його звичайному формалізму квантових схем.
 Потім ми зробимо огляд результатів за останні 2 роки, розділені на три категорії:
-(1) повнота правил ZX-обчислення, (2) передові результати оптимізації квантових схем у комерційних і квантових компіляторів із відкритим ісходним кодом, що покладаються на ZX, і (3) використання ZX для перекладу реальних речей, такі як природна мова, у квантові схеми, які можна запускати на сучасному (дуже обмеженому) квантовому обладнанні.
+(1) повнота правил ZX-числення, (2) передові результати оптимізації квантових схем у комерційних і квантових компіляторів із відкритим ісходним кодом, що покладаються на ZX, і (3) використання ZX для перекладу реальних речей, такі як природна мова, у квантові схеми, які можна запускати на сучасному (дуже обмеженому) квантовому обладнанні.
 
-Ми також сприймаємо назву буквально та описуємо поточний експеримент, який має на меті показати, що ZX-обчислення дозволяє дітям робити передові квантові обчислення. У будь-якому випадку це справді підтвердить, що «дитсадкова квантова механіка» була не просто жартом.
+Ми також сприймаємо назву буквально та описуємо поточний експеримент, який має на меті показати, що ZX-числення дозволяє дітям робити передові квантові обчислення. У будь-якому випадку це справді підтвердить, що «дитсадкова квантова механіка» була не просто жартом.
 \end{abstract}
 
 % OLD STUFF
@@ -200,61 +202,61 @@ ${}^\ddagger$ Oxford University. \href{mailto:aleks.kissinger@cs.ox.ac.uk}{\tt a
 %} 
 %\newpage
 
-\section{Introduction}\label{sec:intro}%%%%%%%%%%%%  
+\section{Вступ}\label{sec:intro}%%%%%%%%%%%%  
 
-A bit over 15 years ago, some people (including some of us) started using %came up with 
-a nice trick. Take plain old Dirac `bra-ket' notation,  the typical go-to language for calculation in quantum computing,  and write it in 2D, where matrix multiplication %composition 
-looks like `plugging boxes together' and tensor product looks like `putting boxes side by side', for example:
+Трохи більше 15 років тому деякі люди (зокрема деякі з нас) почали використовувати %придумати
+непоганий трюк.
+Візьміть просту стару нотацію «бра-кет» Дірака, типову мову для обчислень у квантових обчисленнях, і запишіть її у 2D, де матричне множення %композиція
+виглядає як «поєднання коробок», а тензорний продукт виглядає як «поставити коробки поруч», наприклад:
 \[
 (g(f \otimes \mathbbm{1})(\ket{\psi} \otimes \ket{\phi})) \otimes \mathbbm{1}
 \qquad\leadsto\qquad
 \tikzfig{dirac-ex}
 \]
-So far, things don't look so different from quantum circuits. However, the key trick was to 
-write the maximally entangled state, and its adjoint, 
-as bent pieces of wire:
+Поки що все не так сильно відрізняється від квантових схем. Однак ключовим трюком було
+запис максимально заплутаного стан і його приєднаний(adjoint),
+як зігнутих шматків дроту:
 \beq\label{eq:cupcap}
 \raisebox{-0.7mm}{\tikzfig{cup}} \ := \ \ket{00} + \ket{11}
 \qquad\qquad
 \tikzfig{cap} \ := \ \bra{00} + \bra{11}
 \eeq
 
-Then, the main idea behind quantum teleportation, which basically 
-amounts to this equation:
+Тоді, головна ідея квантової телепортації, яка в основному
+є цим рівнянням:
 \[
 ((\bra{00} + \bra{11}) \otimes \mathbbm{1})(\mathbbm{1} \otimes (\ket{00} + \ket{11})) = \mathbbm{1}
 \]
-becomes something visually very intuitive:
+стає чимось візуально дуже інтуїтивним:
 \[
 \includegraphics[width=8cm]{yankwire.jpg}
 \]
-Hence, kindergarten quantum mechanics became a thing.   Now, these sort of tricks weren't entirely new, as a  certain Nobel Prize winner named Roger Penrose got so fed up in the 1970's with staring at indices in the tensor notation of relativity, and for that purpose  invented exactly the same kinds of pictures.  So we were in pretty good company.  
+Таким чином, дітсадкова квантова механіка стала реальністю. Такі трюки не були чимось новим, оскільки певному лауреату Нобелівської премії на ім’я Роджер Пенроуз у 1970-х роках так набридло дивитися на індекси в тензорній нотації теорії відносності, що з цією метою він винайшов такого типу зображення. Тож ми були у гарній компанії.
 
-A good start, but, how much mileage can you get out of these  sort of tricks? %one trick? 
-Well, as it turns out, a lot: one can teach an entire quantum computing and quantum foundations course in these terms.\footnote{This course has been running since 2012 at the University of Oxford, and this course formed the basis for `dodo book' \cite{CKbook}. \href{https://www.cs.ox.ac.uk/teaching/courses/2019-2020/quantum/}{\tt https://www.cs.ox.ac.uk/teaching/courses/2019-2020/quantum/}}
+Гарний початок, але скільки корисного можна отримати завдяки таким трюкам? % один трюк?
+Ну, як виявилося, багато: можна викладати цілий курс квантових обчислень і квантових основ у цих умовах.\footnote{Цей курс проводиться з 2012 року в Оксфордському університеті, і цей курс став основою для «книги додо». \cite{CKbook}. \href{https://www.cs.ox.ac.uk/teaching/courses/2019-2020/quantum/}{\tt https://www.cs.ox.ac.uk/teaching/courses/2019 -2020/quantum/}}
 %quite a lot as we have discovered 
 %~\cite{CKbook}. 
-How much is really new? That is, can drawing pictures of quantum processes allow us to do things we couldn't do before? Or is it just an art project?
+Наскількі це дійсно нове? Тобто, чи може малювання квантових процесів дозволити нам робити те, що ми не могли робити раніше? Або це просто арт-проект?
 
-This is where the \textit{ZX-calculus} comes in.
+Саме тут з'являється \textit{ZX-числення}.
 %\TODOb{There are new things outside of ZX, right?} 
-The ZX-calculus is a graphical language for expressing quantum computations, mainly over qubits. While it's been around since 2008, things have only really started booming around 2018, with the appearance of several major results: 
+ZX-числення — це графічна мова для вираження квантових обчислень, головним чином над кубітами. Незважаючи на те, що вона існує із 2008 року, справжнє зростання почалося лише в 2018 році, коли з’явилося кілька основних результатів:
  \ben
- \item[(1)] The ZX-calculus has been `completed', which means all equations concerning quantum processes involving qubits that can be derived using linear algebra can also be obtained using a handful of graphical rules \cite{hadzihasanovic2018two, vilmart2019near}. This consolidates the promises made in the early days of kindergarten quantum mechanics, that graphical reasoning should not merely be seen as a helpful gadget, but as a genuine alternative to the Hilbert space formalism.
- \item[(2)] For certain quantum circuit optimisation  
- problems, 
+ \item[(1)] ZX-числення було «завершено», що означає, що всі рівняння, що стосуються квантових процесів із залученням кубітів, які можна вивести за допомогою лінійної алгебри, також можна отримати за допомогою кількох графічних правил \cite{hadzihasanovic2018two, vilmart2019near}. Це об’єднує обіцянки, дані на початку розвитку дитсадкової квантової механіки, що графічне міркування слід розглядати не просто як корисний механізм, а як справжню альтернативу формалізму Гільбертового простору.
+ \item[(2)] Для певних задач оптимізації квантових схем,
  %\bR such as ancilla-free T-count reduction\e,\TODOb{This should be a bit broader stated, with less heavy jargon.} 
- ZX-based methods now outperform the state of the art, e.g.~\cite{de2020fast} showed T-counts that were up to 50\% better than known techniques at the time of publication.  These simplifications are important for making the problems fit on existing quantum computers, and has played an important role in the design of commercial quantum compilers such as Cambridge Quantum Computing's t$|$ket$\rangle$ \cite{sivarajah2020t}. 
+ методи на основі ZX тепер перевершують найсучасніші, наприклад, ~\cite{de2020fast} показав Т-кількості, які були на 50\% кращі, ніж відомі методи на момент публікації. Ці спрощення важливі для адаптації задач до існуючих квантових комп’ютерів і зіграли важливу роль у розробці комерційних квантових компіляторів, таких як t$|$ket$\rangle$ \cite{sivarajah2020t} Cambridge Quantum Computing.
 % \item[(3)] \bR Automated reasoning with the ZX-calculus has been used to verify the correctness of quantum software, and has been 
 % %used to find  
 % \bB successful at finding\e real bugs in quantum circuits\e.\TODOb{See comments in abstract.} %In order to achieve the latter, \em automated reasoning software \em was used, which in itself is a novelty in theoretical physics.
- \item[(3)] ZX-calculus recently enabled a team to convert grammar-aware natural language processing \cite{CSC} into variational quantum circuits \cite{QNLP-foundations} suitable for running on existing, small-scale quantum hardware, resulting in the first implementation of quantum natural language processing on a quantum computer \cite{Nature}.  %The same goes for quantum implementations of other graphical theories. 
+ \item[(3)] ZX-числення нещодавно дозволив команді перетворити обробку природної мови з урахуванням граматики \cite{CSC} у варіаційні квантові схеми \cite{QNLP-foundations}, придатні для роботи на існуючому маломасштабному квантовому обладнанні, що призвело до першої реалізації квантової обробка природної мови на квантовому комп’ютері \cite{Nature}. %Те саме стосується квантових реалізацій інших графічних теорій.
  \een      
      
-This paper is not intended to be a tutorial, but is an easy-going introduction and a survey of some recent successes.
+Ця стаття не має на меті бути підручником, а є легким вступом і оглядом деяких нещодавніх успіхів.
 %, \bR but to provide the reader with an easy-going broad view on the ZX-calculus, with a focus on where it came from, what it is, were it is heading,  and in particular, what it can (now) do for you\e.\TODOb{Is this really what we do here?}
 %, hence including its current status, its (potential capabilities), and its background.   
-If you are in need of a more detailed manual on how to use ZX-calculus, several other resources are already available. For example, the book \cite{CKbook} gives an extensive introduction to the broad subject of pictorial quantum reasoning, leading up to a detailed presentation of ZX-calculus. While  this is a pretty hefty tome (850 pages), it's full of pictures and has been taught multiple times (at Oxford, Nijmegen and Peking) in about 20 hours of lecture time. A much shorter introductory ZX-tutorial is \cite{coecke2012tutorial}, and an extensive, up-to-date introduction with many practical worked examples is~\cite{JohnSurvey}.  There is moreover a forthcoming secondary school book \cite{CoeckeGogioso2018} that we discuss in Section \ref{sec:exp}.
+Якщо вам потрібен більш детальний посібник щодо використання ZX-числення, кілька інших ресурсів уже доступні. Наприклад, книга \cite{CKbook} дає розгорнутий вступ до широкої теми пікторальних квантових міркувань, що веде до детального представлення ZX-числення. Незважаючи на те, що це досить великий фоліант (850 сторінок), він повний картинок і його викладали кілька разів (в Оксфорді, Неймегені та Пекіні) приблизно у 20 годинах лекцій. Набагато коротший вступний ZX-посібник це \cite{coecke2012tutorial}, а розширений, актуальний вступ із багатьма прикладами практичної роботи – це ~\cite{JohnSurvey}. Крім того, є підручник для середньої школи \cite{CoeckeGogioso2018}, який ми обговорюємо в розділі \ref{sec:exp}.
 
 %A tutorial on   more broader diagrammatic quantum reasoning is \cite{ContPhys}, and the connections between diagrammatic and category theory are explained in \cite{CatsII, SelingerSurvey}.  
 %There also are a number of PhD theses that may be useful depending  one's background \bR e.g.~\cite{}\e.\TODOb{Put some here e.g.~Miriam's}\TODOb{Other stuff useful as tutorials?}
@@ -270,11 +272,11 @@ If you are in need of a more detailed manual on how to use ZX-calculus, several 
 
 %\section{What and why}\label{sec:whatwhy}%%%%%%%%%%%%   
 
-\section{ZX: LEGO for quantum computing}\label{sec:ZX}%%%%%
+\section{ZX: LEGO для квантових обчислень}\label{sec:ZX}%%%%%
 
-We will introduce ZX-calculus by comparing  it  to standard quantum circuit language, and in particular, by explaining the manner  in which ZX-calculus (quite literally) stretches beyond how we can manipulate  and reason with quantum circuits. 
+Ми познайомимося з ZX-численням, порівнюючи його зі стандартною мовою квантових схем, і, зокрема, пояснюючи спосіб, у який ZX-числення (доволі дослівно) виходить за межі того, як ми можемо маніпулювати та міркувати за допомогою квантових схем.
 
-\paragraph{ZX-language.} Typical primitives of  quantum circuit language  include the CNOT-gate and certain single qubit gates like Z-phase gates and the Hadamard gate.  We denote these here as follows: 
+\paragraph{ZX-мова.} Типові примітиви мови квантових схем включають CNOT-вентилі та певні однокубітні вентилі, такі як Z-фазові вентилі та вентиль Адамара. Ми позначаємо їх тут наступним чином:
 \[
 \tikzfig{cnot}\ \ :=\ \ \left( \begin{matrix}
   1 & 0 & 0 & 0 \\
@@ -299,18 +301,18 @@ We will introduce ZX-calculus by comparing  it  to standard quantum circuit lang
 \right)
 %\bR \mbox{ZX-notation and corresponding matrix for CNOT, green phase and Hadamard} \e
 \]
-While Z-phase gates are typically taken to be diagonal in the standard (or `Z') basis, we can conjugate by the Hadamard gate to get X-phase gates, which are diagonal in the Hadamard (or `X') basis: 
+У той час як Z-фазові вентилем зазвичай вважаються діагональними в стандартному (або "Z") базисі, ми можемо сполучити за допомогою Адамара вентилем, щоб отримати X-фазові вентилі, які є діагональними в Адамаровому (або "X") базисі:
 \[
 \tikzfig{redphasegate}\ \ :=\ \ \tikzfig{redphasedef} 
 %\bR \mbox{red phase from green phase via Hadamard} \e
 \]
-These two kinds of phase gates  can now be used to build  other things, for example, the Hadamard gate itself now arises, up to a scalar factor (which we ignore), to it's \textit{Euler decomposition} in terms of phase gates:
+Ці два типи фазових вентилів тепер можна використовувати для побудови інших речей, наприклад, сам вентиль Адамара тепер з'являється, як скалярний множник (який ми ігноруємо), до \textit{розкладу Ейлера} у термінах фазових вентилів:
 \[
 \tikzfig{Hadamard2}\ \ =\ \ \tikzfig{HadamardEuler}
 %\bR \mbox{Hadamard as Euler} \e 
 \]
 
-Rather than just using the standard phase gates as building blocks for other gates, ZX-calculus uses generalisations thereof,  allowing one to vary the number of incoming and outgoing wires of these phase gates.   More specifically, we can generalise the phase gates
+Замість простого використання стандартних фазових вентилів як будівельних блоків для інших вентилів, ZX-числення використовує їх узагальнення, що дозволяє змінювати кількість вхідних і вихідних проводів цих фазових вентилів. Більш конкретно, ми можемо узагальнити фазові ворота
 % \[
 % \begin{array}{l}
 % \tikzfig{phasegate}\ \ =\ \ \ket{0}\bra{0} + e^{i \alpha} \ket{1}\bra{1}
@@ -318,7 +320,7 @@ Rather than just using the standard phase gates as building blocks for other gat
 % \tikzfig{redphasegate}\ \ =\ \  \ket{+}\bra{+} + e^{i \alpha} \ket{-}\bra{-} 
 % \end{array}
 % \]
-to `spiders':   
+до `павуків':   
 \beq\label{eq:spiders}
 \begin{array}{l}
 \tikzfig{greenspider}\ \ :=\ \ \ket{0\ldots 0}\bra{0\ldots 0} + e^{i \alpha} \ket{1\ldots 1}\bra{1\ldots 1}
@@ -326,7 +328,7 @@ to `spiders':
 \tikzfig{redspider}\ \ :=\ \  \ket{+\ldots +}\bra{+\ldots +} + e^{i \alpha} \ket{-\ldots -}\bra{-\ldots -}
 \end{array}  
 \eeq
-Without resorting to bra-ket notation, a Z-spider with $m$ legs in and $n$ legs out is a $2^n \times 2^m$ matrix with exactly 2 non-zero elements:
+Не вдаючись до бра-кет нотації, Z-павук із $m$ ногами всередині та $n$ ногами назовні є матрицею $2^n \times 2^m$ із рівно 2 ненульовими елементами:
 \[
 \tikzfig{greenspider}\ \ :=\ \ 
 \begin{pmatrix}
@@ -337,12 +339,12 @@ Without resorting to bra-ket notation, a Z-spider with $m$ legs in and $n$ legs 
   0 & 0 & \cdots & 0 & e^{i\alpha} \\
 \end{pmatrix}
 \]
-and an X-spider can be made from a Z-spider much like we did with phase gates:
+і X-павук може бути зроблений з Z-павука так само, як ми робили з фазовими вентилями:
 \[
   \tikzfig{redspider} \ \ :=\ \ \tikzfig{Z-color-ch}
 \]
 
-Putting no $\alpha$ means $\alpha = 0$, e.g.  
+Відсутність $\alpha$ означає $\alpha = 0$, напр.
 \[
 \tikzfig{greenspider0}\ \ :=\ \ 
 \begin{pmatrix}
@@ -353,26 +355,26 @@ Putting no $\alpha$ means $\alpha = 0$, e.g.
   0 & 0 & \cdots & 0 & 1 \\
 \end{pmatrix}
 \]
-It then follows that the cups and caps of (\ref{eq:cupcap}), as well as many basic quantum states and effects, are special cases of spiders:
+Звідси випливає, що чашки та шапки (\ref{eq:cupcap}), а також багато основних квантових станів і ефектів є окремими випадками павуків:
 \ctikzfig{basic-spiders}
-where $\ket{{+}} = 1/\sqrt{2} \big(\ket 0 + \ket 1\big)$, $\ket{{-}} = 1/\sqrt{2} \big(\ket 0 - \ket 1\big)$, and we have ignored some normalisation factors.
+де $\ket{{+}} = 1/\sqrt{2} \big(\ket 0 + \ket 1\big)$, $\ket{{-}} = 1/\sqrt{2} \big(\ket 0 - \ket 1\big)$, ми проігнорували деякі фактори нормалізації.
 
-Spiders are all that the language of ZX-calculus consists of. Why can ZX-calculus get away with only these? 
-Since we can now build the CNOT-gate from these spiders as follows:
+Павуки - це все, з чого складається мова ZX-числення. Чому ZX-числення може обійтися тільки цим?
+Оскільки тепер ми можемо побудувати CNOT-вентилі з цих павуків наступним чином:
 \beq\label{cnotfromspiders}
 \tikzfig{cnotfromspiders}
 \eeq
-That this is indeed the case is something that can be easily checked using matrices.  So in particular, the CNOT-gate doesn't have to be treated as a primitive anymore, but breaks down in two smaller pieces. Once we have phase gates and the CNOT-gate, we know that we can reproduce any quantum circuit made up of any gates.
+Те, що це справді так, можна легко перевірити за допомогою матриць. Так, зокрема, CNOT-вентиль більше не потрібно розглядати як примітив, він розпадається на дві менші частини. Коли у нас є фазові вентилі та CNOT-вентилі, ми знаємо, що можемо відтворити будь-яку квантову схему, що складається з будь-яких вентилів.
 
-What is the upshot of doing this?  More specifically, why is this better than using standard circuits?
-The true power of ZX-calculus arises from the fact that these smaller pieces in (\ref{cnotfromspiders}) are very easy to work with, in the sense that the rules that govern them  are easy  to figure out, remember, and do calculations with.  Also, there aren't many of them.  In contrast, coming up with all the rules that govern fixed sets of quantum gates is really hard, and little is known beyond the case of very limited gate sets~\cite{cnotdihedral} or small fixed numbers of qubits.
+Який результат цього? Точніше, чому це краще, ніж використання стандартних схем?
+Справжня сила ZX-числення полягає в тому, що з цими меншими частинами в (\ref{cnotfromspiders}) дуже легко працювати, у тому сенсі, що правила, які ними керують, легко зрозуміти, запам’ятати та виконати обчислення за ними. Крім того, їх не так багато. Навпаки, придумати всі правила, які керують фіксованим набором квантових вентилів, справді важко, і мало що відомо, окрім випадків дуже обмежених наборів воріт~\cite{cnotdihedral} або невеликої фіксованої кількості кубітів.
 
-For example, it was shown in~\cite{ptbian} that there \textit{does} exist a set of quantum circuit equations rules that suffices to prove all true equations for 2-qubit circuits built from these gates:
+Наприклад, було показано в~\cite{ptbian}, що \textit{дійсно} існує набір правил рівнянь квантових схем, яких достатньо, щоб підтвердити всі істинні рівняння для 2-кубітових схем, побудованих із цих вентилів:
 \[
 \tikzfig{phasegateT}\qquad\qquad\qquad\tikzfig{Hadamard2}\qquad\qquad\qquad\tikzfig{cnot}  
 \]
-That is, the gates we introduced at the beginning of this section, but with Z-phases restricted to $\alpha = \pi/4$.
-However, some of the rules are huge and difficult to work with. They can be found in their entirity in~\cite{DBLP:conf/rc/CoeckeW18}, but to give a feel for their scale, here is the lefthand side of one of the rules, which is too big to fit on the page:
+Це вентилі, які ми представили на початку цього розділу, але з Z-фазами, обмеженими $\alpha = \pi/4$.
+Однак деякі правила величезні, і з ними важко працювати. Цілком їх можна знайти в ~\cite{DBLP:conf/rc/CoeckeW18}, але щоб відчути їхній масштаб, ось ліва частина одного з правил, яка завелика, щоб поміститися на сторінці :
 \beq\label{circ:completerelationlist142}
 \tikzfig{completerelationlist142} 
 \eeq
@@ -382,17 +384,17 @@ However, some of the rules are huge and difficult to work with. They can be foun
 % We are pretty confident about the following two conjectures.  
 %So confident even that we really haven't put any effort in trying to prove them.
 
-We expect this situation to become worse as we go to more qubits. For example, it is hard to imagine that a 3-qubit rule such as the following:
+Ми очікуємо, що ця ситуація погіршуватиметься, коли ми переходимо до більшої кількості кубітів. Наприклад, важко уявити, що таке подальше 3-кубітне правило, як:
 \begin{equation}\label{eq:3qubit}
 \tikzfig{CNOT-Frob}
 \end{equation}
-could ever be proven using just the 2-qubit rules from \cite{ptbian, DBLP:conf/rc/CoeckeW18}, or any 2-qubit rules for that matter. Doing so seems to require decomposing at least one of the CNOT gates into single-qubit gates, which is impossible. Of course, the devil is in the details, so we'll leave the following as a conjecture for now:
+можна коли-небудь підтвердити, використовуючи лише 2-кубітні правила із \cite{ptbian, DBLP:conf/rc/CoeckeW18} або будь-якіх 2-кубітні правила власне кажучи. Здається, що для цього потрібно розкласти принаймні один із вентилів CNOT на однокубітні вентилі, що неможливо. Звичайно, диявол криється в деталях, тому поки що залишимо наступне як припущення:
 
 \begin{conj}
-No set of rules involving only two qubit circuits can be complete for circuits with more than 2 qubits.
+  Жоден набір правил, що включає лише дві схеми кубітів, не може бути повним для схем із більш ніж 2 кубітами.
 \end{conj}
 
-On the other hand, we'll see in the completeness section~\ref{sec:compl} that it is possible to fit on one side of A4 all the ZX-rules needed to prove all the equations that are true for for all ZX-pictures, including circuits made from any gates with any number of qubits.
+З іншого боку, ми побачимо в розділі про повноту~\ref{sec:compl}, що можна розмістити на одній стороні A4 усі ZX-правила, необхідні для доведення всіх рівнянь, які є вірними для для всіх ZX-картинки, включаючи схеми, створені з будь-яких вентилів з будь-якою кількістю кубітів.
 
 % \noindent
 % {\bf Proof suggestion.} Show that no rules for 2 qubits could ever be used to derive this rule: 
@@ -406,7 +408,7 @@ On the other hand, we'll see in the completeness section~\ref{sec:compl} that it
  
 %\bR ... we explain the rules below ... \e
 
-These much simpler ZX-rules reflect the fact that the ZX-language is in some way or another more fundamental than circuits.
+Ці набагато простіші ZX-правила відображають той факт, що ZX-мова тим чи іншим чином більш фундаментальна, ніж схеми.
 
 % To make an analogy with particle physics: 
 % \begin{center}
@@ -415,11 +417,11 @@ These much simpler ZX-rules reflect the fact that the ZX-language is in some way
 % So one could say that ZX-calculus reveals the true fundamental particles of quantum computing.
 %Once done so, \bR we can use them in a fusion reactor\e.\TODOb{This can probably be improved upon still.}
 
-Consider an analogy using LEGO. The basic LEGO brick has been designed for it's versatility, but if you were crazy enough to glue all of your LEGO together into some fixed `composite' blocks, that famous versatility goes away. Just for fun, let's take this a bit farther and suppose there were indeed LEGO analogues for ZX-pictures:
+Розглянемо аналогію з LEGO. Базову цеглинку LEGO було розроблено для її універсальності, але якщо ви були настільки божевільні, щоб склеїти всі свої LEGO разом у кілька фіксованих «композитних» блоків, ця знаменита універсальність зникає. Просто заради розваги, давайте розглянемо це трохи далі і припустимо, що справді існують аналоги LEGO для зображень ZX:
 \begin{center} 
 \begin{tabular}{|c|c|}
 \hline
-{\bf ZX-language}  & {\bf LEGO analogue}\\ 
+{\bf ZX-мова}  & {\bf LEGO аналогія}\\ 
  \hline \hline
 \tikzfig{phasegate_table} \qquad\quad\  \tikzfig{redphasegate_table}  & \raisebox{-6mm}{\epsfig{figure=images-sm/Lego-single1,width=140pt}}\\ 
  \hline
@@ -431,249 +433,247 @@ Consider an analogy using LEGO. The basic LEGO brick has been designed for it's 
  \hline 
 \end{tabular}
 \end{center}
-Standard LEGO allows for a wealth of creations:
+Стандартний LEGO дозволяє створювати безліч творів:
 \[
   \epsfig{figure=images-sm/house1,width=140pt}
 \]
-while the composite block only allows for a restricted spectrum of `art':    
+тоді як композитний блок допускає лише обмежений спектр «мистецтва»:
 \[
   \epsfig{figure=images-sm/art,width=220pt}
 \]
-In particular, circuit gates have unitarity imposed upon them, while the ZX-components have been liberated from the unitary constraint.
+Зокрема, схемні вентилі мають унітарність, а ZX-компоненти звільнені від унітарного обмеження.
 
-If we want to actually run a computation on a quantum computer, it could be the case that we only really care about unitary quantum circuits in the end. In that case, it is natural to ask: is this extra freedom actually a \textit{good} thing? We would contend that it is, and that we have a situation that is somewhat analogous to complex analysis.
-In the case of complex analysis, leaving real numbers behind (sometimes temporarily), gives us much more power and elegance, even when proving things about real numbers. We will see this same phenomenon happening for ZX-pictures in Section~\ref{sec:circoptim}, where we discuss how to optimise quantum circuits by temporarily leaving the circuit world, then coming back.
+Якщо ми хочемо фактично запустити обчислення на квантовому комп’ютері, може статися так, що зрештою нас дійсно цікавлять лише унітарні квантові схеми. У такому випадку природно запитати: чи справді ця додаткова свобода \textit{гарна} річ? Ми б стверджували, що це так, і що ми маємо ситуацію, яка дещо схожа на комплексний аналіз.
+У випадку складного аналізу, залишення дійсних чисел позаду (іноді тимчасово) дає нам набагато більше потужності та елегантності, навіть коли ми доводимо речі про дійсні числа. Ми побачимо, що це саме явище відбувається для ZX-зображень у Розділі~\ref{sec:circoptim}, де ми обговорюємо, як оптимізувати квантові схеми шляхом тимчасового виходу зі світу схем, а потім повернення.
 
-It was explained in~\cite{GLAmagiclego} that the algebraic structures underlying the ZX-calculus are not just normal LEGO, but `magic LEGO', which are very bendy and enable all sorts of wild creations. This is thanks to the flexibility of the graphical language, which we'll discuss in the next section. By only considering `glued-together' LEGO, i.e. quantum gates, we miss out on this whole story.  So the moral is:
+Було пояснено в~\cite{GLAmagiclego}, що алгебраїчні структури, які лежать в основі ZX-числення, — це не просто звичайний LEGO, а «чарівний LEGO», який є дуже гнучким і дозволяє створювати всі види нестямний творінь. Це завдяки гнучкості графічної мови, яку ми обговоримо в наступному розділі. Розглядаючи лише «склеєні» LEGO, тобто квантові вентилі, ми пропускаємо всю цю історію. Отже, мораль така:
 \begin{center}
-  \it Stop gluing your LEGO together!
+  \it Припиніть склеювати своє LEGO!
 \end{center}
 
-\section{Basic ZX-rules}
+\section{Базові ZX-правила}
 
-\paragraph{Spider fusion rules.} Concretely, there are three kinds of rules governing the  ZX spiders (\ref{eq:spiders}).  The first kind concerns how spiders of the same colour interact, and they are very simple: spiders of the same colour `fuse' together and their phases add up:
+\paragraph{Правила злиття павуків.} Конкретно, існує три типи правил, які керують павуками ZX (\ref{eq:spiders}). Перший тип стосується того, як взаємодіють павуки одного кольору, і вони дуже прості: павуки одного кольору «зливаються» разом, і їхні фази складаються:
 \beq\label{eq:spider-fusion}
 \tikzfig{spiderphaseg}\ \ =\ \ \tikzfig{spidercompphaseg}  
 \qquad\qquad\qquad
 \tikzfig{spiderphaser}\ \ =\ \ \tikzfig{spidercompphaser}
 \eeq
 
-One way to think of spiders is as `multi-wires', in that while ordinary wires have two ends, multi-wires can have multiple ends.  The following multi-wires then happen to be ordinary wires:  
+Один із способів уявити павуків як «багато-дротових», оскільки звичайні дроти мають два кінці, багато-дроти можуть мати декілька кінців. Тоді наступні багато-дроти є звичайними дротами:
 \[
 \tikzfig{ordinarywire}  
 \]
-Now, what characterises a wire is that it connects its two ends, and if you connect two wires together you again get a (now longer) wire. The same is true for multi-wires, and  (\ref{eq:spider-fusion}) just says that if you connect two multi-wires, then you get another multi-wire.
+Що характеризує дріт, так це те, що він з’єднує два кінці, і якщо ви з’єднаєте два дроти разом, ви знову отримаєте (тепер довший) дріт. Те саме стосується багатодротових мереж, і (\ref{eq:spider-fusion}) просто говорить, що якщо ви з’єднаєте два багатодротові мережі, ви отримаєте ще одну багатодротову мережу.
 
-There also is no real difference between a spider-input-leg and a spider-output-leg, as spider-fusion allows these roles to be easily exchanged:  
+Також немає реальної різниці між вхідною-лапкою-павука і вихідною-лапкою-павука, оскільки злиття-павуків дозволяє легко міняти ці ролі:
 \[
 \tikzfig{ordinarywire2}  
 \]
-More generally, this implies that in ZX-calculus: 
+Загалом це означає, що в ZX-численні:
 \begin{center}
-\em  only connectivity matters
+\em  має значення тільки зв'язок
 \end{center}
-and that we can think of ZX-pictures as graphs, that is, something that is specified by  nodes and edges connecting these. The loose legs then make it an `open' graph \cite{DK}. This flexibility is something that makes no sense for ordinary circuits, where each gate must have well-defined inputs and outputs.
+і що ми можемо думати про ZX-картинки як про графи, тобто щось, що визначається вузлами та ребрами, що їх з’єднують. Тоді незв'язані ноги роблять його «відкритим» графом \cite{DK}. Ця гнучкість не має сенсу для звичайних схем, де кожен вентиль повинен мати чітко визначені входи та виходи.
 
-\paragraph{Strong complementarity rules.}  The second kind of rules concern the interaction between spiders of different colours.
-They can either be stated as these two rules:   
+\paragraph{Сильні правила комплементарності.}  Другий тип правил стосується взаємодії між павуками різного кольору.
+Їх можна сформулювати як ці два правила:  
 \beq\label{eq:bialg1}
 \tikzfig{bialg1} 
 \eeq
-together with this third one: 
+разом із цим третім:
 \beq\label{eq:bialg2}
 \tikzfig{bialg2} 
 \eeq 
-or, as this single rule:
+або, як це єдине правило:
 \beq\label{eq:bialg3}
 \tikzfig{bialg3} 
 \eeq
-The rules (\ref{eq:bialg1}) tell us that single leg spiders (a.k.a.~states/effects), are copied by a spider of the opposite colour. The rule (\ref{eq:bialg2}) is slightly harder to interpret, and let's not get us started about (\ref{eq:bialg2}).
-But they all follow a clear pattern, namely, the distinct colours can move trough each other. Taking these rules, together with spider-fusion, one can derive this one \cite{CD2}:
+Правила (\ref{eq:bialg1}) говорять нам, що одноногі павуки (а.к.а.~стани/ефекти) копіюються павуками протилежного кольору. Правило (\ref{eq:bialg2}) трохи важче інтерпретувати, і навіть не будемо починати про (\ref{eq:bialg3}).
+Але всі вони слідують чіткому шаблону, а саме, різні кольори можуть рухатися один через одного. Взявши ці правила разом із злиттям-павуків, можна вивести таке \cite{CD2}:
 \beq\label{eq:bialg4}
 \tikzfig{bialg4} 
 \eeq
-Let's stress again that it is essential to have spider-fusion to derive this rule.  Without it (\ref{eq:bialg3}) and (\ref{eq:bialg4}) are independent.  In fact, in mathematics, rule (\ref{eq:bialg3}) defines a bialgebra, and having (\ref{eq:bialg4}) makes it a Hopf algebra (with trivial antipode) \cite{cartier2007primer}.  We will say something more about the mathematical familiarity of these specific rules in Sec.~\ref{sec:furtherrefs}. 
+Давайте ще раз підкреслимо, що для виведення цього правила важливо мати злиття-павуків. Без нього (\ref{eq:bialg3}) і (\ref{eq:bialg4}) незалежні. Насправді в математиці правило (\ref{eq:bialg3}) визначає біалгебру, а наявність (\ref{eq:bialg4}) робить її алгеброю Хопфа (з тривіальним антиподом) \cite{cartier2007primer}. Ми скажемо більше про математичну звичність цих конкретних правил у Розд.~\ref{sec:furtherrefs}. 
 
-Rule (\ref{eq:bialg4}) has a very intuitive reading, namely, that two wires between spiders of opposite colour always vanish.  In other words, a 2-cycle always vanishes: 
+Правило (\ref{eq:bialg4}) має дуже інтуїтивне читання, а саме те, що два дроти між павуками протилежного кольору завжди зникають. Іншими словами, 2-цикл завжди зникає:
 \[ 
 \tikzfig{2loop}
 \]
-We can also give such an interpretation to (\ref{eq:bialg2}), namely, that we can also eliminate all 4-cycles:   
+Ми також можемо дати аналогічну інтерпретацію (\ref{eq:bialg2}), а саме, що ми також можемо виключити всі 4-цикли:
 \[ 
 \tikzfig{4loop}
 \]
 
-Rule (\ref{eq:bialg4}) also has a very clear conceptual interpretation, namely, complementarity, or in modern terminology, unbiasedness.  One can show that spiders, when defined as linear maps that obey spider-fusion are always uniquely fixed by a choice of orthonormal basis~\cite{CPV}.  Then (\ref{eq:bialg4}) tells us that these two ONBs must be mutually unbiased \cite{CD2, CKbook}. Mutually unbiased bases crop up all the time in quantum computing and quantum information theory. For example, a lot of quantum cryptography, including the famous BB84 quantum key distribution protocol~\cite{BB84}, depends on mutually unbiased bases.
+Правило (\ref{eq:bialg4}) також має дуже чітке концептуальне тлумачення, а саме комплементарність або, за сучасною термінологією, неупередженість. Можна показати, що павуки, визначені як лінійні карти, які підкоряються злиттю-павуків, завжди однозначно фіксуються вибором ортонормованого базису~\cite{CPV}. Тоді (\ref{eq:bialg4}) говорить нам, що ці два ортонормальні бази мають бути взаємно неупередженими \cite{CD2, CKbook}. Взаємно неупереджені основи постійно виникають у квантових обчисленнях і квантовій теорії інформації. Наприклад, багато квантової криптографії, включаючи знаменитий протокол квантового розподілу ключів BB84~\cite{BB84}, залежить від взаємно неупереджених баз.
+
+Отже, правило (\ref{eq:bialg4}) визначає пари взаємно неупереджених ортонормальних баз. Оскільки, припускаючи злиття павуків, правило (\ref{eq:bialg3}) сильніше ніж (\ref{eq:bialg4}), ми називаємо це «сильною комплементарністю». Цікава річ у цьому новому понятті сильної комплементарності полягає в тому, що ми насправді знаємо про неї більше, ніж про звичайну комплементарність. Ми знаємо, що взаємна сильна комплементарність є моногамною, тому вона може бути лише парами \cite[Thm.~9.66]{CKbook}, і всі ці пари були повністю класифіковані для скінченновимірних гільбертових просторів у термінах скінченних абелевих груп \cite{CDKZ}.
 
 
-So the rule (\ref{eq:bialg4}) defines pairs of mutually unbiased ONBs.  Because, assuming spider-fusion,  the rule (\ref{eq:bialg3}) is stronger than  (\ref{eq:bialg4}), we call is `strong complementarity'.  A funny thing about this novel notion of strong complementarity is that we actually know more about it then about ordinary complementarity.  We know that mutual strong complementarity is monogamous, so it can only come in pairs \cite[Thm.~9.66]{CKbook}, and all of these pairs have been fully classified for finite dimensional Hilbert spaces, in terms of the finite Abelian groups \cite{CDKZ}.
-
-
-In terms of circuits, rule (\ref{eq:bialg4}) tells us that CNOT-gates are unitary:
+З точки зору схем, правило (\ref{eq:bialg4}) говорить нам, що CNOT-вентилі є унітарними:
 \[ 
 \tikzfig{unitarity}
 \]
-If instead of having the CNOT-gates acting on the same wire with the same colours, we do the opposite, we get a circuit interpretation for (\ref{eq:bialg2}):
+Якщо замість CNOT-вентилей, що діють на той самий дріт однакового кольору, ми зробимо навпаки, ми отримаємо інтерпретацію схеми для (\ref{eq:bialg2}):
 \[ 
 \tikzfig{strongcomplementary1CNOT}
 \] 
-Together these two circuit equations yield:
+Разом ці два рівняння схем дають:
 \[ 
 \tikzfig{3-cnot-swap}   
 \] 
 
-A more extensive discussion of strong complementarity is in \cite{CKbook}. For now we stop discussing rules, and do some stuff with the ones we have.  We discuss rules further in the following section.
+Більш широке обговорення сильної комплементарності міститься в \cite{CKbook}. Наразі ми припиняємо обговорювати правила, а виконаємо деякі речі з тими правилами, що є. Ми обговоримо правила далі в наступному розділі.
 
-\section{A complete calculus}\label{sec:compl}%%%%%
+\section{Повне числення}\label{sec:compl}%%%%%
 
-Neither the rules (\ref{eq:spider-fusion}) or (\ref{eq:bialg3}) are specific to qubits, but make sense in all dimensions, and even beyond Hilbert space quantum theory. Indeed, they provide a canvas for studying theories more general than quantum theory, and they have for example enabled a crisp pictorial presentation of Spekkens' toy theory \cite{CEToy, CES, MiriamSpek}. Notably, this kind of presentation enables one to pinpoint exactly where quantum theory and interesting `quantum-like' theories depart. In this case, it has to do with the difference in the two finite groups $\mathbb{Z}_4$ and $\mathbb{Z}_2\times\mathbb{Z}_2$. An extensive discussion of all of this is in \cite{CKbook}, Chapter 11.
+Ні правила (\ref{eq:spider-fusion}), ні (\ref{eq:bialg3}) не є специфічними для кубітів, але мають сенс у всіх вимірах і навіть за межами квантової теорії Гільбертового простору. Дійсно, вони створюють канву для вивчення теорій, більш загальних, ніж квантова теорія, і вони, наприклад, уможливили чітке графічне представлення теорії іграшок Спеккенса \cite{CEToy, CES, MiriamSpek}. Примітно, що такий вид презентації дозволяє точно визначити, де квантова теорія та цікаві «квантовоподібні» теорії відділяються. У цьому випадку це пов’язано з різницею у двох скінченних групах $\mathbb{Z}_4$ і $\mathbb{Z}_2\times\mathbb{Z}_2$. Широке обговорення всього цього міститься в \cite{CKbook}, Розділ 11.
 
-Other papers on generalised theories based on strong complementarity include \cite{CDKZ, gogioso2015schroedinger, gogioso2015fourier, CDKZ2, gogioso2019diagrammatic, gogioso2019generalised}. All of this is part of the `process theories' approach to quantum foundations, where quantum-like theories are defined using a symmetric monoidal category, a.k.a. a process theory, and their features are studied abstractly (see e.g.~\cite{JTF, selby2017leaks, gogioso2018categorical, gogioso2018density, selby2018reconstructing, lee2018no,coecke2016terminality, kissinger2017categorical, pinzani2019categorical, pinzani2020giving}).
+Інші статті про узагальнені теорії, засновані на сильній комплементарності, включають \cite{CDKZ, gogioso2015schroedinger, gogioso2015fourier, CDKZ2, gogioso2019diagrammatic, gogioso2019generalised}. Усе це є частиною підходу «процесних теорій» до квантових основ, де квантовоподібні теорії визначаються за допомогою симетричної моноїдальної категорії, так само як теорія процесів, а їхні особливості вивчаються абстрактно (див., наприклад, ~\cite{JTF, selby2017leaks, gogioso2018categorical, gogioso2018density, selby2018reconstructing, lee2018no,coecke2016terminality, kissinger2017categorical, pinzani2019categorical, pinzani2020giving}).
 
-However, if we come back down to earth, we can look at which rules actually \textit{are} specific to quantum computation with qubits. As we will see, we don't need to go too far before we have enough rules to prove every true equation between pictures.
+Однак, якщо ми повернемося на землю, ми зможемо подивитися, які правила насправді \textit{є} специфічними для квантових обчислень з кубітами. Як ми побачимо, нам не потрібно заходити надто далеко, перш ніж матимемо достатньо правил, щоб довести кожне справжнє рівняння між малюнками.
 
 % quantum causal process structures as a topic of particular interest \cite{coecke2016terminality, kissinger2017categorical, pinzani2019categorical, pinzani2020giving}.  
 
-\paragraph{Qubit related rule(s).}  Turning our attention to Hilbert space again, and qubits specifically, another rule that was part of the ZX-calculus early on, although in a very different form,  is the following one:
+\paragraph{Правило(-а), пов’язані з кубітом.}  Знову звертаючи нашу увагу на гільбертовий простір і кубіти конкретно, ще одне правило, яке було частиною ZX-числення на ранньому етапі, хоча й у зовсім іншій формі, це таке:
 \beq\label{spider-convert1}
 \tikzfig{spider-convert1}   
 \eeq
-The form in which it appeared initially was the 1st one of these rules \cite{CD1}:     
+Форма, у якій воно з’явилося спочатку, була першим із цих правил \cite{CD1}:
 \beq\label{hbox-colour-change}
 \tikzfig{hbox-colour-change}   
 \qquad\qquad\qquad\qquad
 \tikzfig{Hadamard2}\ \ =\ \ \tikzfig{Hadamard-euler-single1}  
 \eeq
-which is a pretty one, with the 2nd one added a bit later \cite{duncan2009graph}, which is slightly less pretty.  Together these two rules involving the yellow box are equivalent to (\ref{spider-convert1}).  So what is {(\ref{spider-convert1}) telling us?
+який є гарним, а друге додано трохи пізніше \cite{duncan2009graph}, який є трохи менш гарним. Разом ці два правила, що стосуються жовтої рамки, еквівалентні (\ref{spider-convert1}). Отже, що нам говорить {(\ref{spider-convert1})?
 
-We already told you about X spiders and Z spiders, but you might be wondering `what happened to Y?' Did we put our brains in the oven and cook our Y's?
+Ми вже розповідали вам про X-павуків і Z-павуків, але ви можете запитати, «що трапилося з Y?» Ми поклали свої мізки в піч і спекли наші Y?
 
-No! In fact, we didn't define Y-spiders, because they can already be defined in two different ways: in terms of an X-spider or in terms of a Z-spider. Equation~\eqref{spider-convert1} relates those two different ways.
+Ні! Насправді ми не визначали Y-павуків, тому що їх уже можна визначити двома різними способами: у термінах X-павука або в термінах Z-павука. Рівняння~\eqref{spider-convert1} пов’язує ці два різні способи.
 
-This rule comes from the geometry of the \textit{Bloch sphere}, a common way to visualise qubit operations as sphere rotations, in order to rotate X/Z into Y.  Alternatively, you can slightly modify this rule as follows:
+Це правило походить від геометрії \textit{сфери Блоха}, загального способу візуалізації операцій кубіта як обертання сфери, щоб обертати X/Z на Y. Крім того, ви можете трохи змінити це правило наступним чином:
 \[
 \tikzfig{spider-convert2}    
 \]
-which really is:
+що насправді:
 \[
 \tikzfig{spider-convert3}    
 \]
-And hence-ish the equivalence with  rules (\ref{hbox-colour-change}). See \cite{CKbook} for a proper proof, without the `ish'. :)
+А, отже-сенько, еквівалентність із правилами (\ref{hbox-colour-change}). Перегляньте \cite{CKbook} для належного доказу, без `сенько'. :)
 
-\paragraph{A complete set of rules}  So what can we prove with the rules we now have? That is: 
+\paragraph{Повний набір правил}  Отже, що ми можемо довести за правилами, які ми маємо зараз? Це:
 \begin{equation}\label{stabrules}
 \tikzfig{AllRules}
 \end{equation}
-We already pointed out in Section \ref{sec:ZX} that with ZX-calculus we can go all the way and prove every equation that one can prove using linear algebra. It was shown in shown in \cite{VladComp} that these rules are not enough just yet.
+Ми вже зазначали в Розділі \ref{sec:ZX}, що за допомогою ZX-числення ми можемо пройти весь шлях і довести кожне рівняння, яке можна довести за допомогою лінійної алгебри. У \cite{VladComp} було показано, що цих правил поки недостатньо.
 
-However, Backens~\cite{Backens} showed that they do enable us to prove every equation that holds for \textit{stabilizer quantum theory}, i.e. ZX-pictures with phases restricted to multiples of $\pi/2$.
+Проте Бекенс~\cite{Backens} показав, що вони дають нам змогу довести кожне рівняння, яке виконується для \textit{квантової теорії стабілізатора}, тобто ZX-зображень із фазами, кратними $\pi/2$.
 
 % This is, informally, qubits being restricted to only having 6 states, namely the Z-, X- and Y- eigenstates.  In terms of ZX-calculus, this means that there only are phases that are multiples of ${\pi\over 2}$:
 % \beq\label{eq:stabphase}
 % \tikzfig{stabphase}
 % \eeq  
 
-This is surely not an unimportant fragment of quantum theory, as, for example, it suffices to prove that quantum theory is non-local \cite{CDKZ}.  On the other hand, stabiliser quantum circuits can be efficiently simulated classically \cite{GottesmanKnill}.
-
+Це, звичайно, не маловажливий фрагмент квантової теорії, оскільки, наприклад, достатньо довести, що квантова теорія є нелокальною \cite{CDKZ}. З іншого боку, квантові схеми стабілізатора можна ефективно моделювати класично \cite{GottesmanKnill}.
 %Perhaps unsurprisingly, the ZX-rules above can not only prove all true equations between stabiliser ZX-pictures, they can do it efficiently.
 
 % But still, for many practical applications involving circuits that cannot be simulated, these stabiliser ZX-rules are sufficient for the job.
 
 %Going beyond stabiliser ZX-pictures, we get into a realm of things that cannot be classically simulated.
 
-In practice, even though the ZX-rules above cannot prove \textit{all} equations involving circuits beyond stabiliser quantum theory, they seem pretty capable for many practical tasks such as circuit optimisation, as we'll see in the next section. % in that case the rules seem to be quite
+На практиці, навіть незважаючи на те, що наведені вище ZX-правила не можуть підтвердити \textit{всі} рівняння, включаючи схеми за межами квантової теорії стабілізатора, вони здаються досить придатними для багатьох практичних завдань, таких як оптимізація схем, як ми побачимо в наступному розділі. % у цьому випадку правила виглядають досить
 
-Of course, we do really want to understand which extra rules are needed in order to be able to prove all equations.  These were established for the first time by Ng and Wang in \cite{ng2017universal}, building further on Hadzihasanovic's result on a graphical calculus related to the ZX-calculus \cite{hadzihasanovic2017algebra, hadzihasanovic2018two}. Along the way, a result by Jeandel, Perdrix and Vilmart established derivability of all equations for the `Clifford+T' ZX-pictures, which generalise stabilisers by allowing multiples of $\pi/4$ rather than only $\pi/2$~\cite{jeandel2018complete}.  
+Звичайно, ми дійсно хочемо зрозуміти, які додаткові правила потрібні, щоб мати можливість довести всі рівняння. Вони були вперше встановлені Нг та Вонг у \cite{ng2017universal}, спираючись на результат Хадзіхасановича щодо графічного числення, пов’язаного із ZX-численням \cite{hadzihasanovic2017algebra, hadzihasanovic2018two}. По дорозі результат Жанделя, Пердрікса та Вілмарта встановив можливість виводу всіх рівнянь для `Кліффорд+Т' ZX-зображень, які узагальнюють стабілізатори, допускаючи кратні $\pi/4$, а не лише $\pi/2$ ~\cite{jeandel2018complete}.
 
-Theorems like these are called \textit{completeness} theorems, in the sense that the rules form a complete set with respect to derivability. There are now several different complete sets of rules for the full family of ZX-pictures~\cite{ng2017universal,vilmart2019near}, as well as the various different special cases~\cite{jpvnormalform,jeandel2018complete,jeandel2018diagrammatic,zxtri}. The most succinct one currently around adds a single rule to the 4 rules above, which allows for exchanging the colours of the phases in triples \cite{vilmart2019near}:  
+Подібні теореми називають теоремами \textit{про повноту} в тому сенсі, що правила утворюють повний набір щодо можливості виведення. Зараз існує кілька різних повних наборів правил для повного сімейства ZX-зображень ~\cite{ng2017universal,vilmart2019near}, а також для різних спеціальніх випадків~\cite{jpvnormalform,jeandel2018complete,jeandel2018diagrammatic,zxtri}. Найбільш стислий набір на даний момент додає єдине правило до 4 правил вище, яке дозволяє обмінювати кольори фаз у трійках \cite{vilmart2019near}:
 \beq\label{colour-change-rule} 
 \tikzfig{Renaut} 
 \eeq
-where each of the phases $\tilde\alpha, \tilde\beta, \tilde\gamma$ are trigonometric functions of the phases on the left-hand side.
+де кожна з фаз $\tilde\alpha, \tilde\beta, \tilde\gamma$ є тригонометричними функціями фаз у лівій частині.
 
-This rule was first introduced for the case of two-qubit circuits \cite{DBLP:conf/rc/CoeckeW18}, with two of the authors of the present paper failing to realise that it would yield full-blown completeness as well. This seems to show us that the four basic rules \eqref{stabrules} already capture all of the complex interactions of multiple qubits, up to some `local' single qubit equations, which are all subsumed by~\eqref{colour-change-rule}.
+Це правило вперше було введено для випадку двокубітових схем \cite{DBLP:conf/rc/CoeckeW18}, причому двоє авторів цієї статті не зрозуміли, що це також дасть повномасштабну повноту. Здається, це показує нам, що чотири основні правила \eqref{stabrules} вже охоплюють усі складні взаємодії кількох кубітів, аж до деяких «локальних» одиничних рівнянь кубітів, які всі поглинаються ~\eqref{colour-change-rule}.
 
-So, if we have a complete set of rules for all ZX-pictures, we should be happy right? Wrong! Completeness should be seen as the beginning and not the end for the ZX-calculus, and there is much to be gained by finding better rules.
+Отже, якщо ми маємо повний набір правил для всіх ZX-зображень, ми повинні бути щасливі, чи не так? Неправильно! Повнота повинна розглядатися як початок, а не кінець для обчислення ZX, і можна багато чого отримати, знайшовши кращі правила.
  
-For example, the succinctness obtained from the introduction of the colour-exchanging rule (\ref{colour-change-rule}) comes at the price of introducing complicated, trigonometric functions of phases whenever it is applied. In fact, these are ugly enough that we didn't even bother to write them here. If we are working with phases numerically on a computer, this isn't a big problem, but for symbolic manipulation this quickly becomes impractical.
+Наприклад, стислість, отримана завдяки введенню правила зміни кольору (\ref{colour-change-rule}), коштує введення складних тригонометричних функцій фаз кожного разу, коли воно застосовується. Насправді вони досить потворні, тому ми навіть не потрудилися написати їх тут. Якщо ми працюємо з фазами чисельно на комп’ютері, це не є великою проблемою, але для символічних маніпуляцій це швидко стає непрактичним.
 
-One way around this problem is to shift to the \textit{algebraic ZX-calculus}, which replaces the phases $\alpha \in [0,2\pi)$ -- which become $e^{i\alpha}$ in the definition of a spider \eqref{eq:spiders} -- with plain ol' complex numbers $a \in \mathbb C$:
+Один із способів вирішення цієї проблеми — перейти до \textit{алгебраїчного ZX-числення}, яке замінює фази $\alpha \in [0,2\pi)$ -- які стають $e^{i\alpha}$ у визначення павука \eqref{eq:spiders} -- на прості комплекснимі числа $a \in \mathbb C$:
 \[
 \tikzfig{greenspider} \qquad\qquad\leadsto\qquad\qquad  \tikzfig{greenboxspider}
 \]
-Our previous notion of spiders are still around, just by setting $a := e^{i\alpha}$, but the extra generality buys us several nice features such as a more direct encoding of complex-valued matrices as well as straightforward generalisations from 2D to all finite dimensions~\cite{qwangslides} and from complex numbers to any commutative semi-ring~\cite{azxsemiring}.
+Наше попереднє уявлення про павуків все ще існує, просто встановивши $a := e^{i\alpha}$, але додаткова загальність дає нам кілька приємних особливостей, таких як більш просте кодування комплексних матриць, також як і прямолінійне узагальнення від 2D до всіх скінченних вимірів~\cite{qwangslides} і від комплексних чисел до будь-якого комутативного півкільця~\cite{azxsemiring}.
  
-\section{Automated circuit optimisation}\label{sec:circoptim}%%%%% 
+\section{Автоматизована оптимізація схем}\label{sec:circoptim}%%%%% 
 
-If a circuit is given, can ZX-calculus help with simplifying it?  Of course it can, and it seems to be better at it than anything else.  Here's an example of how that works.  Suppose we want to simplify the following circuit made up of multiple gates, and we need to measure the last two quibits:
+Якщо задано схему, чи може ZX-числення допомогти її спростити? Звичайно, може, і, здається, вдається йому краще за будь-що інше. Ось приклад того, як це працює. Припустімо, ми хочемо спростити наступну схему, що складається з кількох вентилів, і нам потрібно виміряти останні два кубіти:
 \[
 \tikzfig{q_circuit_new}
 \]
-There are a lot of 4-cycles here, and we've just learned that ZX-calculus is good at getting rid of 4-cycles.   The 4-cycles are here:
+Тут є багато 4-циклів, і ми щойно дізналися, що ZX-числення добре позбавляється від 4-циклів. 4-цикли тут:
 \[ 
 \tikzfig{QC1}    
 \] 
-However, they are not 4-cycles because they happen to look like rectangles, as the 4-cycles we are looking for has alternating colours as corners. We can do some (un-)fusing:
+Однак вони не є 4-циклами, тому що вони виглядають як прямокутники, оскільки 4-цикли, які ми шукаємо, мають чергування кольорів як кути. Ми можемо зробити деякі (роз-)злиття:
 \[ 
 \tikzfig{QC2}    
 \] 
-and now we can eliminate that square, and then re-arrange a bit:
+і тепер ми можемо видалити цей квадрат, а потім трохи переставити:
 \[ 
 \tikzfig{QC3}    
 \] 
-We can do the same for the other 4-cycles:
+Ми можемо зробити те саме для інших 4-циклів:
 \[ 
 \tikzfig{QC4}    
 \] 
-What we get has been called a `phase gadget'~\cite{KissingerTcount}.  By using the trick for eliminating 4-cycles again, one also finds that phase gadgets with opposite angles cancel out:
+Те, що ми отримуємо, було названо «фазовим гаджетом»~\cite{KissingerTcount}. Знову використовуючи трюк для усунення 4-циклів, можна також виявити, що фазові гаджети з протилежними кутами компенсуються:
 \[ 
 \tikzfig{QC6}      
 \] 
 
-Hey ho let's go.  We first bring in phase gadgets and then fuse: 
+Гей-гоп поїхали. Спочатку вводимо фазові гаджети, а потім зливаємо:
 \[
 \tikzfig{q_circuit_new_reduce} 
 \]
-We get a 2-cycle which as we know vanishes, and then the two qubits on the left completely disentangle from those on the right, so we can forget about them:
+Ми отримуємо 2-цикл, який, як ми знаємо, зникає, а потім два кубіти ліворуч повністю відокремлюються від кубітів праворуч, тому ми можемо про них забути:
 \[
 \tikzfig{q_circuit_new_reduce1}  
 \]
-resulting in the fact that we end up with what we started with, despite the whole circuit looking pretty complicated when we started.
+в результаті ми отримуємо те, з чого почали, незважаючи на те, що коли ми починали схема виглядала досить складною.
 
-While it is easy to work on small circuits by hand, we would also like to apply these techniques to circuits with thousands or millions of quantum gates, so it is natural to consider how these kinds of simplifications can be automated. A standard method for this is to replace equations, which can be applied in either direction, with directed rewrite rules. For example:
+Незважаючи на те, що легко працювати з невеликими схемами вручну, ми також хотіли б застосувати ці методи до схем із тисячами або мільйонами квантових вентилів, тому природно подумати про те, як такі види спрощень можна автоматизувати. Стандартним методом для цього є заміна рівнянь, які можна застосовувати в будь-якому напрямку, на спрямовані правила перезапису. Наприклад:
 \beq\label{eq:rewrite-rule}
 \tikzfig{spiderphaseg}\ \ =\ \ \tikzfig{spidercompphaseg}  
 \qquad\qquad\leadsto\qquad\qquad
 \tikzfig{spiderphaseg}\ \ \rightarrow\ \ \tikzfig{spidercompphaseg}   
 \eeq
-As long as the rules decrease some metric of the ZX-picture (e.g.~the number of spiders), applying them blindly until they don't apply any more will always terminate. In rewrite theory lingo, this means we can automate simplification of ZX-pictures by using a \textit{terminating rewrite system}, based on a subset of the ZX-calculus rules.
+Поки правила зменшують деякі показники ZX-зображення (наприклад, ~кількість павуків), застосування їх наосліп, доки вони не перестануть застосовуватися, завжди завершується. На жаргоні теорії перезапису це означає, що ми можемо автоматизувати спрощення ZX-зображень за допомогою \textit{системи завершення перезапису}, заснованої на підмножині правил ZX-числення.
 
-This rewriting can be formalised in such a way that ZX-pictures can be represented and transformed by software tools using a method called \textit{double-pushout graph rewriting}~\cite{dpo-old}. The basic theory for representing ZX-pictures as graphs and rewriting them was presented in~\cite{DK}, and recently extended in~\cite{bonchi2020string}. This forms the basis of a diagrammatic `proof assistant' called Quantomatic~\cite{quanto-cade}.
+Це переписування можна формалізувати таким чином, щоб ZX-зображення могли бути представлені та трансформовані програмними інструментами за допомогою методу під назвою \textit{переписування графа з подвійним висуванням}~\cite{dpo-old}. Базова теорія для представлення ZX-зображень у вигляді графів і їх переписування була представлена в ~\cite{DK} і нещодавно розширена в~\cite{bonchi2020string}. Це формує основу діаграмного `помічника з доказів' під назвою Quantomatic~\cite{quanto-cade}.
 
 
 % \TODOb{Some screenshots would be nice here.} \COMMh{Maybe just mention PyZX as an optimisation tool here? Because ours is just an algorithm implemented in Haskell code which just works for T-count reduction.} 
 
-By `breaking open' the gates in a quantum circuit, we can find simplifications in the ZX-calculus that would be hidden at the gate level. However, we may end up with something that doesn't look at all like a circuit any more. Hence, an important problem for ZX-based optimisation techniques is \textit{circuit extraction}, that is efficiently recovering a gate-decomposition from a simplified ZX-picture. This simplify-and-extract technique for ZX was introduced in~\cite{clifford-simp}, generalised to a broader family of diagrams in~\cite{backens2020there}, and forms the basis of the quantum circuit optimisation tool PyZX~\cite{pyzx} (Fig.~\ref{fig:pyzx}).
+«Розриваючи» вентилі в квантовій схемі, ми можемо знайти спрощення в ZX-численні, які були б приховані на рівні вентиля. Однак ми можемо отримати щось, що більше не буде схоже на схему. Отже, важливою проблемою для методів оптимізації на основі ZX є \textit{вилучення схеми}, яке ефективно відновлює вентильну декомпозицію зі спрощеного ZX-зображення. Ця техніка спрощення та виділення для ZX була введена в~\cite{clifford-simp}, узагальнена до ширшого сімейства діаграм у~\cite{backens2020there} та є основою інструменту квантової оптимізації схеми PyZX~\cite {pyzx} (Рис.~\ref{fig:pyzx}).
 
 \begin{figure}[]
   \centering
   \includegraphics[width=0.7\textwidth]{pyzx2.png}
-  \caption{PyZX is a Python library and circuit optimsation tool using the ZX-calculus. See \url{github.com/Quantomatic/pyzx}.}
+  \caption{PyZX — це бібліотека Python і інструмент оптимізації схем за допомогою ZX-числення. Дивись \url{github.com/Quantomatic/pyzx}.}
   \label{fig:pyzx}
 \end{figure}
 
 
-ZX-picture rewriting also forms the basis of a special-purpose circuit simplification tool STOMP \cite{de2020fast}, which reduces an important cost metric called the T-count of a quantum circuit using so-called `spider-nest' identities.
+Перезапис ZX-зображеннь також є основою спеціального інструменту спрощення схеми STOMP \cite{de2020fast}, який зменшує важливу метрику вартості, звану Т-кількістю квантової схеми, використовуючи так звані ідентичності «павукових гнізд».
 
 
-\section{Quantum Natural Language Processing}\label{sec:QNLP}%%%%%   
+\section{Квантова обробка природної мови}\label{sec:QNLP}%%%%%   
 
-ZX-calculus grew out of a more general pictorial approach to quantum foundations and quantum computation, called categorical quantum mechanics (CQM) \cite{AC1, Kindergarten}. In fact, what CQM does is propose an alternative formalism to Hilbert space, which puts the emphasis on how systems compose, rather than in which space systems are described. Thanks to the successes of ZX-calculus it is fair to say the this alternative has genuine practical advantages.  
+ZX-обчислення виникло з більш загального образного підходу до квантових основ і квантового числення, що називається категоріальною квантовою механікою (CQM) \cite{AC1, Kindergarten}. Насправді CQM пропонує альтернативний гільбертовому простору формалізм, який робить наголос на тому, як складаються системи, а не на тому, в якому просторі системи описуються. Завдяки успіхам ZX-числення можна справедливо сказати, що ця альтернатива має справжні практичні переваги.
 
-On the other hand, the graphical structures employed by CQM (and in many cases originating there) stretch well beyond quantum theory. For example they have been applied in
-computability theory~\cite{pavlovic2013monoidal}, models of concurrency~\cite{Sobocinski:2010aa}, control theory~\cite{Baez2014a,Bonchi2015}, the study of electrical~\cite{BaezFongElec} and digital~\cite{GhicaCircuit} circuits, game theory~\cite{ghani2016compositional}, broader cognitive features \cite{ConcSpacI}, natural language processing \cite{CSC, FrobMeanI}, and even consciousness research \cite{seanconscious, wangconscious}!
+З іншого боку, графічні структури, які використовує CQM (і в багатьох випадках походять звідти), виходять далеко за межі квантової теорії. Наприклад, вони були застосовані в
+теорія обчислюваності~\cite{pavlovic2013monoidal}, моделі паралелізму~\cite{Sobocinski:2010aa}, теорія керування~\cite{Baez2014a,Bonchi2015}, дослідження електричних~\cite{BaezFongElec} та цифрових~\cite{GhicaCircuit} схеми, теорія ігор~\cite{ghani2016compositional}, ширші когнітивні функції \cite{ConcSpacI}, обробка природної мови \cite{CSC, FrobMeanI} і навіть дослідження свідомості \cite{seanconscious, wangconscious}!
 
-As aspects of ZX-calculus are essential to some of these areas, one may argue that to some extent they are `quantum-like'. While this may only be taken as a rough analogy in some cases, in the particular area of natural language processing (NLP), it seems to be useful to take this quantum connection seriously. In the approach to NLP put forward in~\cite{CSC}, vector space models for word meaning were combined with grammatical structure to produce compositional models of sentence meaning. As this model makes crucial use of this tensor product of vector spaces, which gives exponential space requirements on a classical computer. On the other hand, forming tensor products on a quantum computer is cheap, as this is just what happens when you put two pieces of quantum data next to each other. This realisation led to the proposal of a quantum algorithm for natural language processing~\cite{WillC}. For various reasons, this first proposal was not very practical to run on quantum computers of today or the near future.
+Оскільки аспекти ZX-обчислення є важливими для деяких із цих областей, можна стверджувати, що певною мірою вони є «кванто-подібними». Хоча в деяких випадках це можна сприймати лише як приблизну аналогію, у конкретній області обробки природної мови (ОПМ) здається корисним сприймати цей квантовий зв’язок серйозно. У підході до ОПМ, запропонованому в~\cite{CSC}, моделі векторного простору для значення слова були об’єднані з граматичною структурою для створення композиційних моделей значення речення. Оскільки ця модель дуже важливо використовує цей тензорний добуток векторних просторів, що дає експоненціальні вимоги до простору на класичному комп’ютері. З іншого боку, формування тензорних добутків на квантовому комп’ютері є дешевим, оскільки це саме те, що відбувається, коли ви розміщуєте два фрагменти квантових даних поруч. Це усвідомлення призвело до пропозиції квантового алгоритму обробки природної мови~\cite{WillC}. З різних причин ця перша пропозиція була не дуже практичною для роботи на квантових комп’ютерах сьогодні чи найближчого майбутнього.
 
 %In particular, the approach to natural language processing put forward in~\cite{CSC, FrobMeanI} makes essential use of the tensor product of Hilbert spaces, and this happens to be something that is not easy to simulate on classical computers, as it results in an exponential blow-up of space requirements. % Also, known quantum algorithms may be adjusted to relevant tasks in these areas.  
 
@@ -681,153 +681,154 @@ As aspects of ZX-calculus are essential to some of these areas, one may argue th
 
 % Earlier work combined (i) models for natural language meaning, with (ii) models for grammar, within a quantum-like model \cite{CSC}, something that hadn't been established before---except for true/false-meaning.  However, this model came at an exponentially expensive space cost, just like when simulating quantum systems, a cost that vanished when implementing it on a quantum computer.  It also enjoyed quantum algorithmic speed-up.
 
-More recently, this proposal was adjusted and refined in order to fit on currently existing quantum hardware \cite{QPL-QNLP, QNLP-foundations}, and implemented on IBM's quantum devices~\cite{Nature}. This provided an example of a `quantum native' solution to a classical problem. That is, while the problem has nothing to do with quantum systems, it's structure still naturally lives on a quantum computer.
+Нещодавно цю пропозицію було скориговано та вдосконалено, щоб відповідати існуючому квантовому апаратному забезпеченню \cite{QPL-QNLP, QNLP-foundations}, і реалізовано на квантових пристроях IBM~\cite{Nature}. Це стало прикладом «нативно-квантового» рішення класичної проблеми. Тобто, хоча проблема не має нічого спільного з квантовими системами, її структура все ще природно живе на квантовому комп’ютері.
 
 
-An important refinement from the original algorithm to the one recently implemented on a real quantum computer was the use of the ZX-calculus to turn a picture representing a natural language sentence into a runnable quantum circuit that computes something about the sentence's meaning within the NLP model. Here is an example of a sentence and it's interpretation as a picture:
+Важливим удосконаленням від оригінального алгоритму до того, який нещодавно реалізовано на реальному квантовому комп’ютері, було використання ZX-числення для перетворення зображення, що представляє речення природної мови, у квантову схему, що виконується, яка обчислює щось про значення речення в рамках моделі NLP. Ось приклад речення та його інтерпретація як зображення:
 \[
 \llbracket \textrm{{\tt Alice hates Bob.}} \rrbracket \ \ =\ \ \ 
 \tikzfig{tv3}  
 \]
-To `run' this sentence on a quantum computer, we first interpret the black dot as the green ZX-spider.  We can now use ZX-calculus to turn it into circuit-form:  
+Щоб «запустити» це речення на квантовому комп’ютері, ми спочатку інтерпретуємо чорну крапку як зеленого ZX-павука. Тепер ми можемо використовувати ZX-числення, щоб перетворити його на схему:
 \[
 \tikzfig{tv4}
 \]
-We may then use ZX-calculus rules to massage this diagram into a different shape (who's meaning is equivalent):  
+Потім ми можемо використовувати правила ZX-числення, щоб масувати цю діаграму в іншу форму (із еквівалентним значенням):
 \begin{equation}\label{eq:elastic}
 \tikzfig{tv12}
 \end{equation}
-and replace the word-meanings by some pieces of ZX-picture with free parameters, $\alpha, \beta, ...$:
+і замініть значення слів деякими фрагментами ZX-картинки з вільними параметрами, $\alpha, \beta, ...$:
 \[
 \tikzfig{tv17more}
 \]
-These parameters are `trained' over the course of many runs of such circuits using machine learning techniques. The finished product is a quantum circuit capable in principle of comparing sentence meanings, answering questions, and doing many more linguistic tasks.
+Ці параметри «навчаються» протягом багатьох прогонів таких схем за допомогою методів машинного навчання. Кінцевий продукт — це квантова схема, здатна в принципі порівнювати значення речень, відповідати на запитання та виконувати багато інших лінгвістичних завдань.
 
+Це дуже просте речення використовує лише дрібку ZX-числення, але вже стає зрозуміло, що «еластичність» ZX корисна для таких завдань. Існує багато еквівалентних способів обчислення значення речення, і деякі краще підходять для квантового комп’ютера, ніж інші, тому «масаж» у рівнянні~\eqref{eq:elastic}. Це дійсно починає окупатися, коли ви починаєте розглядати більш складні речення, як це:
 This very simple sentence only uses a dash of ZX-calculus, but it already becomes clear that the `elasticity' of ZX is helpful for such tasks. There are many equivalent ways to compute the sentence meaning, and some fit better on a quantum computer than others, hence the `massaging' in equation~\eqref{eq:elastic}. This really starts to pay off when one starts to consider more complex sentences like this one:
 \[
 \tikzfig{relpronEduardo} 
 \]
-This can be seen as a compilation process, but one that doesn't take a program language as input, but natural language, and turns it into quantum machine code using the ZX-calculus to handle everything in between. The end result is a physics-first: the use of quantum systems to process natural language, with the help of the ZX-calculus.
+Це можна розглядати як процес компіляції, але такий, який приймає не мову програмування як вхідні дані, а природну мову, і перетворює його на квантовий машинний код за допомогою ZX-числення для обробки всього проміжного. Кінцевим результатом є фізика: використання квантових систем для обробки природної мови за допомогою ZX-числення.
 
-Quantum machine learning plays a central role in quantum natural language processing. Recently, the ZX-calculus has started to play a role in enhancing our understanding of quantum machine learning itself: first in picturing quantum ans\"atze~\cite{yeung2020diagrammatic}, and then in analysing important problems within the approach like the barren plateu phenomenon~\cite{zhao2021analyzing}.
+Квантове машинне навчання відіграє центральну роль у квантовій обробці природної мови. Останнім часом ZX-числення почало відігравати важливу роль у покращенні нашого розуміння самого квантового машинного навчання: спочатку у зображенні квантового ans\"atze~\cite{yeung2020diagrammatic}, а потім в аналізі важливих проблем у підході, таких як феномен безплідного плато~\cite{zhao2021analyzing}.
 
-\section{MBQC and Fault-tolerance}\label{sec:prac}%%%%%%%%%%%%     
+\section{MBQC і відмовостійкість}\label{sec:prac}%%%%%%%%%%%%     
      
-Measurement-based quantum computing (MBQC) is an alternative model of computation to the circuit model, where measurements, rather than quantum gates, are the main things driving the computation. The most well-studied MBQC setup is called the quantum \textit{one-way model}~\cite{MBQC2} In this setup, many qubits are prepared in a certain fixed state, called a \textit{graph state}, then single-qubit measurements are prepared in a particular order.
+Квантові обчислення на основі вимірювань (MBQC від Measurement-based quantum computing) — це модель обчислень, альтернативна схемній моделі, де вимірювання, а не квантові ворота, є основними елементами, що керують обчисленнями. Найбільш добре вивчена конфігурація MBQC називається квантовою \textit{односторонньою моделлю}~\cite{MBQC2}. У цій конфігурації багато кубітів готуються в певному фіксованому стані, що називається \textit{станом графа}, а потім одно-кубітовими вимірюваннями готуються у певному порядку.
 
-Notably, the choice of the kind of measurement performed can depend on past measurement outcomes, a principle referred to as \textit{feed-forward}. Even though each individual measurement outcome is non-deterministic, a clever application of feed-forward can produce deterministic quantum computations.
+Примітно, що вибір типу виконаного вимірювання може залежати від попередніх результатів вимірювання, принцип, який називають \textit{передаючим}. Незважаючи на те, що кожен окремий результат вимірювання є недетермінованим, розумне застосування прямого зв’язку може створити детерміновані квантові обчислення.
 
-For example, in the one-way model, measurements are defined by angles $\alpha \in [0, 2\pi)$. When they are performed, one of two things happens, non-deterministically:
-\[ \tikzfig{alpha-effect} \textrm{\quad or \quad} \tikzfig{alphapi-effect}. \]
-Suppose we actually wanted the first outcome for our computation, then the ZX-calculus tells us how to `push' the unwanted $\pi$ forward in time, changing future measurement angles:
+Наприклад, в односторонній моделі вимірювання визначаються кутами $\alpha \in [0, 2\pi)$. Коли вони виконуються, відбувається одна з двох недетермінованих речей:
+\[ \tikzfig{alpha-effect} \textrm{\quad або \quad} \tikzfig{alphapi-effect}. \]
+Припустімо, що ми справді хотіли отримати перший результат для нашого обчислення, тоді обчислення ZX підказує нам, як «просунути» небажаний $\pi$ вперед у часі, змінюючи майбутні кути вимірювання:
 \ctikzfig{phase-correct-meas}
 
-In fact, making these kinds of computations in the one-way model easier was one of the original motivations for the ZX-calculus. ZX was used, for example, to teach the one-way model in a fully-graphical way~\cite{CKbook}, give the first technique for translating MBQC computations into circuits that didn't require extra qubits or (non-physical) feedback loops~\cite{DP2}, and produce an alternative model for MBQC based on Pauli-ZZ interactions~\cite{Kissinger2019universalmbqc}, which are the native 2-qubit gate for most types of quantum hardware.
+Насправді полегшення таких обчислень в односторонній моделі було однією з початкових мотивацій для ZX-числення. ZX використовувався, наприклад, для навчання односторонній моделі повністю графічним способом~\cite{CKbook}, дати першу техніку для перетворення обчислень MBQC у схеми, які не потребують додаткових кубітів або (нефізичних) циклів зворотного зв’язку~\cite{DP2} і створити альтернативну модель для MBQC на основі взаємодії Паулі-ZZ~\cite{Kissinger2019universalmbqc}, які є рідними 2-кубітовими вентилями для більшості типів квантового обладнання.
 
-Another popular family of measurement-based models of quantum computation are various forms of fault-tolerant computations based on the \textit{surface code}, a type of quantum error correcting code. Quantum error correction, and fault-tolerance is a huge subject, and way too huge to cover here. However, the basic idea is that many low-level `physical' qubits correspond to a few `logical' qubits. When doing computation in this way, it is useful to abstract away individual operations on the physical qubit to and certain high-level logical transformations. A particularly nice instance of this is \textit{lattice surgery}~\cite{Horsman2012}, which was co-developed by one of the authors of this survey. In lattice surgery, the main logical operations are `Z-split', `X-split', `Z-merge', and `X-merge'. You might notice that I just said `ZX' twice, so maybe this is a job for the ZX-calculus!
+Ще одна популярна сім’я моделей квантового обчислення, заснованих на вимірюваннях, — це різні форми стійких до помилок обчислень на основі \textit{поверхневого коду}, типу квантового коду з виправленням помилок. Квантова корекція помилок і відмовостійкість — це величезна тема, і надто велика, щоб охопити її тут. Однак основна ідея полягає в тому, що багато «фізичних» кубітів низького рівня відповідають кільком «логічним» кубітам. Виконуючи обчислення таким чином, корисно абстрагуватися від окремих операцій над фізичним кубітом і певних логічних перетворень високого рівня. Особливо гарним прикладом цього є \textit{решіткова хірургія}~\cite{Horsman2012}, яку спільно розробив один із авторів цього опитування. У решітковій хірургії основними логічними операціями є «Z-розділення, «X-розділення, «Z-злиття» та «X-злиття». Можливо, ви помітили, що я щойно двічі сказав «ZX», тому, можливо, це робота для ZX-числення!
 
-Indeed, in~\cite{latticeZX}, the authors showed that ZX is a natural language for lattice surgery computations. For one thing, the basic operations are exactly what they sound like:
+Дійсно, у ~\cite{latticeZX} автори показали, що ZX є природною мовою для обчислень решіткової хірургії. З одного боку, основні операції є саме такими, як вони звучать:
 \ctikzfig{lattice-surgery}
 
-Since these are just spiders, we already know how to use lattice surgery operations to build, for example, a CNOT gate:
+Оскільки це просто павуки, ми вже знаємо, як використовувати операції решітки, щоб побудувати, наприклад, вентилі CNOT:
 \begin{equation}\label{eq:lattice-cnot}
 \tikzfig{cnotfromspiders} \ \ =\ \ \tikzfig{CNOT}
 \end{equation}
-While splits can be done deterministically, merges might introduce a $\pi$ error. However, much like in the one-way model, these errors can often be fed-forward using ZX-rules and accounted for by later operations:
+Хоча розділення можна виконувати детерміновано, злиття може викликати помилку $\pi$. Однак, як і в односторонній моделі, ці помилки часто можуть бути передані вперед за допомогою ZX-правил і враховані пізнішими операціями:
 \[ \tikzfig{lattice-feed-fwd} \]
-This ZX language for lattice surgery was given a formal foundation in~\cite{PauliFusion} and variations have been used by groups at Google~\cite{Gidney2019} and NII Toyko~\cite{NemotoZXbraids} for optimising various aspects of fault-tolerant computations.
+Цю мову ZX для решітки було закладено в~\cite{PauliFusion}, а її варіанти використовувалися групами Google~\cite{Gidney2019} і NII Toyko~\cite{NemotoZXbraids} для оптимізації різних аспектів відмовостійкості обчислення.
 
-While originally envisioned as a model based on the new primitives of split and merge, subsequent work has focused mainly on using lattice surgery as a tool for building CNOT gates as in equation~\eqref{eq:lattice-cnot} (with a few notable exceptions, e.g.~\cite{Litinski2019gameofsurfacecodes}). Interestingly, in 2020 we saw the first experimental demonstration of logical qubit entanglement using lattice surgery~\cite[\textit{Nature}]{LatticeSurgeryNature}, where the authors noted that it was much more efficient to use the primitive split and merge operations to prepare an entangled state. They did it like this:
+Хоча спочатку передбачалося як модель, заснована на нових примітивах розділення та злиття, подальша робота була зосереджена головним чином на використанні решіткової хірургії як інструменту для створення вентилів CNOT, як у рівнянні~\eqref{eq:lattice-cnot} (з кількома помітними винятки, наприклад ~\cite{Litinski2019gameofsurfacecodes}). Цікаво, що у 2020 році ми побачили першу експериментальну демонстрацію логічної заплутаності кубітів за допомогою решітчатої хірургії~\cite[\textit{Nature}]{LatticeSurgeryNature}, де автори відзначили, що було набагато ефективніше використовувати примітивні операції поділу та злиття для підготувати заплутаного стану. Вони зробили це так:
 \ctikzfig{lattice-cup}
 
 %% TODO: incorporate....
 
 %% For the first time, entangling lattice surgery has in fact recently been experimentally demonstrated [ref]. The two experiments (Bell state generation and quantum teleportation) both use a merge followed by a split. We immediately see in ZX this is a spider [fig a]. We can use this to easily represent and verify what these two experiments are doing (much more simply than the methods used in the paper). For example, the first experiment, Bell state creation, puts two \ket{0} states as inputs to the spider, and using ZX we can verify Bell state creation in a single line [fig b]. (For experiment 2, teleportation, we need extra types of nodes for the measurement feed-forwards, as defined in [45]. Verifying the experiment diagrammatically is, however, then equally simple). The authors of [ref] themselves note that, by using split and merge as basic, they use many fewer operations than if they’d implemented the equivalent CNOT-based circuit. The power of using ZX to represent these operations will only increase as both theoretical and experimental capabilities continue to grow. 
 
-\section{Kindergarten quantum mechanics: the experiment}\label{sec:exp}
+\section{Дитсадкова садок квантова механіка: дослід}\label{sec:exp}
 
-In the abstract, we claimed that this paper is a spiritual child of the 2005 lecture notes \textit{Kindergarten Quantum Mechanics}~\cite{Kindergarten}, but in fact, it is rather a spiritual grandchild. The middle generation was a paper called \textit{Quantum Picturalism}~\cite{ContPhys}, which contained among other things a vague proposal for testing the effectiveness of the pictorial formalism.  It was claimed that, given the proper learning materials, high-school students could outperform their teachers in quantum theory, if the students used the pictorial formalism while the teachers used the Hilbert space formalism.
+В анотації ми стверджували, що ця стаття є духовним дитям конспектів лекцій 2005 року \textit{Дітсадкова квантова механіка}~\cite{Kindergarten}, але насправді це скоріше духовний онук. Середнім поколінням була стаття під назвою \textit{Квантовий піктуралізм}~\cite{ContPhys}, яка містила, серед іншого, розпливчасту пропозицію перевірити ефективність пікторального формалізму. Стверджувалося, що за належних навчальних матеріалів учні середньої школи могли б перевершити своїх учителів у квантовій теорії, якщо учні використовували пікторальний формалізм, а вчителі використовували формалізм простору Гільберта.
 
-Now, ten years later, we have the materials in place for a far more ambitious goal: getting high-school students to do state-of-the-art quantum computing, on par with the abilities of Oxford post-graduate students.  First of all, this required a book specifically targeted at high-schoolers, and a set of tasks to set both the high-schoolers and the postgrads, and some other interesting groups (like art students!). The book~\cite{CoeckeGogioso2018} and the tasks are written, but still under-wraps until the experiment is done. Without giving too much away, this should give some idea of the tone of the book:
+Тепер, десять років по тому, у нас є матеріали для набагато амбітнішої мети: змусити старшокласників використовувати найсучасніші квантові обчислення на рівні з оксфордськими аспірантами. По-перше, для цього була потрібна книжка, спеціально розрахована на старшокласників, і набір завдань, які ставили б і старшокласники, і аспіранти, і деякі інші цікаві групи (наприклад, студенти мистецтв!). Книга~\cite{CoeckeGogioso2018} і завдання написані, але все ще закриті, поки експеримент не буде завершено. Не розкриваючи дуже багато, це повинно дати деяке уявлення про тон книги:
 \[
 \epsfig{figure=figures/10,width=190pt}
 \qquad
 \epsfig{figure=figures/11,width=190pt}
 \]
-The experiments have already begun. Watch this space!
+Експерименти вже почалися. Слідкуйте за цим напрямком!
 
-\section{How we got here: a brief history of the ZX-calculus}\label{sec:furtherrefs}%%%%%%%%%%%%    
+\section{Як ми тут опинилися: коротка історія ZX-числення}\label{sec:furtherrefs}%%%%%%%%%%%%    
 
-\paragraph{Conception.} ZX-calculus was `born' in a rejected conference abstract \cite{CD0} (QIP 2007), written in the mountains north of Tehran.  The referee reports said things like:
+\paragraph{Зачаття.} ZX-числення «народилося» у відхиленій анотації до конференції \cite{CD0} (QIP 2007), написаній у горах на північ від Тегерана. Доповіді суддів говорили про такі речі:
 \begin{center}
-`Looks cute, so what?'
+`Виглядає мило, і що?'
 \end{center}
 % The applications of quantum circuit rewriting and conversion between different quantum computational models like MBQC were already there. 
 
-The basic idea at the time was to expand categorical quantum mechanics to complementary quantum observables, with the now-stated aim to make it directly applicable to practical quantum computing, but the deeper goal was to do something the program of Birkhoff-von Neumann quantum logic~\cite{BvN} failed to do:
-produce from first principles a full-fledged alternative to Hilbert space quantum theory. Strong complementarity was reverse-engineered by looking at `generalised flow' for MBQC \cite{DP2},  and phases just followed from general abstract nonsense, a.k.a.~category theory. 
+Основна ідея того часу полягала в тому, щоб розширити категориальну квантову механіку до комплементарних квантових спостережуваних(observables), із заявленою нині метою зробити її безпосередньо застосовною до практичних квантових обчислень, але глибша мета полягала в тому, щоб зробити щось що програма квантової логіки Біркгофа-фон Неймана. ~\cite{BvN} не змогла виконати:
+створити з перших принципів повноцінну альтернативу квантовій теорії простору Гільберта. Сильну взаємодоповнюваність було спроектовано шляхом зворотного проектування, розглядаючи «узагальнений потік» для MBQC \cite{DP2}, а фази просто випливають із загальної абстрактної нісенітниці, під назвою теорія категорій.
 
 % on the  back of the historical failure of formalisms such as quantum logic  and generalised probabilistic theories \cite{Ludwig}.\footnote{We are talking here about genuine alternatives to Hilbert space, not toy theories nor generalised frameworks, where both quantum logic and generalised probabilistic theories are very useful.}  Strong complementarity was reverse-engineered by looking at `generalised flow' for MBQC \cite{DP2},  and phases just followed from general abstract nonsense, a.k.a.~category theory.  
   
 %This was (the bitter part of) the quantum computing community speaking at that time. 
-ZX-calculus was `officially' introduced in the accepted conference paper \cite[ICALP, 2008]{CD1}. A slightly unfortunate statement in \cite{CD1} concerns the relative status of complementarity (\ref{eq:bialg4}) and strong complementarity (\ref{eq:bialg3}): it was shown (in Theorem 3) that under a `mild assumption' these are equivalent.  Later, in the 85 page  corrected and substantially expanded journal version \cite[NJP, 2011]{CD2} that `mild assumption' was in Thm.~9.24 shown to be essentially equivalent to strong complementarity. A proper treatment of the (huge!) difference between complementarity and strong complementarity appeared in \cite{CDKZ}, by establishing a connection with non-locality, and fully classifying strongly complementary bases. (The full classification of complementarity bases is still completely open, and has swallowed several careers whole.)   
+ZX-числення було «офіційно» представлено в прийнятій статті на конференції \cite[ICALP, 2008]{CD1}. Трохи невдале твердження в \cite{CD1} стосується відносного статусу комплементарності (\ref{eq:bialg4}) і сильної комплементарності (\ref{eq:bialg3}): було показано (у теоремі 3), що під `м’яким припущення', вони еквівалентні. Пізніше, у 85-сторінковій виправленій та суттєво розширеній журнальній версії \cite[NJP, 2011]{CD2}, це «м’яке припущення» було в Теор.~9.24 показано, що воно по суті еквівалентне сильній комплементарності. Належне трактування (величезної!) різниці між комплементарністю та сильною комплементарністю з’явилося в \cite{CDKZ} шляхом встановлення зв’язку з нелокальністю та повної класифікації сильно комплементарних основ. (Повна класифікація основ комплементарності все ще повністю відкрита і цілком поглинула декілька кар'єр.)
 
-\paragraph{Early rule fuzz.} One of the early goals of the ZX-calculus was to fully understand MBQC using pictures. In doing so, it quickly become clear that the Euler decomposition rule on the right of equation (\ref{hbox-colour-change}) was needed in addition to rules that were already established~\cite{duncan2009graph}.
-This than settled the core of ZX-calculus, as it still is now.
+\paragraph{Ранішній двіж із правилами.} Однією з перших цілей ZX-числення було повне розуміння MBQC за допомогою зображень. При цьому швидко стало зрозуміло, що правило розкладання Ейлера в правій частині рівняння (\ref{hbox-colour-change}) потрібне на додаток до правил, які вже були встановлені~\cite{duncan2009graph}.
+Це стало основою ZX-числення, якою воно залишається і зараз.
 
-After that, we attempted to move ZX-calculus beyond bog-standard quantum gates and MBQC to describe W-states. In quantum entanglement theory, there is `essentially' only one two-qubit entangled state, up to equivalence by so-called \textit{stochastic local operations}, but for 3 qubits there are two~\cite{DurVC}. One is called a GHZ-state, and is just a 3-legged spider, and the other is called a W-state.
+Після цього ми спробували вивести ZX-числення за межі стандартних квантових вентилів та MBQC для опису W-станів. У квантовій теорії заплутаності існує «по суті» лише один двокубітовий заплутаний стан, аж до еквівалентності за так званими \textit{стохастичними локальними операціями}, але для 3 кубітів є два~\cite{DurVC}. Один називається GHZ-станом і є просто 3-лапим павуком, а інший називається W-станом.
 
-At first, a lot of time and energy was spent trying to cram W-states into the ZX-calculus. Along the way we got a useful new ZX-rule (\textit{supplementarity}~\cite{CEGHZW}), but we didn't get much closer to being able to work with W-states.
-This early defeat made some of us consider an alternative to the ZX calculus which is now called the...
-  
-\paragraph{ZW-calculus.} The completeness of ZX-calculus was initially proven using completeness of another calculus: the ZW-calculus, a.k.a. the GHZ/W calculus~\cite{CK}.  The key idea was to slightly vary the rules governing spiders
-as follows:
+Спочатку було витрачено багато часу та енергії, намагаючись втиснути W-стани у ZX-числення. На цьому шялху ми отримали нове корисне ZX-правило (\textit{доповненість}~\cite{CEGHZW}), але ми не наблизилися до можливості працювати з W-станами.
+Ця рання поразка змусила деяких із нас розглянути альтернативу ZX-численню, яке зараз називається...
+
+\paragraph{ZW-числення.} Повнота ZX-числення спочатку була доведена за допомогою повноти іншого числення: ZW-числення, також відомого як GHZ/W числення~\cite{CK}. Ключова ідея полягала в тому, щоб дещо змінити правила, що керують павуками
+наступним чином:
 \[
 \tikzfig{singleleg1}\ \ =\ \ \tikzfig{singleleg2} 
 \qquad\mbox{but}\qquad
 \tikzfig{doubleleg1}\ \ =\ \ \tikzfig{doubleleg2}
 \]
-These spiders were called W-spiders, as the W-state was an instance of them.  While this seemed like a relatively minor tweak to the notion of spiders, it turned out that, unlike the ZX-calculus, it was relatively straightforward to find a complete set of rules~\cite{Amar}, owing in part to the fact that the ZW-calculus it more directly encodes the rules of arithmetic~\cite{CKMR}.
+Ці павуки були названі W-павуками, оскільки W-стан був їх прикладом. Хоча це здавалося відносно незначною зміною поняття павуків, виявилося, що, на відміну від обчислення ZX, було відносно просто знайти повний набір правил~\cite{Amar}, частково завдяки тому факту, що ZW-числення це більш безпосередньо кодує правила арифметики~\cite{CKMR}.
 
-The first completeness theorems for the ZX-calculus were proven using a somewhat roundabout technique that encoded ZX-pictures as ZW-pictures and showed (painstakingly) that each of the ZW-rules was derivable in ZX. This proved an important step in the progress of ZX theory, but the original \textit{raison d'etre} for ZW remains open:
+Перші теореми повноти для ZX-числення були доведені за допомогою дещо обхідної техніки, яка кодувала ZX-картинки як ZW-картинки та показала (хворобливо-ретельно), що кожне з ZW-правил можна вивести в ZX. Це виявилося важливим кроком у прогресі теорії ZX, але оригінальний \textit{raison d'etre} для ZW залишається відкритим:
 
 \begin{open}
-  Provide a classification of many-qubit entanglement (which is still poorly understood beyond three qubits) using the ZW-calculus.
+  Надайте класифікацію багатокубітної заплутаності (яка все ще погано вивчена за межами трьох кубітів) за допомогою ZW-числення.
 \end{open} 
 
-\paragraph{A dead end: the `XYZ-calculus'.}  An early variation on ZX-calculus was the trichromatic calculus of \cite{LangC2}, where a third colour (i.e.~the Y-observable) was added.  As one cannot have the cups for all three observable coincide, for the sake of symmetry, none did. This resulted in a substantially more complex rule-set and the calculus was never really used.  The reason it shouldn't be used, probably, is because of monogamy of strong complementarity \cite{CKbook}. That is, at most two colours of spiders can satisfy the strong complementarity rules described in section~\ref{sec:compl} with each other, so to accommodate more colours, you have to put some sort of `awkward twist'.
+\paragraph{Тупик: `XYZ-числення'.} Ранньою варіацією ZX-числення було трихроматичне числення \cite{LangC2}, де було додано третій колір (тобто ~Y-спостережуваний). Оскільки чашки для всіх трьох спостережуваних не можуть збігатися, заради симетрії жодна з них не збігалася. Це призвело до значно складнішого набору правил, і обчислення насправді ніколи не використовувалося. Можливо, причиною, по якій його не слід використовувати, є моногамія сильної комплементарності \cite{CKbook}. Тобто щонайбільше два кольори павуків можуть задовольнити суворі правила взаємодоповнюваності, описані в розділі~\ref{sec:compl} один з одним, тому, щоб пристосувати більше кольорів, ви повинні застосувати якийсь `незручний поворот'.
 
-\paragraph{(In)completeness and presentations.}
-The rules of ZX-calculus as firstly introduced in \cite{CD2} without much consideration for scalar factors. These tended to be ignored when it was convenient, which causes problems e.g. for computing probabilities of quantum measurement outcomes. Scalars were seriously considered in the rules for the stabilizer fragment of ZX-calculus \cite{backens_making_2015}.  Minimality (whether a rule is non-derivable from other rules) of ZX rules was initially considered in \cite{bpw2020} for stabilizer ZX-calculus, then it was further investigated for Clifford+T ZX-calculus in \cite{BorunMSc}.
+\paragraph{(Не)повнота та презентації.}
+Правила ZX-числення, вперше представлені в \cite{CD2} без особливого врахування скалярних факторів. Їх, як правило, ігнорували, коли це було зручно, що спричиняло проблеми, напр. для обчислення ймовірностей результатів квантових вимірювань. Скаляри були серйозно розглянуті в правилах для фрагмента стабілізатора ZX-числення \cite{backens_making_2015}. Мінімальність (чи правило не виводиться з інших правил) правил ZX спочатку розглядалося в \cite{bpw2020} для стабілізаційного ZX-числення, потім це було додатково досліджено для Clifford+T ZX-числення в \cite{BorunMSc}.
 
-As mentioned in section~\ref{sec:compl}, the first breakthrough for completeness of ZX-calculus was made by Backens \cite{Backens} for the  stabilizer fragment. The completeness of the real stabilizer ZX-calculus then followed in \cite{perdrixpivoting}. Furthermore, Backens proved that the scalar version of stabilizer ZX-calculus and the single-qubit Clifford+T fragment of ZX are complete  \cite{backens_making_2015, Backens2}. At the same time, Schr\"oder de Witt and Zamdzhiev showed by a counter-example that ZX-calculus can't be universally complete if it is just equipped with stabiliser-style rules~\cite{Vladimir}. They also conjectured that completeness could be achieved by adding a rule of form  
-\eqref{colour-change-rule}. Later on, Perdrix and Wang proved that the stabiliser-style ZX even can't be complete for the multi-qubit Clifford+T fragment, and the supplementarity rule is necessary \cite{PerdrixWang}.
+Як згадувалося в розділі~\ref{sec:compl}, перший прорив у повноті ZX-числення був зроблений Бекенсом \cite{Backens} для фрагмента стабілізатора. У \cite{perdrixpivoting} наведено повноту ZX-числення реального стабілізатора. Крім того, Бекенс довів, що скалярна версія ZX-числення стабілізатора та однокубітний Clifford+T фрагмент ZX є повним \cite{backens_making_2015, Backens2}. У той же час Шредер де Вітт і Замджієв показали на протилежному прикладі, що ZX-числення не може бути універсально повним, якщо воно просто оснащене правилами типу стабілізатора~\cite{Vladimir}. Вони також припустили, що повноти можна досягти, додавши правило форми
+\eqref{colour-change-rule}. Пізніше Пердрікс і Ван довели, що стабілізований-ZX навіть не може бути повним для мультикубітового фрагмента Clifford+T, і необхідне правило додатковості \cite{PerdrixWang}.
 
-At some point, some people (including at least one of the authors of this paper) started to believe there would be \textit{no} finite set of rules which would be complete for any substantial extension of stabiliser quantum theory.
+У якийсь момент деякі люди (включаючи принаймні одного з авторів цієї статті) почали вірити, що \textit{немає} кінцевого набору правил, який був би повним для будь-якого істотного розширення квантової теорії стабілізатора.
 
-Fortunately, the aforementioned author didn't put money on it, as 2017-18 saw a veritable frenzy of completeness results for ZX. First Jeandel, Perdrix, and Vilmart (a.k.a. `team Nancy') proved the completeness of multi-qubit Clifford+T ZX-calculus with a translation from ZW-calculus \cite{jeandel2018complete}. Very soon after, Ng and Wang finished the first complete axiomatisation for universal qubit ZX-calculus using a similar approach to the Nancy team and by introducing some new generators to the theory~\cite{ng2017universal}. They were also able to give a (different) complete axiomatisation for the multi-qubit Clifford+T fragment \cite{ngwang2, hadzihasanovic2018two}. Inspired by Ng and Wang's results, the Nancy team gave another complete axiomatisation for universal qubit ZX-calculus in terms of original ZX spiders~\cite{jeandel2018diagrammatic}. Furthermore, they proposed a normal form for ZX diagrams based on which universal completeness was still obtained without any resort to translation from ZW-calculus \cite{jpvnormalform}. At last, as we mentioned in section \ref{sec:compl}, Vilmart successfully proved Schr\"oder de Witt and Zamdzhiev's conjecture with the explicit expression of~\eqref{colour-change-rule} \cite{vilmart2019near}.
+На щастя, вищезгаданий автор не поставив на це, оскільки в 2017-18 роках спостерігався справжній ажіотаж щодо результатів повноти для ZX. Спочатку Jeandel, Perdrix і Vilmart (він же «команда Ненсі») довели повноту багатокубітного Clifford+T ZX-числення за допомогою перекладу ZW-обчислення \cite{jeandel2018complete}. Дуже скоро після цього Нґ і Ван закінчили першу повну аксіоматизацію ZX-числення для універсального кубіта, використовуючи підхід подібний до команди Ненсі та ввівши кілька нових генераторів до теорії~\cite{ng2017universal}. Вони також змогли дати (іншу) повну аксіоматизацію для багатокубітного Clifford+T фрагмента \cite{ngwang2, hadzihasanovic2018two}. Надихнувшись результатами Нґа та Ванга, команда Ненсі надала ще одну повну аксіоматизацію універсального кубіта ZX-числення в термінах оригінальних ZX-павуків~\cite{jeandel2018diagrammatic}. Крім того, вони запропонували нормальну форму для діаграм ZX, на основі якої універсальна повнота все ще була отримана без будь-якого перекладу із ZW-числення \cite{jpvnormalform}. Нарешті, як ми згадували в розділі \ref{sec:compl}, Вільмарт успішно довів гіпотезу Шредера де Вітта та Замджієва за допомогою явного виразу~\eqref{colour-change-rule} \cite{vilmart2019near}.
 
 
-\paragraph{Precursors and successors.} The kind of pictorial reasoning used in this paper was initiated by Penrose as a more intuitive alternative for ordinary tensor notation \cite{Penrose}. In fact, even though Penrose had reportedly been using the notation since he was an undergrad, he didn't think too highly of its prospects, mainly due to typesetting issues. In his 1984 text \textit{Spinors and Spacetime}, he notes:
+\paragraph{Попередники та наступники.} Різновид пікторального міркування, використаного в цій статті, було започатковано Пенроузом як більш інтуїтивна альтернатива звичайному тензорному запису \cite{Penrose}. Насправді, незважаючи на те, що Пенроуз, як повідомляється, використовував нотацію ще з студентства, він не надто високо оцінював її перспективи, головним чином через проблеми з набором. У своєму тексті \textit{Спінори та простір-час(Spinors and Spacetime)} 1984 року він зазначає:
 \begin{quote}
-The notation has been found very useful in practice as it greatly
-simplifies the appearance of complicated tensor or spinor equations,
-the various interrelations expressed being discernible at a glance.
-Unfortunately the notation seems to be of value mainly for private
-calculations because it cannot be printed in the normal way.
+Нотацію було визнано дуже корисною на практиці, оскільки вона дуже сильно
+спрощує вигляд складних тензорних або спінорних рівнянь,
+різні виражені взаємозв'язки, які помітні з першого погляду.
+На жаль, нотація, здається, має значення переважно для персональних
+розрахунків, оскільки його неможливо надрукувати звичайним способом.
 \end{quote}
 
-Of course a lot can change in 20 years. In 2004, this notation was adopted to the specific needs of (finite-dimensional) quantum theory in CQM \cite{AC1}, which started the compositional axiomatization of quantum theory. 
+Звичайно, за 20 років багато чого може змінитися. У 2004 році ця нотація була прийнята для конкретних потреб (скінченно-вимірної) квантової теорії в CQM \cite{AC1}, що поклало початок композиційній аксіоматизації квантової теорії.
 
-Spiders, in their algebraic incarnation as certain Frobenius algebras, first appeared in the category-theory literature \cite{CarboniWalters, Lack}. Hopf algebras, which in ZX-calculus terms correspond to the strong complementarity rules in absence of the spider-rules,  have been around in their current concrete form since 1956~\cite{cartier2007primer}, when Cartier generalised earlier definitions based on structure theorems on the cohomology of compact Lie groups by Hopf, Samelson, Borel and others in the 1940s.   
+Павуки у своєму алгебраїчному втіленні як певні алгебри Фробеніуса вперше з’явилися в літературі з теорії категорій \cite{CarboniWalters, Lack}. Алгебри Хопфа, які в термінах ZX-числення відповідають сильним правилам комплементарності за відсутності правил павука, і існують у своїй поточній конкретній формі з 1956 року~\cite{cartier2007primer}, коли Картьє узагальнив попередні визначення на основі структурних теорем про когомології компактних груп Лі Хопфа, Самельсона, Бореля та інших у 1940-х роках.
 %One obtains abstract Hopf algebras when representing a Hopf algebra internally in the category of vector spaces, and then replacing this ambient category with any  (symmetric) monodial category.  
-Hopf algebras and their representations are now studied extensively under of moniker of \textit{quantum group theory} (see e.g.~\cite{majid2000foundations}).
+Алгебри Хопфа та їхні репрезентації зараз широко вивчаються під назвою \textit{квантова теорія груп} (див., наприклад, ~\cite{majid2000foundations}).
 
-The idea of depicted (classical boolean) circuits as pictures of more basic components, and the pictorial depiction of the Hopf algebra (a.k.a. strong complementarity) laws, goes back to Lafont~\cite{Lafont}. However, to capture the full richness of quantum circuits, one needs not just a single Hopf algebra, but a pair of them which interact in a special way (namely via the Frobenius, a.k.a. spider fusion laws). This structure was first made explicit, to the best of our knowledge, as part of the ZX-calculus.
+Ідея зображених (класичних булевих) схем як зображень більш базових компонентів, а також графічне зображення законів алгебри Хопфа (він же сильної додатковості) сходить до Лафонта~\cite{Lafont}. Однак, щоб охопити повне багатство квантових схем, потрібна не лише одна алгебра Хопфа, а пара із них, які взаємодіють особливим чином (а саме через закони Фробеніуса, або ж закони злиття павуків). Наскільки нам відомо, цю структуру вперше було явно розкрито як частина ZX-числення.
 
-Notably, this structure contains non-trivial algebraic parts (i.e. those with operations taking many inputs) and non-trivial \textit{co-algebraic} parts (i.e. those with operations producing multiple outputs), which interact with each other. This novel mathematical structure is interesting in its own right, and has since been studied using category theory~\cite{PawelRel,RossKevin,bonchi2017interacting,bonchi2019graphical} and found a multitude of applications e.g. in the study of signal-flow graphs~\cite{signalflownew} and concurrent systems~\cite{bonchi2019concurrent}.
+Примітно, що ця структура містить нетривіальні алгебраїчні частини (тобто ті, де операції приймають багато вхідних даних) і нетривіальні \textit{коалгебраїчні} частини (тобто ті, де операції створюють кілька виходів), які взаємодіють одна з одною. Ця нова математична структура цікава сама по собі, і з тих пір її вивчали за допомогою теорії категорій~\cite{PawelRel,RossKevin,bonchi2017interacting,bonchi2019graphical} і знайшли безліч застосувань, наприклад. у вивченні графів потоку сигналу~\cite{signalflownew} і паралельних систем~\cite{bonchi2019concurrent}.
 
-\paragraph{The future.}  New papers on ZX-calculus are appearing at a steadily increasing rate, and we can only expect that increase to continue.  There is a regularly updated list of papers on ZX-calculus available here that you may want to consult in the future:
+\paragraph{Майбутнє.}  Нові статті про ZX-обчислення з’являються зі стабільною швидкістю, і ми можемо лише очікувати, що це зростання триватиме. Тут доступний регулярно оновлюваний список документів із обчислення ZX, з якими ви можете ознайомитись у майбутньому:
 \begin{center}
   \href{https://zxcalculus.com/publications.html}{\tt https://zxcalculus.com/publications.html}
 \end{center}
