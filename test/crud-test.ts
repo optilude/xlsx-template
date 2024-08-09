@@ -1343,19 +1343,23 @@ describe("CRUD operations", function() {
                     pushDownPageBreakOnTableSubstitution : true
                 };
                 var t = new XlsxTemplate(buffer, option);
-                var data = {
-                    myarray : [
-                        {name : "foo"},
-                        {name : "john"},
-                        {name : "doe"},
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
                     ]
-                };
-                t.substitute(1, data);
+                });
                 var newData = t.generate();
                 var workbook = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
 
                 workbook.findall("definedNames/definedName").forEach(function(name) {
-                    expect(name.text === "Feuil1!$A$1:$J$12");
+                    expect(name.text === "Feuil1!$A$1:$J$13");
                 });
 
                 fs.writeFileSync("test/output/movePageBreakOption.xlsx", newData, "binary");

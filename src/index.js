@@ -1707,50 +1707,51 @@ class Workbook {
 
             const formulaParts = self.splitDefinedNameText(name.text, self.sheet.name);
 
-            formulaParts.forEach(function (part) {
-                if (!part.isRef || !part.ref.includes(self.sheet.name)) return;
-
-                if (self.isRange(part.ref)) {
-                    const namedRange = self.splitRange(part.ref);
-                    const namedRangeStart = self.splitRef(namedRange.start);
+            if (self.option && self.option.pushDownPageBreakOnTableSubstitution && name.attrib.name === "_xlnm.Print_Area") {
+                if (self.isRange(name.text)) {
+                    const namedRange = self.splitRange(name.text);
                     const namedRangeEnd = self.splitRef(namedRange.end);
 
-                    if (namedRangeStart.row > currentRow) {
+                    namedRangeEnd.row += numRows;
+                    name.text = self.joinRange({
+                        start: namedRange.start,
+                        end: self.joinRef(namedRangeEnd),
+                    })
+                } else {
+                    console.error("Illegal PageBreak, skipping adjustment");
+                }
+            } else {
+                formulaParts.forEach(function (part) {
+                    if (!part.isRef || !part.ref.includes(self.sheet.name)) return;
 
-                        namedRangeStart.row += numRows;
-                        namedRangeEnd.row += numRows;
+                    if (self.isRange(part.ref)) {
+                        const namedRange = self.splitRange(part.ref);
+                        const namedRangeStart = self.splitRef(namedRange.start);
+                        const namedRangeEnd = self.splitRef(namedRange.end);
 
-                        part.ref = self.joinRange({
-                            start: self.joinRef(namedRangeStart),
-                            end: self.joinRef(namedRangeEnd),
-                        });
-                    }
+                        if (namedRangeStart.row > currentRow) {
 
-                    /* TODO - what is it for, what does it do? Feels like this pushes the ref down a 2nd time
-                    if (self.option && self.option.pushDownPageBreakOnTableSubstitution) {
-                        if (self.sheet.name == part.ref.split("!")[0].replace(/'/gi, "")) {
-                            if (namedRangeEnd.row > currentRow) {
-                                namedRangeEnd.row += numRows;
-                                part.ref = self.joinRange({
-                                    start: self.joinRef(namedRangeStart),
-                                    end: self.joinRef(namedRangeEnd),
-                                });
-                            }
+                            namedRangeStart.row += numRows;
+                            namedRangeEnd.row += numRows;
+
+                            part.ref = self.joinRange({
+                                start: self.joinRef(namedRangeStart),
+                                end: self.joinRef(namedRangeEnd),
+                            });
+                        }
+                    } else {
+                        const namedRef = self.splitRef(part.ref);
+
+                        if (namedRef.row > currentRow) {
+                            namedRef.row += numRows;
+
+                            part.ref = self.joinRef(namedRef);
                         }
                     }
-                     */
-                } else {
-                    const namedRef = self.splitRef(part.ref);
+                });
 
-                    if (namedRef.row > currentRow) {
-                        namedRef.row += numRows;
-
-                        part.ref = self.joinRef(namedRef);
-                    }
-                }
-            });
-
-            name.text = self.joinDefinedNameText(formulaParts);
+                name.text = self.joinDefinedNameText(formulaParts);
+            }
         });
 
         // Update hyperlinks refs
