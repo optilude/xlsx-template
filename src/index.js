@@ -1695,6 +1695,39 @@ class Workbook {
             }
         });
     }
+
+    /**
+     * Hides specified columns in an Excel sheet by setting the `hidden` attribute in the XML structure.  
+     * Ensures proper updates to the `<cols>` section and recalculates workbook dependencies.  
+    */
+    hideCols(sheetName, hideItemIndexes) {
+        var self = this;
+        var sheet = self.loadSheet(sheetName);
+        self.sheet = sheet;
+    
+        if (Array.isArray(hideItemIndexes) && hideItemIndexes.length) {
+            let cols = sheet.root.find("cols");
+            if (cols) {
+                hideItemIndexes.forEach(function (hideIndex) {
+                    const colIndex = hideIndex + 1;
+                    let col = cols.findall("col").find(c => {
+                        const min = parseInt(c.attrib.min, 10);
+                        const max = parseInt(c.attrib.max, 10);
+                        return colIndex >= min && colIndex <= max;
+                    });
+        
+                    if (col) {
+                        col.attrib.hidden = "1"; // Set hidden to true
+                    }
+                });
+            }
+        }
+    
+        self.archive.file(sheet.filename, etree.tostring(sheet.root));
+    
+        self._rebuild();
+    }
+    
     getWidthCell(numCol, sheet) {
         var defaultWidth = sheet.root.find("sheetFormatPr").attrib["defaultColWidth"];
         if (!defaultWidth) {
