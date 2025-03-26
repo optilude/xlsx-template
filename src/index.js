@@ -807,7 +807,20 @@ class Workbook {
     // is the entirety of the string) and `type` (one of `table` or `cell`)
     extractPlaceholders(string) {
         // Yes, that's right. It's a bunch of brackets and question marks and stuff.
-        var re = /\${(?:(.+?):)?(.+?)(?:\.(.+?))?(?::(.+?))??}/g;
+        // IMPORTANT: Instead of matching 'any character' on every capture (by using a dot),
+        // it captures 'any except colon and brackets' by using [^{}:] to avoid
+        // a bug where the expression will consume the text in a 'greedy' way,
+        // capturing colon characters from outside the placeholder (after a closing
+        // bracket).
+        // Since that characters are already managed in the RegExp as separators
+        // of capture groups, it will still match the whole expression,
+        // but in a safe way (by including brackets and not only the colon from
+        // the exclusion, it avoids other kinds of mistakes and wrong placeholder
+        // syntax, but if compatibility is a concern they could be removed and
+        // left like [^:] ).
+        // (The non-greedy modifier should have done that, but it's more difficult
+        // to get it right than expected)
+        var re = /\${(?:([^{}:]+?):)?([^{}:]+?)(?:\.([^{}:]+?))?(?::([^{}:]+?))??}/g;
 
         var match = null, matches = [];
         while ((match = re.exec(string)) !== null) {
@@ -1061,14 +1074,14 @@ class Workbook {
                     let mergeCell = self.sheet.root.findall("mergeCells/mergeCell")
                         .find(c => self.splitRange(c.attrib.ref).start === cell.attrib.r)
                     let isMergeCell = mergeCell != null
-                    
+
                     if(isMergeCell) {
                         let originalMergeRange = self.splitRange(mergeCell.attrib.ref),
                             originalMergeStart    = self.splitRef(originalMergeRange.start),
                             originalMergeEnd      = self.splitRef(originalMergeRange.end);
-                        
+
                         for (let colnum = self.charToNum(originalMergeStart.col) + 1; colnum <= self.charToNum(originalMergeEnd.col); colnum++) {
-                            const originalRow = self.sheet.root.find('sheetData')._children.find(f=>f.attrib.r == originalMergeStart.row)      
+                            const originalRow = self.sheet.root.find('sheetData')._children.find(f=>f.attrib.r == originalMergeStart.row)
                             let col = self.numToChar(colnum)
                             let originalCell = originalRow._children.find(f=>f.attrib.r.startsWith(col))
 
@@ -1698,7 +1711,7 @@ class Workbook {
     getWidthCell(numCol, sheet) {
         var defaultWidth = sheet.root.find("sheetFormatPr").attrib["defaultColWidth"];
         if (!defaultWidth) {
-            // TODO : Check why defaultColWidth is not set ? 
+            // TODO : Check why defaultColWidth is not set ?
             defaultWidth = 11.42578125;
         }
         var finalWidth = defaultWidth;
@@ -1751,7 +1764,7 @@ class Workbook {
     }
     columnWidthToEMUs(width) {
         // TODO : This is not the true. Change with true calcul
-        // can find help here : 
+        // can find help here :
         // https://docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths
         // https://stackoverflow.com/questions/58021996/how-to-set-the-fixed-column-width-values-in-inches-apache-poi
         // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
@@ -1766,9 +1779,9 @@ class Workbook {
     }
     /**
      * Find max file id.
-     * @param {RegExp} fileNameRegex 
-     * @param {RegExp} idRegex 
-     * @returns {number} 
+     * @param {RegExp} fileNameRegex
+     * @param {RegExp} idRegex
+     * @returns {number}
      */
     findMaxFileId(fileNameRegex, idRegex) {
         var self = this;
