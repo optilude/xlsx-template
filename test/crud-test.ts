@@ -281,6 +281,35 @@ describe("CRUD operations", function() {
 
         });
 
+        it("can include a literal colon in between two placeholders in the same cell (with and without newlines in between)", function(done) {
+
+            fs.readFile(path.join(__dirname, "templates", "colon-allowed-between-placeholders.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute(1, {
+                    foo: "f-value",
+                    bar: "b-value",
+                });
+
+                var newData = t.generate();
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+
+                expect(sheet1).toBeDefined();
+                expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("f-value and colon in between: b-value on same line");
+                expect(getSharedString(sharedStrings, sheet1, "A2")).toEqual("f-value\nand colon in between: b-value\non different lines");
+
+                // XXX: For debugging only
+                fs.writeFileSync("test/output/colon-allowed-between-placeholders.xlsx", newData, "binary");
+
+                done();
+            });
+
+        });
+
 		it("can substitute values when single item array contains an object and generate a file", function(done) {
 
             fs.readFile(path.join(__dirname, "templates", "t3.xlsx"), function(err, data) {
