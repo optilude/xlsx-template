@@ -642,7 +642,7 @@ describe("CRUD operations", function() {
                     score_first: {name: "Jason", score: 1},
                     scores: [
                         {name: "John", score: 100, extra:'O'},
-                        {name: "Bob", score: 110, extra:'O'}, 
+                        {name: "Bob", score: 110, extra:'O'},
                         {name: "Jim", score: 120, extra:'O'}
                     ],
                     score_last: {name: "Fox", score: 99},
@@ -650,7 +650,7 @@ describe("CRUD operations", function() {
                     score2_first: {name: "Daddy", score: 1},
                     scores2: [
                         {name: "Son1", score: 100, extra:'O'},
-                        {name: "Son2", score: 110, extra:'O'}, 
+                        {name: "Son2", score: 110, extra:'O'},
                         {name: "Son3", score: 120, extra:'O'},
                         {name: "Son4", score: 130, extra:'O'}
                     ],
@@ -681,7 +681,7 @@ describe("CRUD operations", function() {
             });
 
         });
-        
+
         it("replaces hyperlinks in sheet", function(done) {
           fs.readFile(path.join(__dirname, "templates", "test-hyperlinks.xlsx"), function(err, data) {
             expect(err).toBeNull();
@@ -811,6 +811,7 @@ describe("CRUD operations", function() {
                 expect(workbook.find("./definedNames/definedName[@name='RangeRightOfTable']").text).toEqual("Tables!$E$14:$F$14");
                 expect(workbook.find("./definedNames/definedName[@name='RightOfTable']").text).toEqual("Tables!$F$8");
                 expect(workbook.find("./definedNames/definedName[@name='_xlnm.Print_Titles']").text).toEqual("Tables!$1:$3");
+                expect(workbook.find("./definedNames/definedName[@name='Formula']").text).toEqual("IF(Tables!$I$8>1,Tables!$G$7,SUM(Untouched!$A$2:$A$6)/COUNT(Untouched!$A$2:$A$6))");
 
                 // Merged cells have moved
                 expect(sheet1.find("./mergeCells/mergeCell[@ref='B2:C2']")).not.toBeNull(); // title - unchanged
@@ -1371,19 +1372,23 @@ describe("CRUD operations", function() {
                     pushDownPageBreakOnTableSubstitution : true
                 };
                 var t = new XlsxTemplate(buffer, option);
-                var data = {
-                    myarray : [
-                        {name : "foo"},
-                        {name : "john"},
-                        {name : "doe"},
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
                     ]
-                };
-                t.substitute(1, data);
+                });
                 var newData = t.generate();
                 var workbook = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
 
                 workbook.findall("definedNames/definedName").forEach(function(name) {
-                    expect(name.text === "Feuil1!$A$1:$J$12");
+                    expect(name.text === "Feuil1!$A$1:$J$13");
                 });
 
                 fs.writeFileSync("test/output/movePageBreakOption.xlsx", newData, "binary");
