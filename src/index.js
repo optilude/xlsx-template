@@ -209,7 +209,7 @@ class Workbook {
             si.findall('r/t').forEach(function (tmp) {
                 t.text += tmp.text;
             });
-            self.sharedStrings.push(t.text);
+            self.sharedStrings.push(self.stringify(t.text));
             self.sharedStringsLookup[t.text] = self.sharedStrings.length - 1;
         });
 
@@ -930,7 +930,9 @@ class Workbook {
         } else if (typeof (value) === "number" || typeof (value) === "boolean") {
             return Number(value).toString();
         } else if (typeof (value) === "string") {
-            return String(value).toString();
+            // Remove invalid XML characters
+            const regex = /:[\0-\x08\x0B\f\x0E-\x1F\uFFFD\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g;
+            return String(value).toString().replace(regex, '');
         }
 
         return "";
