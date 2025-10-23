@@ -1530,6 +1530,84 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+
+        it("copies sheets with comments", function(done) {
+
+            fs.readFile(path.join(__dirname, "templates", "test-copy-sheet-with-comments.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+                try {
+                    var t = new XlsxTemplate(data);
+                    t.copySheet("Feuil1", "Feuil3", true);
+                    var newData = t.generate();
+
+                    // Verify that each sheet has its own comment files
+                    var sheet1Rels = etree.parse(t.archive.file("xl/worksheets/_rels/sheet1.xml.rels").asText()).getroot();
+                    var sheet3Rels = etree.parse(t.archive.file("xl/worksheets/_rels/sheet3.xml.rels").asText()).getroot();
+                    var sheet1CommentsRel = sheet1Rels.find("./Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments']");
+                    var sheet3CommentsRel = sheet3Rels.find("./Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments']");
+                    var sheet1ThreadedCommentsRel = sheet1Rels.find("./Relationship[@Type='http://schemas.microsoft.com/office/2017/10/relationships/threadedComment']");
+                    var sheet3ThreadedCommentsRel = sheet3Rels.find("./Relationship[@Type='http://schemas.microsoft.com/office/2017/10/relationships/threadedComment']");
+                    var sheet1VmlDrawingRel = sheet1Rels.find("./Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing']");
+                    var sheet3VmlDrawingRel = sheet3Rels.find("./Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing']");
+
+                    // Relationship Target must be different
+                    expect(sheet1CommentsRel.attrib.Target).not.toEqual(sheet3CommentsRel.attrib.Target);
+                    expect(sheet1ThreadedCommentsRel.attrib.Target).not.toEqual(sheet3ThreadedCommentsRel.attrib.Target);
+                    expect(sheet1VmlDrawingRel.attrib.Target).not.toEqual(sheet3VmlDrawingRel.attrib.Target);
+
+                    // Verify copied files exist with correct numeric naming
+                    expect(t.archive.file("xl/comments3.xml")).not.toBeNull();
+                    expect(t.archive.file("xl/threadedComments/threadedComment3.xml")).not.toBeNull();
+                    expect(t.archive.file("xl/drawings/vmlDrawing3.vml")).not.toBeNull();
+
+                    // Verify Content Types are registered
+                    var contentTypes = etree.parse(t.archive.file("[Content_Types].xml").asText()).getroot();
+                    expect(contentTypes.find("./Override[@PartName='/xl/worksheets/sheet3.xml']")).not.toBeNull();
+                    expect(contentTypes.find("./Override[@PartName='/xl/comments3.xml']")).not.toBeNull();
+                    expect(contentTypes.find("./Override[@PartName='/xl/threadedComments/threadedComment3.xml']")).not.toBeNull();
+                    
+
+                    // Verify UUIDs are consistent across comment files
+                    var comments3Content = t.archive.file("xl/comments3.xml").asText();
+                    var threadedComment3Content = t.archive.file("xl/threadedComments/threadedComment3.xml").asText();
+                    var threadedComment1Content = t.archive.file("xl/threadedComments/threadedComment1.xml").asText();
+
+                    var commentsUuidMatch = comments3Content.match(/xr:uid="\{([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})\}"/i);
+                    expect(commentsUuidMatch).not.toBeNull();
+                    var commentsUuid = commentsUuidMatch ? commentsUuidMatch[1] : null;
+
+                    var commentsAuthorUuidMatch = comments3Content.match(/<author>tc=\{([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})\}<\/author>/i);
+                    expect(commentsAuthorUuidMatch).not.toBeNull();
+                    var commentsAuthorUuid = commentsAuthorUuidMatch ? commentsAuthorUuidMatch[1] : null;
+
+                    var threadedCommentUuidMatch = threadedComment3Content.match(/\sid="\{([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})\}"/i);
+                    expect(threadedCommentUuidMatch).not.toBeNull();
+                    var threadedCommentUuid = threadedCommentUuidMatch ? threadedCommentUuidMatch[1] : null;
+
+                    // All three UUIDs must match
+                    expect(commentsUuid).toEqual(commentsAuthorUuid);
+                    expect(commentsUuid).toEqual(threadedCommentUuid);
+
+                    // Verify personId is preserved from original sheet (references persons/person.xml)
+                    var personIdMatch = threadedComment3Content.match(/personId="\{([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})\}"/i);
+                    expect(personIdMatch).not.toBeNull();
+                    var personId = personIdMatch ? personIdMatch[1] : null;
+                    expect(personId).not.toEqual(commentsUuid);
+
+                    var personId1Match = threadedComment1Content.match(/personId="\{([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})\}"/i);
+                    expect(personId1Match).not.toBeNull();
+                    var personId1 = personId1Match ? personId1Match[1] : null;
+                    expect(personId).toEqual(personId1);
+
+                    fs.writeFileSync("test/output/copy-sheet-with-comments.xlsx", newData, "binary");
+
+                    done();
+                } catch (err) {
+                    done(err);
+                }
+            });
+
+        });
     });
 
     describe("Rebuild file", function() {
