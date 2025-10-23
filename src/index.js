@@ -104,16 +104,23 @@ class Workbook {
         // Copy sheet file
         self.archive.file(arcName, etree.tostring(sheet.root));
         self.archive.files[arcName].options.binary = binary;
+
+        // Add content type for the new sheet
+        var sheetContentType = etree.SubElement(self.contentTypes, 'Override');
+        sheetContentType.attrib.PartName = '/' + arcName;
+        sheetContentType.attrib.ContentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml';
+
         // copy sheet name in workbook
         var newSheet = etree.SubElement(self.workbook.find('sheets'), 'sheet');
-        newSheet.attrib.name = copyName || 'Sheet' + newSheetIndex;
+        const finalSheetName = copyName || 'Sheet' + newSheetIndex;
+        newSheet.attrib.name = finalSheetName;
         newSheet.attrib.sheetId = newSheetIndex;
         newSheet.attrib['r:id'] = 'rId' + newSheetIndex;
         // Copy definedName if any
         self.workbook.findall('definedNames/definedName').forEach(element => {
             if (element.text && element.text.split("!").length && element.text.split("!")[0] == sheetName) {
                 var newDefinedName = etree.SubElement(self.workbook.find('definedNames'), 'definedName', element.attrib);
-                newDefinedName.text = `${copyName}!${element.text.split("!")[1]}`;
+                newDefinedName.text = `${finalSheetName}!${element.text.split("!")[1]}`;
                 newDefinedName.attrib.localSheetId = newSheetIndex - 1;
             }
         });
@@ -122,11 +129,85 @@ class Workbook {
         newRel.attrib.Type = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
         newRel.attrib.Target = fileName;
 
-        //Copy rels sheet - TODO : Maybe we can copy also the 'Target' files in rels, but Excel make this automaticly
+        // Copy sheet relationships and their target files
+        var sourceRels = self.loadSheetRels(sheet.filename);
         var relFileName = 'worksheets' + '/_rels/' + 'sheet' + newSheetIndex + '.xml.rels';
         var relArcName = self.prefix + '/' + relFileName;
-        self.archive.file(relArcName, etree.tostring(self.loadSheetRels(sheet.filename).root));
-        self.archive.files[relArcName].options.binary = true;
+        var newRelsRoot = self.cloneElement(sourceRels.root, true);
+
+        // Generate a new UUID for comments (shared between comments.xml and threadedComment.xml)
+        var newCommentUuid = self.generateUUID();
+
+        // Process each relationship to copy target files with unique names
+        sourceRels.root.findall('Relationship').forEach(function(rel, index) {
+            var relType = rel.attrib.Type;
+            var target = rel.attrib.Target;
+
+            // Relationship types that require copying the target file
+            var needsFileCopy = [
+                'http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments',
+                'http://schemas.microsoft.com/office/2017/10/relationships/threadedComment',
+                'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing'
+            ];
+
+            if (needsFileCopy.indexOf(relType) !== -1) {
+                var sheetDirectory = path.dirname(sheet.filename);
+                var sourceFilePath = path.join(sheetDirectory, target).replace(/\\/g, '/');
+                var sourceFile = self.archive.file(sourceFilePath);
+
+                if (sourceFile) {
+                    // Generate unique file name based on newSheetIndex
+                    var fileExtension = path.extname(target);
+                    var fileBaseName = path.basename(target, fileExtension);
+                    var fileDir = path.dirname(target);
+                    var baseNameWithoutNumber = fileBaseName.replace(/\d+$/, '');
+                    var newFileName = baseNameWithoutNumber + newSheetIndex + fileExtension;
+                    var newTarget = path.join(fileDir, newFileName).replace(/\\/g, '/');
+                    var newFilePath = path.join(sheetDirectory, newTarget).replace(/\\/g, '/');
+
+                    // Copy file in binary mode to preserve UTF-8 encoding
+                    var binaryContent = sourceFile.asBinary();
+
+                    // Apply file-specific transformations
+                    if (relType === 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing') {
+                        // Update VML data attribute to make it unique per sheet
+                        binaryContent = binaryContent.replace(/data="\d+"/, 'data="' + newSheetIndex + '"');
+
+                    } else if (relType === 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments') {
+                        // Replace comment UUIDs in both <author>tc= and xr:uid= attributes
+                        var uuidWithoutBraces = newCommentUuid.replace(/[{}]/g, '');
+                        binaryContent = binaryContent.replace(/(<author>tc=\{)[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}(\}<\/author>)/gi, '$1' + uuidWithoutBraces + '$2');
+                        binaryContent = binaryContent.replace(/(xr:uid="\{)[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}(\}\")/gi, '$1' + uuidWithoutBraces + '$2');
+
+                        var commentsContentType = etree.SubElement(self.contentTypes, 'Override');
+                        commentsContentType.attrib.PartName = '/' + newFilePath;
+                        commentsContentType.attrib.ContentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml';
+
+                    } else if (relType === 'http://schemas.microsoft.com/office/2017/10/relationships/threadedComment') {
+                        // Replace only the comment UUID in id= attribute (preserve personId)
+                        var uuidWithoutBraces = newCommentUuid.replace(/[{}]/g, '');
+                        binaryContent = binaryContent.replace(/(\sid="\{)[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}(\}")/gi, '$1' + uuidWithoutBraces + '$2');
+
+                        var threadedCommentContentType = etree.SubElement(self.contentTypes, 'Override');
+                        threadedCommentContentType.attrib.PartName = '/' + newFilePath;
+                        threadedCommentContentType.attrib.ContentType = 'application/vnd.ms-excel.threadedcomments+xml';
+                    }
+
+                    self.archive.file(newFilePath, binaryContent);
+                    self.archive.files[newFilePath].options.binary = true; // Force binary mode to preserve UTF-8 encoding
+
+                    // Update relationship target in the copied rels file
+                    var newRelInRels = newRelsRoot.findall('Relationship')[index];
+                    if (newRelInRels) {
+                        newRelInRels.attrib.Target = newTarget;
+                    }
+                }
+            }
+        });
+
+        self.archive.file(relArcName, etree.tostring(newRelsRoot));
+        self.archive.files[relArcName].options.binary = binary;
+        self.archive.file('[Content_Types].xml', etree.tostring(self.contentTypes));
 
         self._rebuild();
         return self;
@@ -900,6 +981,21 @@ class Workbook {
         }
 
         return str;
+    }
+    // Generate a UUID v4 for comment IDs
+    generateUUID() {
+        // Format: {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
+        var hexDigits = '0123456789ABCDEF';
+        var uuid = '{';
+        for (var i = 0; i < 36; i++) {
+            if (i === 8 || i === 13 || i === 18 || i === 23) {
+                uuid += '-';
+            } else {
+                uuid += hexDigits[Math.floor(Math.random() * 16)];
+            }
+        }
+        uuid += '}';
+        return uuid;
     }
     // Is ref a range?
     isRange(ref) {
