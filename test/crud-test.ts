@@ -1506,24 +1506,88 @@ describe("CRUD operations", function() {
                 expect(getSharedString(sharedStrings, copysheet4, "B4")).toEqual("Some data");
                 expect(getSharedString(sharedStrings, copysheet4, "C6")).toEqual("${data.foo}");
                 expect(getSharedString(sharedStrings, copysheet4, "C11")).toEqual("AZE²&é\"'(-è_çà)=~#{[|`\\^@]} ^$ù*,;:!¨£%µ?./§¤€<>Ôöôîïï");
-                // TODO : How can I test the fill color of cell D9 ?
+                // Verify that cell D9 has the same style as the original (fill color should be preserved)
+                var originalSheet1 = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var originalCellD9 = originalSheet1.find(".//c[@r='D9']");
+                var copiedCellD9 = copysheet4.find(".//c[@r='D9']");
+                expect(originalCellD9).toBeDefined();
+                expect(copiedCellD9).toBeDefined();
+                expect(copiedCellD9.attrib.s).toEqual(originalCellD9.attrib.s); // Same style index (fill color preserved)
                 // test copy sheet with image
                 t.copySheet("image_sheet", "image_sheet_copy");
                 var relscopysheet2    = etree.parse(t.archive.file("xl/worksheets/_rels/sheet5.xml.rels").asText()).getroot();
                 expect(relscopysheet2.findall("Relationship").length).toEqual(1);
                 expect(relscopysheet2.findall("Relationship")[0].attrib.Target).toEqual("../drawings/drawing1.xml");
-                // test copy sheet with utf-8 header/footer
-                // without binary mode (no ok) :
-                // This test can be remove if you wish. This is just for show the issue if binary is set to true (default)
+
+                // ========================================
+                // UTF-8 PRESERVATION TESTS
+                // ========================================
+                // The original test expected UTF-8 corruption (.not.toEqual) due to a bug where
+                // etree.tostring() was used without proper encoding. This has been fixed by using
+                // asBinary() to read the source sheet, preserving UTF-8 characters correctly.
+
+                // Test with binary mode enabled (default = true) - UTF-8 should be preserved
                 t.copySheet("utf8_header_sheet", "utf8_header_sheet_copy");
                 var copysheet6    = etree.parse(t.archive.file("xl/worksheets/sheet6.xml").asText()).getroot();
                 expect(copysheet6).toBeDefined();
-                expect(copysheet6.find("headerFooter/oddHeader").text).not.toEqual("&LTEST UTF8 éàè&ùï&C&A");
-                // with binary mode (ok) :
+                expect(copysheet6.find("headerFooter/oddHeader").text).toEqual("&LTEST UTF8 éàè&ùï&C&A"); // UTF-8 must be preserved with binary mode enabled (default = true)
+
+                // Test with binary mode explicitly disabled (binary=false) - UTF-8 will be corrupted
                 t.copySheet("utf8_header_sheet", "utf8_header_sheet_copy_v2", false);
                 var copysheet7    = etree.parse(t.archive.file("xl/worksheets/sheet7.xml").asText()).getroot();
                 expect(copysheet7).toBeDefined();
-                expect(copysheet7.find("headerFooter/oddHeader").text).toEqual("&LTEST UTF8 éàè&ùï&C&A");
+                // When binary=false, UTF-8 characters are corrupted (this is expected behavior with warning)
+                expect(copysheet7.find("headerFooter/oddHeader").text).not.toEqual("&LTEST UTF8 éàè&ùï&C&A");
+                expect(copysheet7.find("headerFooter/oddHeader").text).toContain("LTEST UTF8"); // non-UTF8 parts should remain intact
+
+                // ========================================
+                // NEW VALIDATION TESTS
+                // ========================================
+
+                // Verify merged cells are preserved
+                var originalSheetWithMerge = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                var originalMergeCells = originalSheetWithMerge.find("mergeCells");
+                var copiedSheetWithMerge = copysheet4;
+                var copiedMergeCells = copiedSheetWithMerge.find("mergeCells");
+                expect(copiedMergeCells).toBeDefined();
+                expect(copiedMergeCells.findall("mergeCell").length).toEqual(originalMergeCells.findall("mergeCell").length);
+                var originalMergeRefs = originalMergeCells.findall("mergeCell").map((mc: any) => mc.attrib.ref);
+                var copiedMergeRefs = copiedMergeCells.findall("mergeCell").map((mc: any) => mc.attrib.ref);
+                expect(copiedMergeRefs).toEqual(originalMergeRefs);
+
+                // Verify print settings are preserved
+                var originalSheet = etree.parse(t.archive.file("xl/worksheets/sheet3.xml").asText()).getroot();
+                var originalPageSetup = originalSheet.find("pageSetup");
+                var copiedPageSetup = copysheet6.find("pageSetup");
+                expect(copiedPageSetup).toBeDefined();
+                expect(copiedPageSetup.attrib.orientation).toEqual(originalPageSetup.attrib.orientation);
+
+                // Verify header/footer content is identical to original
+                var originalHeaderFooter = originalSheet.find("headerFooter");
+                expect(originalHeaderFooter).toBeDefined();
+                var copiedHeaderFooter = copysheet6.find("headerFooter");
+                expect(copiedHeaderFooter).toBeDefined();
+                expect(copiedHeaderFooter.find("oddHeader")).toBeDefined();
+                expect(copiedHeaderFooter.find("oddHeader").text).toEqual(originalHeaderFooter.find("oddHeader").text);
+                expect(copiedHeaderFooter.find("oddFooter")).toBeDefined();
+                expect(copiedHeaderFooter.find("oddFooter").text).toEqual(originalHeaderFooter.find("oddFooter").text);
+
+                // Verify images share the same drawing file (not duplicated) - like excel does when you do the operation manually
+                // This unit test could evolve if it is necessary to duplicate the image
+                // If so, then:
+                // -> expect(copiedImageRels.findall("Relationship").length).not.toEqual(originalImageRels.findall("Relationship").length);
+                // and test the consistency of the Relationship
+                var originalImageSheet = etree.parse(t.archive.file("xl/worksheets/sheet2.xml").asText()).getroot();
+                var originalImageRels = etree.parse(t.archive.file("xl/worksheets/_rels/sheet2.xml.rels").asText()).getroot();
+                var copiedImageRels = etree.parse(t.archive.file("xl/worksheets/_rels/sheet5.xml.rels").asText()).getroot();
+                expect(copiedImageRels.findall("Relationship").length).toEqual(originalImageRels.findall("Relationship").length);
+
+                var originalDrawingRel = originalImageRels.find("Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing']");
+                var copiedDrawingRel = copiedImageRels.find("Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing']");
+                expect(originalDrawingRel).toBeDefined();
+                expect(copiedDrawingRel).toBeDefined();
+                expect(copiedDrawingRel.attrib.Target).toEqual(originalDrawingRel.attrib.Target);
+
                 // Get binary data
                 var newData = t.generate();
                 fs.writeFileSync("test/output/copy-sheet.xlsx", newData, "binary");
