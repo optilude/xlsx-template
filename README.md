@@ -522,6 +522,11 @@ When using `${table:...}` placeholders:
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
 
+**Pull Request Requirements:**
+- All PRs **must include unit tests** for new features or bug fixes
+- Ensure all existing tests pass (`npm test`)
+- Follow the existing code style and conventions
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details
