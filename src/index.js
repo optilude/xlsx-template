@@ -97,12 +97,22 @@ class Workbook {
      */
     copySheet(sheetName, copyName, binary = true) {
         var self = this;
+
+        // Warn user if binary mode is disabled
+        // do not warn during jest tests to avoid polluting test output
+        if (binary === false  && !process.env.JEST_WORKER_ID) {
+            console.warn('Warning: copySheet() called with binary=false. UTF-8 characters (éàèùï, etc.) in sheet content, headers, footers, comments, and other XML content may be corrupted. Use binary=true (default) to preserve all characters correctly.');
+        }
+
         var sheet = self.loadSheet(sheetName); //filename, name , id, root
         var newSheetIndex = (self.workbook.findall("sheets/sheet").length + 1).toString();
         var fileName = 'worksheets' + '/' + 'sheet' + newSheetIndex + '.xml';
         var arcName = self.prefix + '/' + fileName;
-        // Copy sheet file
-        self.archive.file(arcName, etree.tostring(sheet.root));
+
+        // Copy sheet file in binary mode to preserve UTF-8 encoding
+        var sourceSheetFile = self.archive.file(sheet.filename);
+        var sheetContent = sourceSheetFile.asBinary();
+        self.archive.file(arcName, sheetContent);
         self.archive.files[arcName].options.binary = binary;
 
         // Add content type for the new sheet
@@ -194,7 +204,7 @@ class Workbook {
                     }
 
                     self.archive.file(newFilePath, binaryContent);
-                    self.archive.files[newFilePath].options.binary = true; // Force binary mode to preserve UTF-8 encoding
+                    self.archive.files[newFilePath].options.binary = binary;
 
                     // Update relationship target in the copied rels file
                     var newRelInRels = newRelsRoot.findall('Relationship')[index];
