@@ -310,6 +310,14 @@ const values = {
 };
 ```
 
+**Result:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Employee | Avatar |
+| 2 | Alice | 🖼️ |
+| 3 | Bob | 🖼️ |
+
 ## API Reference
 
 ### `new XlsxTemplate(data, options)`
