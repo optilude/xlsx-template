@@ -226,6 +226,11 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
+### Version 1.4.5
+* Fixed UTF-8 encoding in `copySheet()` - sheet content now properly preserved in binary mode
+* `copySheet()` now properly copies comments (including threaded comments)
+* **Note**: In `copySheet()`, do not use `binary=false` parameter as it corrupts UTF-8 characters. May be deprecated in future versions.
+
 ### Version 1.4.4
 * Move hyperlinks references on added rows and columns. (#184). Thanks @IagoSRL
 * Fix line issue under table with merged cell. (#188). Thanks @muyoungko
