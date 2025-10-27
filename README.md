@@ -1,230 +1,551 @@
 # XLSX Template
 
-[![Build status](https://api.travis-ci.org/optilude/xlsx-template.png?branch=master)](http://travis-ci.org/optilude/xlsx-template)
+[![CI validation](https://github.com/optilude/xlsx-template/actions/workflows/npm.yaml/badge.svg)](https://github.com/optilude/xlsx-template/actions/workflows/npm.yaml)
 
-This module provides a means of generating "real" Excel reports (i.e. not CSV
-files) in NodeJS applications.
+Generate Excel (.xlsx) reports from templates with dynamic data substitution. Create beautifully formatted Excel files using Excel as your template designer, then populate them with data from your Node.js application.
 
-The basic principle is this: You create a template in Excel. This can be
-formatted as you wish, contain formulae etc. In this file, you put placeholders
-using a specific syntax (see below). In code, you build a map of placeholders
-to values and then load the template, substitute the placeholders for the
-relevant values, and generate a new .xlsx file that you can then serve to the
-user.
+## Features
 
-## Placeholders
+- ✅ **Real Excel files** - Generate actual `.xlsx` files
+- 📝 **Template-based** - Design templates in Excel with all formatting, formulas, and styles
+- 🔄 **Dynamic data** - Replace placeholders with values, arrays, tables, and images
+- 📊 **Preserve formatting** - Cell formatting, merged cells, formulas, named tables are maintained
+- 🖼️ **Image support** - Insert images from file paths or Base64
+- 📋 **Multiple sheets** - Work with multiple sheets, copy/delete sheets dynamically
+- ⚡ **Lightweight & cross-platform** - Only 3 dependencies ([jszip](https://www.npmjs.com/package/@kant2002/jszip), [elementtree](https://www.npmjs.com/package/elementtree), [image-size](https://www.npmjs.com/package/image-size)). Direct XML DOM manipulation with no superfluous overhead. Works seamlessly on Windows, Linux, and macOS.
 
-Placeholders are inserted in cells in a spreadsheet. It does not matter how
-those cells are formatted, so e.g. it is OK to insert a placeholder (which is
-text content) into a cell formatted as a number or currecy or date, if you
-expect the placeholder to resolve to a number or currency or date.
+## Installation
 
-### Scalars
+```bash
+npm install xlsx-template
+```
 
-Simple placholders take the format `${name}`. Here, `name` is the name of a
-key in the placeholders map. The value of this placholder here should be a
-scalar, i.e. not an array or object. The placeholder may appear on its own in a
-cell, or as part of a text string. For example:
+## Quick Start
 
-    | Extracted on: | ${extractDate} |
+**1. Create an Excel template** (`template.xlsx`) with placeholders:
 
-might result in (depending on date formatting in the second cell):
+|   | A | B |
+|---|---|---|
+| 1 | Report Date | `${reportDate}` |
+| 2 | Company | `${companyName}` |
 
-    | Extracted on: | Jun-01-2013 |
+**2. Use the template in your code:**
 
-Here, `extractDate` may be a date and the second cell may be formatted as a
-number.
+```javascript
+const XlsxTemplate = require('xlsx-template');
+const fs = require('fs');
 
-Inside scalars there possibility to use array indexers. 
-For example: 
+// Load the template
+fs.readFile('template.xlsx', (err, data) => {
+    const template = new XlsxTemplate(data);
+    
+    // Define replacement values
+    const values = {
+        reportDate: new Date(),
+        companyName: 'Acme Corporation'
+    };
+    
+    // Perform substitution on sheet 1 (can also use sheet name as string: 'Sheet1')
+    template.substitute(1, values);
+    
+    // Generate the output file
+    const output = template.generate();
+    
+    // Save to disk
+    fs.writeFileSync('output.xlsx', output);
+});
+```
 
-Given data
+## Placeholder Types
 
-    var template = { extractDates: ["Jun-01-2113", "Jun-01-2013" ]}
+### 1. Simple Values (Scalars)
 
-which will be applied to following template
+Replace a placeholder with a single value.
 
-    | Extracted on: | ${extractDates[0]} |
+**Excel template:**
 
-will results in the 
+|   | A | B |
+|---|---|---|
+| 1 | Extracted on: | `${extractDate}` |
 
-    | Extracted on: | Jun-01-2113 |
+**Code:**
+```javascript
+const values = {
+    extractDate: new Date('2024-01-15')
+};
+template.substitute(1, values);
+```
 
-### Columns
+**Result:** 
 
-You can use arrays as placeholder values to indicate that the placeholder cell
-is to be replicated across columns. In this case, the placeholder cannot appear
-inside a text string - it must be the only thing in its cell. For example,
-if the placehodler value `dates` is an array of dates:
+|   | A | B |
+|---|---|---|
+| 1 | Extracted on: | Jan-15-2024 |
 
-    | ${dates} |
+**Notes:**
+- Placeholders can be standalone in a cell or part of text: `"Total: ${amount}"`
+- Excel cell formatting (date, number, currency) is preserved
 
-might result in:
+### 2. Array Indexing
 
-    | Jun-01-2013 | Jun-02-2013 | Jun-03-2013 |
+Access specific array elements directly in templates.
 
-### Tables
+**Excel template:**
 
-Finally, you can build tables made up of multiple rows. In this case, each
-placeholder should be prefixed by `table:` and contain both the name of the
-placeholder variable (a list of objects) and a key (in each object in the list).
-For example:
+|   | A | B |
+|---|---|---|
+| 1 | First date: | `${dates[0]}` |
+| 2 | Second date: | `${dates[1]}` |
 
-    | Name                 | Age                 |
-    | ${table:people.name} | ${table:people.age} |
+**Code:**
+```javascript
+const values = {
+    dates: [new Date('2024-01-01'), new Date('2024-02-01')]
+};
+template.substitute(1, values);
+```
 
-If the replacement value under `people` is an array of objects, and each of
-those objects have keys `name` and `age`, you may end up with something like:
+**Result:**
 
-    | Name        | Age |
-    | John Smith  | 20  |
-    | Bob Johnson | 22  |
+|   | A | B |
+|---|---|---|
+| 1 | First date: | Jan-01-2024 |
+| 2 | Second date: | Feb-01-2024 |
 
-If a particular value is an array, then it will be repeated across columns as
-above.
+### 3. Column Arrays
 
-### Images in cell
+Expand an array horizontally across columns.
 
-> **⚠️ Warning :**  This functionality is avaible only from new Excel version (2308 - maybe more recent but 2302 does not work).
+**Excel template:**
 
-*images in cell* automatically match cell size (merge cell size) and formatted cell (alignment, colorization etc.)
+|   | A |
+|---|---|
+| 1 | `${dates}` |
 
-You can insert *images in cell* with   
-    | My image: | ${imageincell:imageName} |
+**Code:**
+```javascript
+const values = {
+    dates: [
+        new Date('2024-01-01'),
+        new Date('2024-02-01'),
+        new Date('2024-03-01')
+    ]
+};
+template.substitute(1, values);
+```
 
-Given data
+**Result:**
 
-    var template = { imageName: "helloImage.jpg"}
+|   | A | B | C |
+|---|---|---|---|
+| 1 | Jan-01-2024 | Feb-01-2024 | Mar-01-2024 |
 
-You can insert a list of images with   
+**Notes:**
+- The placeholder must be the **only content** in its cell
 
-    | My images | ${table:images.name:imageincell} |
+### 4. Table Rows
 
-Given data
+Generate multiple rows from an array of objects.
 
-    var template = { images: [{name : "helloImage1.jpg"}, {name : "helloImage2.jpg"}]}   
+**Excel template:**
 
-support the same format as 'image' just below
+|   | A | B | C |
+|---|---|---|---|
+| 1 | Name | Age | Department |
+| 2 | `${table:team.name}` | `${table:team.age}` | `${table:team.dept}` |
+
+**Code:**
+```javascript
+const values = {
+    team: [
+        { name: 'Alice Johnson', age: 28, dept: 'Engineering' },
+        { name: 'Bob Smith', age: 34, dept: 'Marketing' },
+        { name: 'Carol White', age: 25, dept: 'Sales' }
+    ]
+};
+template.substitute(1, values);
+```
+
+**Result:**
+
+|   | A | B | C |
+|---|---|---|---|
+| 1 | Name | Age | Department |
+| 2 | Alice Johnson | 28 | Engineering |
+| 3 | Bob Smith | 34 | Marketing |
+| 4 | Carol White | 25 | Sales |
+
+**Notes:**
+- Syntax: `${table:arrayName.propertyName}`
+- Each object in the array creates a new row
+- If a property is an array, it expands horizontally
+
+### 5. Images
+
+Insert images into cells.
+
+**Excel template:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Logo: | `${image:companyLogo}` |
+
+**Code:**
+```javascript
+const values = {
+    companyLogo: '/path/to/logo.png'  // or Base64, Buffer
+};
+template.substitute(1, values);
+```
+
+**Result:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Logo: | 🖼️ |
+
+**Supported image formats:**
+- File path (absolute or relative): `'/path/to/image.png'`
+- Base64 string: `'data:image/png;base64,iVBORw0KG...'`
+- Buffer: `fs.readFileSync('image.png')`
+- **URL: Not supported** - This library is synchronous and cannot fetch remote images. Fetch the image in your own code first, then pass it as one of the supported formats above.
+
+**Image options:**
+```javascript
+const template = new XlsxTemplate(data, {
+    imageRootPath: '/absolute/path/to/images',  // Base path for relative image paths
+    imageRatio: 75                               // Scale images to 75% (only for non-merged cells)
+});
+```
+
+**Table images:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Product | Photo |
+| 2 | `${table:products.name}` | `${table:products.photo:image}` |
+
+```javascript
+const values = {
+    products: [
+        { name: 'Product 1', photo: 'product1.jpg' },
+        { name: 'Product 2', photo: 'product2.jpg' }
+    ]
+};
+```
+
+**Result:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Product | Photo |
+| 2 | Product 1 | 🖼️ |
+| 3 | Product 2 | 🖼️ |
+
+#### Images in Merged Cells
+
+Images automatically fit the size of merged cells.
+
+**Excel template with merged cells B1:C2:**
+
+|   | A | B-C (merged) |
+|---|---|---|
+| 1-2 (merged) | Large Image: | `${image:banner}` |
+
+```javascript
+const values = {
+    banner: 'banner-image.png'
+};
+template.substitute(1, values);
+```
+
+**Result:** The image will be automatically resized to fit the merged cell area (B1:C2).
+
+### 6. Images in Cell
+
+Insert images that automatically fit cell size (requires Excel 2308+).
+
+> **⚠️ Warning:** This feature requires Excel version 2308 or later. Excel 2302 and earlier do not support this.
+
+This is the equivalent of Excel's "Place in Cell" feature (right-click on image → "Place in Cell").
+
+**Excel template:**
+
+|   | A |
+|---|---|
+| 1 | `${imageincell:profilePicture}` |
+
+**Code:**
+```javascript
+const values = {
+    profilePicture: 'avatar.jpg'
+};
+template.substitute(1, values);
+```
+
+**Result:**
+
+|   | A |
+|---|---|
+| 1 | 🖼️ |
+
+**Features:**
+- Images automatically match cell/merged cell size
+- Respects cell alignment and formatting
+- Perfect for profile pictures, thumbnails, etc.
+
+**Table usage:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Employee | Avatar |
+| 2 | `${table:employees.name}` | `${table:employees.avatar:imageincell}` |
+
+```javascript
+const values = {
+    employees: [
+        { name: 'Alice', avatar: 'alice.jpg' },
+        { name: 'Bob', avatar: 'bob.jpg' }
+    ]
+};
+```
+
+**Result:**
+
+|   | A | B |
+|---|---|---|
+| 1 | Employee | Avatar |
+| 2 | Alice | 🖼️ |
+| 3 | Bob | 🖼️ |
+
+## API Reference
+
+### `new XlsxTemplate(data, options)`
+
+Create a new template instance.
+
+**Parameters:**
+- `data` (Buffer|String) - The `.xlsx` file content (binary data)
+- `options` (Object) - Optional configuration:
+  - `imageRootPath` (String) - Root directory for relative image paths
+  - `imageRatio` (Number) - Image scaling percentage (default: 100)
+  - `moveImages` (Boolean) - Move images when inserting table rows (default: false)
+  - `moveSameLineImages` (Boolean) - Move images on the same line as inserted rows (default: false)
+  - `subsituteAllTableRow` (Boolean) - Apply substitutions to all cells in table rows (default: false)
+  - `pushDownPageBreakOnTableSubstitution` (Boolean) - Adjust page breaks when tables grow (default: false)
+
+**Example:**
+```javascript
+const template = new XlsxTemplate(data, {
+    imageRootPath: __dirname + '/images',
+    imageRatio: 80,
+    moveImages: true
+});
+```
+
+### `template.substitute(sheetNumber, values)`
+
+Replace placeholders with values on a specific sheet.
+
+**Parameters:**
+- `sheetNumber` (Number|String) - Sheet index (1-based) or sheet name
+- `values` (Object) - Key-value pairs for placeholder substitution
+
+**Example:**
+```javascript
+template.substitute(1, { name: 'John', age: 30 });
+template.substitute('Sales Report', { quarter: 'Q1', revenue: 50000 });
+```
+
+### `template.substituteAll(values)`
+
+Replace placeholders on **all sheets** with the same values.
+
+**Parameters:**
+- `values` (Object) - Key-value pairs for placeholder substitution
+
+**Example:**
+```javascript
+template.substituteAll({ 
+    companyName: 'Acme Corp',
+    reportDate: new Date() 
+});
+```
+
+### `template.generate(options)`
+
+Generate the final Excel file.
+
+**Parameters:**
+- `options` (Object) - JSZip generation options:
+  - `type` (String) - Output format:
+    - `'nodebuffer'` - Node.js Buffer (recommended for file I/O)
+    - `'base64'` - Base64 string
+    - `'uint8array'` - Uint8Array
+    - `'arraybuffer'` - ArrayBuffer
+    - `'blob'` - Blob (browser only)
+
+**Returns:** The generated file in the specified format
+
+**Example:**
+```javascript
+const buffer = template.generate({ type: 'nodebuffer' });
+fs.writeFileSync('output.xlsx', buffer);
+
+// Or for web download
+const base64 = template.generate({ type: 'base64' });
+const downloadLink = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + base64;
+```
+
+### `template.copySheet(sheetName, newSheetName)`
+
+Copy an existing sheet to a new sheet in the same workbook.
+
+**Parameters:**
+- `sheetName` (String|Number) - Source sheet name or index (1-based)
+- `newSheetName` (String) - Name for the new sheet (optional, defaults to "SheetN")
+
+**Returns:** `this` (for chaining)
+
+> **Note:** The optional `binary` parameter (third parameter) is deprecated and should not be used. It will be removed in a future version. Always use the default behavior which preserves UTF-8 encoding correctly.
+
+**Example:**
+```javascript
+template.copySheet('Template', 'January Report');
+template.copySheet(1, 'Q1 Data');
+
+// Chain operations
+template.copySheet('Template', 'Report1')
+        .substitute('Report1', { month: 'January' })
+        .copySheet('Template', 'Report2')
+        .substitute('Report2', { month: 'February' });
+```
+
+**Notes:**
+- Copies all content/Relation: data, formatting, formulas, comments, images, print settings
+- Merged cells and named ranges are preserved
+- Comments (including threaded comments) are copied with unique IDs
+
+### `template.deleteSheet(sheetName)`
+
+Delete a sheet from the workbook.
+
+**Parameters:**
+- `sheetName` (String|Number) - Sheet name or index (1-based) to delete
+
+**Returns:** `this` (for chaining)
+
+**Example:**
+```javascript
+template.deleteSheet('Sheet2');
+template.deleteSheet(3);
+```
+
+## Complete Example
+
+```javascript
+const XlsxTemplate = require('xlsx-template');
+const fs = require('fs');
+
+// Load template
+const templateData = fs.readFileSync('sales-template.xlsx');
+const template = new XlsxTemplate(templateData, {
+    imageRootPath: __dirname + '/assets',
+    moveImages: true
+});
+
+// Prepare data
+const data = {
+    reportDate: new Date(),
+    companyName: 'Acme Corporation',
+    region: 'North America',
+    
+    // Table data
+    salesData: [
+        { product: 'Widget A', qty: 150, price: 25.50, photo: 'widget-a.jpg' },
+        { product: 'Widget B', qty: 200, price: 30.00, photo: 'widget-b.jpg' },
+        { product: 'Gadget X', qty: 80, price: 55.75, photo: 'gadget-x.jpg' }
+    ],
+    
+    // Chart data (arrays)
+    months: ['Jan', 'Feb', 'Mar', 'Apr'],
+    revenues: [45000, 52000, 48000, 61000],
+    
+    // Company logo
+    logo: 'company-logo.png',
+    
+    // Formula
+    totalFormula: '=SUM(D2:D100)'
+};
+
+// Apply substitutions
+template.substitute(1, data);
+
+// Generate output
+const output = template.generate({ type: 'nodebuffer' });
+fs.writeFileSync('sales-report.xlsx', output);
+
+console.log('Report generated successfully!');
+```
+
+## Important Notes & Limitations
+
+### File Format
+- ✅ Only `.xlsx` format is supported
+- ❌ `.xls`, `.xlsb`, `.xlsm` formats are **not supported**
+
+
+### Merged Cells & Named Ranges
+- Merged cells are automatically adjusted when rows/columns are inserted
+- Named ranges and tables are moved correctly
+
+### Table Substitutions
+When using `${table:...}` placeholders:
+- Rows below the table are pushed down automatically
+- Columns to the right are shifted if arrays expand horizontally
+- Use **Excel Named Tables** for best formula compatibility
+- Page breaks can be automatically adjusted with the `pushDownPageBreakOnTableSubstitution` option
 
 ### Images
+- Images in merged cells automatically fit the merged area
+- Standard cells: use `imageRatio` option to scale
+- The `moveImages` option shifts images when rows are inserted (move the anchor)
 
-You can insert images with   
+### Performance
+- Large templates with many placeholders may take time to process
+- Consider splitting very large reports across multiple sheets
+- Image processing (especially Base64) can be memory-intensive
 
-    | My image: | ${image:imageName} |
+---
 
-Given data
+## Contributing
 
-    var template = { imageName: "helloImage.jpg"}
+Contributions are welcome! Please feel free to submit issues or pull requests.
 
-You can insert a list of images with   
+**Pull Request Requirements:**
+- All PRs **must include unit tests** for new features or bug fixes
+- Ensure all existing tests pass (`npm test`)
+- Follow the existing code style and conventions
 
-    | My images | ${table:images.name:image} |
+## License
 
-Given data
+MIT License - see [LICENSE](LICENSE) file for details
 
-    var template = { images: [{name : "helloImage1.jpg"}, {name : "helloImage2.jpg"}]}
+## Authors
 
-Supported image format in given data : 
-- Base64 string
-- Base64 Buffer
-- Absolute path file
-- relative path file (absolute is prior to relative in test)
-- URL : TODO
+- **Martin Aspeli** - Original author
+- **Andrii Kurdiumov** (@kant2002) - Maintainer
+- And many [contributors](https://github.com/optilude/xlsx-template/graphs/contributors)
 
-You can pass imageRootPath option for setting the root folder for your images.  
+---
 
-    var option = {imageRootPath : "/path/to/your/image/dir"}  
-    ...  
-    var t = new XlsxTemplate(data, option);
+## Changelog History
 
-If the image Placeholders is in standard cell, image is insert normaly  
-If the image Placeholders is in merge cell, image feet (at the best) the size of the merge cell.
-
-You can pass imageRatio option for adjust the ratio image (in percent and for standard cell - not applied on merge cell)
- 
-    var option = {imageRatio : 75.4}  
-    ...  
-    var t = new XlsxTemplate(data, option);
-
-
-
-## Generating reports
-
-To make this magic happen, you need some code like this:
-
-```
-    var XlsxTemplate = require('xlsx-template');
-
-    // Load an XLSX file into memory
-    fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), function(err, data) {
-
-        // Create a template
-        var template = new XlsxTemplate(data);
-
-        // Replacements take place on first sheet
-        var sheetNumber = 1;
-
-        // Set up some placeholder values matching the placeholders in the template
-        var values = {
-                extractDate: new Date(),
-                dates: [ new Date("2013-06-01"), new Date("2013-06-02"), new Date("2013-06-03") ],
-                people: [
-                    {name: "John Smith", age: 20},
-                    {name: "Bob Johnson", age: 22}
-                ]
-            };
-
-        // Perform substitution
-        template.substitute(sheetNumber, values);
-
-        // Get binary data
-        var data = template.generate();
-
-        // ...
-
-    });
-```
-
-At this stage, `data` is a string blob representing the compressed archive that
-is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
-if you didn't know). You can send this back to a client, store it to disk,
-attach it to an email or do whatever you want with it.
-
-You can pass options to `generate()` to set a different return type. use
-`{type: 'uint8array'}` to generate a `Uint8Array`, `arraybuffer`, `blob`,
-`nodebuffer` to generate an `ArrayBuffer`, `Blob` or `nodebuffer`, or
-`base64` to generate a base64-encoded string.
-
-## Caveats
-
-* The spreadsheet must be saved in `.xlsx` format. `.xls`, `.xlsb` or `.xlsm`
-  won't work.
-* Column (array) and table (array-of-objects) insertions cause rows and cells to
-  be inserted or removed. When this happens, only a limited number of
-  adjustments are made:
-    * Merged cells and named cells/ranges to the right of cells where insertions
-      or deletions are made are moved right or left, appropriately. This may
-      not work well if cells are merged across rows, unless all rows have the
-      same number of insertions.
-    * Merged cells, named tables or named cells/ranges below rows where further
-      rows are inserted are moved down.
-  Formulae are not adjusted.
-* As a corollary to this, it is not always easy to build formulae that refer
-  to cells in a table (e.g. summing all rows) where the exact number of rows
-  or columns is not known in advance. There are two strategies for dealing
-  with this:
-    * Put the table as the last (or only) thing on a particular sheet, and
-      use a formula that includes a large number of rows or columns in the
-      hope that the actual table will be smaller than this number.
-    * Use named tables. When a placeholder in a named table causes columns or
-      rows to be added, the table definition (i.e. the cells included in the
-      table) will be updated accordingly. You can then use things like
-      `TableName[ColumnName]` in your formula to refer to all values in a given
-      column in the table as a logical range.
-* Placeholders only work in simple cells and tables, pivot tables or
-  other such things.
-
-## Changelog
+### Version 1.4.5
+* Fixed UTF-8 encoding in `copySheet()` - sheet content now properly preserved in binary mode
+* `copySheet()` now properly copies comments (including threaded comments)
+* **Note**: Do not use `binary=false` parameter as it corrupts UTF-8 characters. May be deprecated in future versions.
+* Added comprehensive sheet copying tests
 
 ### Version 1.4.4
 * Move hyperlinks references on added rows and columns. (#184). Thanks @IagoSRL
