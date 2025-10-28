@@ -38,19 +38,19 @@ const fs = require('fs');
 // Load the template
 fs.readFile('template.xlsx', (err, data) => {
     const template = new XlsxTemplate(data);
-    
+
     // Define replacement values
     const values = {
         reportDate: new Date(),
         companyName: 'Acme Corporation'
     };
-    
+
     // Perform substitution on sheet 1 (can also use sheet name as string: 'Sheet1')
     template.substitute(1, values);
-    
+
     // Generate the output file
     const output = template.generate();
-    
+
     // Save to disk
     fs.writeFileSync('output.xlsx', output);
 });
@@ -76,7 +76,7 @@ const values = {
 template.substitute(1, values);
 ```
 
-**Result:** 
+**Result:**
 
 |   | A | B |
 |---|---|---|
@@ -366,9 +366,9 @@ Replace placeholders on **all sheets** with the same values.
 
 **Example:**
 ```javascript
-template.substituteAll({ 
+template.substituteAll({
     companyName: 'Acme Corp',
-    reportDate: new Date() 
+    reportDate: new Date()
 });
 ```
 
@@ -459,21 +459,21 @@ const data = {
     reportDate: new Date(),
     companyName: 'Acme Corporation',
     region: 'North America',
-    
+
     // Table data
     salesData: [
         { product: 'Widget A', qty: 150, price: 25.50, photo: 'widget-a.jpg' },
         { product: 'Widget B', qty: 200, price: 30.00, photo: 'widget-b.jpg' },
         { product: 'Gadget X', qty: 80, price: 55.75, photo: 'gadget-x.jpg' }
     ],
-    
+
     // Chart data (arrays)
     months: ['Jan', 'Feb', 'Mar', 'Apr'],
     revenues: [45000, 52000, 48000, 61000],
-    
+
     // Company logo
     logo: 'company-logo.png',
-    
+
     // Formula
     totalFormula: '=SUM(D2:D100)'
 };
@@ -546,6 +546,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 * `copySheet()` now properly copies comments (including threaded comments)
 * **Note**: Do not use `binary=false` parameter as it corrupts UTF-8 characters. May be deprecated in future versions.
 * Added comprehensive sheet copying tests
+* Excel Column hiding functionality. (#199) Thanks @thelunarwolf
 
 ### Version 1.4.4
 * Move hyperlinks references on added rows and columns. (#184). Thanks @IagoSRL
