@@ -1429,6 +1429,125 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+
+        it("hide cols from sheet", function(done) {
+
+            fs.readFile(path.join(__dirname, "templates", "t1.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+
+                t.substitute(1, {
+                    extractDate: new Date("2013-01-02"),
+                    revision: 10,
+                    dates: [new Date("2013-01-01"), new Date("2013-01-02"), new Date("2013-01-03")],
+                    planData: [
+                        {
+                            name: "John Smith",
+                            role: "Developer",
+                            days: [8, 8, 4]
+                        }, {
+                            name: "James Smith",
+                            role: "Analyst",
+                            days: [4, 4, 4]
+                        }, {
+                            name: "Jim Smith",
+                            role: "Manager",
+                            days: [4, 4, 4]
+                        }
+                    ]
+                });
+
+                t.hideCols(1, [0, 2]);
+
+                var newData = t.generate();
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
+                    sheet1 = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                
+                // Ensure columns are hidden
+                var cols = sheet1.find("./cols").findall("col");
+                expect(cols[0].attrib.hidden).toEqual("1"); // Column A (hidden)
+                expect(cols[1].attrib.hidden).toBeUndefined(); // Column B (not hidden)
+                expect(cols[2].attrib.hidden).toEqual("1"); // Column C (hidden)
+
+                // Dimensions should be updated
+                expect(sheet1.find("./dimension").attrib.ref).toEqual("B2:F9");
+
+                // extract date placeholder - interpolated into string referenced at B4
+                expect(sheet1.find("./sheetData/row/c[@r='B4']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B4']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Extracted on 41276");
+
+                // revision placeholder - cell C4 changed from string to number
+                expect(sheet1.find("./sheetData/row/c[@r='C4']/v").text).toEqual("10");
+
+                // dates placeholder - added cells
+                expect(sheet1.find("./sheetData/row/c[@r='D6']/v").text).toEqual("41275");
+                expect(sheet1.find("./sheetData/row/c[@r='E6']/v").text).toEqual("41276");
+                expect(sheet1.find("./sheetData/row/c[@r='F6']/v").text).toEqual("41277");
+
+                // planData placeholder - added rows and cells
+                expect(sheet1.find("./sheetData/row/c[@r='B7']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B7']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("John Smith");
+                expect(sheet1.find("./sheetData/row/c[@r='B8']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B8']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("James Smith");
+                expect(sheet1.find("./sheetData/row/c[@r='B9']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='B9']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Jim Smith");
+
+                expect(sheet1.find("./sheetData/row/c[@r='C7']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C7']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Developer");
+                expect(sheet1.find("./sheetData/row/c[@r='C8']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C8']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Analyst");
+                expect(sheet1.find("./sheetData/row/c[@r='C9']").attrib.t).toEqual("s");
+                expect(
+                    sharedStrings.findall("./si")[
+                        parseInt(sheet1.find("./sheetData/row/c[@r='C9']/v").text, 10)
+                    ].find("t").text
+                ).toEqual("Manager");
+
+                expect(sheet1.find("./sheetData/row/c[@r='D7']/v").text).toEqual("8");
+                expect(sheet1.find("./sheetData/row/c[@r='D8']/v").text).toEqual("4");
+                expect(sheet1.find("./sheetData/row/c[@r='D9']/v").text).toEqual("4");
+
+                expect(sheet1.find("./sheetData/row/c[@r='E7']/v").text).toEqual("8");
+                expect(sheet1.find("./sheetData/row/c[@r='E8']/v").text).toEqual("4");
+                expect(sheet1.find("./sheetData/row/c[@r='E9']/v").text).toEqual("4");
+
+                expect(sheet1.find("./sheetData/row/c[@r='F7']/v").text).toEqual("4");
+                expect(sheet1.find("./sheetData/row/c[@r='F8']/v").text).toEqual("4");
+                expect(sheet1.find("./sheetData/row/c[@r='F9']/v").text).toEqual("4");
+
+                // XXX: For debugging only
+                fs.writeFileSync("test/output/test1.xlsx", newData, "binary");
+
+                done();
+            });
+
+        });
     });
 
     describe("Multiple sheets", function() {
