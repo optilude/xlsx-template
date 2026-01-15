@@ -541,6 +541,14 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Changelog History
 
+### Version 1.4.6
+
+* feat: preserve metadata types when adding images in cells (#216) (@jdugh)
+* Update deleteSheet for delete also relationships of sheet (#215) (@jdugh)
+* Fix: Handle missing drawing rels file when worksheet contains shapes only (#214) (@atsu0127)
+    * create a new relationships element if the rels file does not exist.
+    * Add test for image substitution in worksheets with shapes lacking drawing rels
+
 ### Version 1.4.5
 * Fixed UTF-8 encoding in `copySheet()` - sheet content now properly preserved in binary mode
 * `copySheet()` now properly copies comments (including threaded comments)
