@@ -84,6 +84,28 @@ class Workbook {
         var sheet = self.loadSheet(sheetName);
 
         var sh = self.workbook.find("sheets/sheet[@sheetId='" + sheet.id + "']");
+        var sheets = self.workbook.findall("sheets/sheet");
+        var sheetIndex = sheets.indexOf(sh);
+        // Remove the definedNames associated with this position
+        var definedNamesParent = self.workbook.find("definedNames");
+        if (definedNamesParent) {
+            var toRemove = [];
+            self.workbook.findall("definedNames/definedName").forEach(function(def) {
+                if (def.attrib.localSheetId !== undefined) {
+                    var localId = parseInt(def.attrib.localSheetId);
+                    if (localId === sheetIndex) {
+                        toRemove.push(def);
+                    } else if (localId > sheetIndex) {
+                        // Decrement the localSheetId of the sheets after the deleted one
+                        def.attrib.localSheetId = (localId - 1).toString();
+                    }
+                }
+            });
+            // Remove the definedNames marked for deletion
+            toRemove.forEach(function(def) {
+                definedNamesParent.remove(def);
+            });
+        }
         self.workbook.find("sheets").remove(sh);
 
         var rel = self.workbookRels.find("Relationship[@Id='" + sh.attrib['r:id'] + "']");

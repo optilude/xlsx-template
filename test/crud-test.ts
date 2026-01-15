@@ -1828,6 +1828,90 @@ describe("CRUD operations", function() {
                 done();
             });
         });
+        it("Delete sheet contain comment", function (done) {
+            fs.readFile(path.join(__dirname, "templates", "test-sheet-with-comment.xlsx"), function(err, buffer) {
+                expect(err).toBeNull();
+                try {
+                    // Create a template
+                    var t = new XlsxTemplate(buffer);
+                    
+                    // Verify the sheet exists before deletion
+                    var workbookBefore = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
+                    var sheetBefore = workbookBefore.find("sheets/sheet[@name='Feuil1']");
+                    expect(sheetBefore).not.toBeNull();
+                    var sheetIdBefore = sheetBefore.attrib.sheetId;
+                    var rIdBefore = sheetBefore.attrib['r:id'];
+                    
+                    // Verify workbook rels before deletion
+                    var workbookRelsBefore = etree.parse(t.archive.file("xl/_rels/workbook.xml.rels").asText()).getroot();
+                    var relBefore = workbookRelsBefore.find("Relationship[@Id='" + rIdBefore + "']");
+                    expect(relBefore).not.toBeNull();
+                    var targetBefore = relBefore.attrib.Target; // e.g., "worksheets/sheet1.xml"
+                    
+                    // Check if there are definedNames related to the sheet
+                    var definedNamesBefore = workbookBefore.findall("definedNames/definedName");
+                    var definedNamesForSheet = definedNamesBefore.filter((dn: any) => {
+                        var localSheetId = dn.attrib.localSheetId;
+                        return localSheetId !== undefined && localSheetId === sheetIdBefore;
+                    });
+                    
+                    // Count sheets and relationships before deletion
+                    var sheetsCountBefore = workbookBefore.findall("sheets/sheet").length;
+                    var relsCountBefore = workbookRelsBefore.findall("Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet']").length;
+                    
+                    // Delete the sheet
+                    t.deleteSheet("Feuil1");
+                    
+                    // Verify the sheet is removed from workbook.xml
+                    var workbookAfter = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
+                    var sheetAfter = workbookAfter.find("sheets/sheet[@name='Feuil1']");
+                    expect(sheetAfter).toBeNull();
+                    
+                    // Verify the number of sheets decreased by 1
+                    var sheetsCountAfter = workbookAfter.findall("sheets/sheet").length;
+                    expect(sheetsCountAfter).toEqual(sheetsCountBefore - 1);
+                    
+                    // Verify the relationship to the deleted sheet is removed from workbook.xml.rels
+                    // After _rebuild(), IDs are reorganized, so we check by Target instead
+                    var workbookRelsAfter = etree.parse(t.archive.file("xl/_rels/workbook.xml.rels").asText()).getroot();
+                    var relAfter = workbookRelsAfter.find("Relationship[@Target='" + targetBefore + "']");
+                    expect(relAfter).toBeNull();
+                    
+                    // Verify the number of worksheet relationships decreased by 1 (Feuill1 has only one worksheet relationship : comment)
+                    var relsCountAfter = workbookRelsAfter.findall("Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet']").length;
+                    expect(relsCountAfter).toEqual(relsCountBefore - 1);
+                    
+                    // Verify definedNames associated with the deleted sheet are removed
+                    var definedNamesAfter = workbookAfter.findall("definedNames/definedName");
+                    var definedNamesForSheetAfter = definedNamesAfter.filter((dn: any) => {
+                        var localSheetId = dn.attrib.localSheetId;
+                        return localSheetId !== undefined && localSheetId === sheetIdBefore;
+                    });
+                    expect(definedNamesForSheetAfter.length).toEqual(0);
+                    
+                    // Verify remaining sheets have updated localSheetId if necessary
+                    var remainingSheets = workbookAfter.findall("sheets/sheet");
+                    remainingSheets.forEach((sheet: any, index: number) => {
+                        var currentSheetId = parseInt(sheet.attrib.sheetId, 10);
+                        var relatedDefinedNames = definedNamesAfter.filter((dn: any) => {
+                            var localSheetId = dn.attrib.localSheetId;
+                            if (localSheetId === undefined) return false;
+                            return parseInt(localSheetId, 10) === index;
+                        });
+                        // Each definedName should have a valid localSheetId matching the sheet's position
+                        relatedDefinedNames.forEach((dn: any) => {
+                            expect(parseInt(dn.attrib.localSheetId, 10)).toEqual(index);
+                        });
+                    });
+                    
+                    var newData = t.generate();
+                    fs.writeFileSync("test/output/sheet-with-comment.xlsx", newData, "binary");
+                done();
+                } catch (err) {
+                    done(err);
+                }
+            });
+        });
     });
 
     describe("Image substitution with shapes only (no drawing rels)", function() {
