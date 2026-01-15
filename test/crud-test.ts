@@ -642,7 +642,7 @@ describe("CRUD operations", function() {
                     score_first: {name: "Jason", score: 1},
                     scores: [
                         {name: "John", score: 100, extra:'O'},
-                        {name: "Bob", score: 110, extra:'O'}, 
+                        {name: "Bob", score: 110, extra:'O'},
                         {name: "Jim", score: 120, extra:'O'}
                     ],
                     score_last: {name: "Fox", score: 99},
@@ -650,7 +650,7 @@ describe("CRUD operations", function() {
                     score2_first: {name: "Daddy", score: 1},
                     scores2: [
                         {name: "Son1", score: 100, extra:'O'},
-                        {name: "Son2", score: 110, extra:'O'}, 
+                        {name: "Son2", score: 110, extra:'O'},
                         {name: "Son3", score: 120, extra:'O'},
                         {name: "Son4", score: 130, extra:'O'}
                     ],
@@ -681,7 +681,7 @@ describe("CRUD operations", function() {
             });
 
         });
-        
+
         it("replaces hyperlinks in sheet", function(done) {
           fs.readFile(path.join(__dirname, "templates", "test-hyperlinks.xlsx"), function(err, data) {
             expect(err).toBeNull();
@@ -1464,7 +1464,7 @@ describe("CRUD operations", function() {
 
                 var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot(),
                     sheet1 = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
-                
+
                 // Ensure columns are hidden
                 var cols = sheet1.find("./cols").findall("col");
                 expect(cols[0].attrib.hidden).toEqual("1"); // Column A (hidden)
@@ -1748,7 +1748,7 @@ describe("CRUD operations", function() {
                     expect(contentTypes.find("./Override[@PartName='/xl/worksheets/sheet3.xml']")).not.toBeNull();
                     expect(contentTypes.find("./Override[@PartName='/xl/comments3.xml']")).not.toBeNull();
                     expect(contentTypes.find("./Override[@PartName='/xl/threadedComments/threadedComment3.xml']")).not.toBeNull();
-                    
+
 
                     // Verify UUIDs are consistent across comment files
                     var comments3Content = t.archive.file("xl/comments3.xml").asText();
@@ -1910,6 +1910,51 @@ describe("CRUD operations", function() {
                 } catch (err) {
                     done(err);
                 }
+            });
+        });
+    });
+
+    describe("Image substitution with shapes only (no drawing rels)", function() {
+        it("should substitute image on worksheet containing shapes without existing drawing rels", function(done) {
+            fs.readFile(path.join(__dirname, "templates", "test-shape-only.xlsx"), function(err, data) {
+              expect(err).toBeNull();
+              var option = {
+                imageRootPath: path.join(__dirname, "templates", "dataset"),
+              };
+              var t = new XlsxTemplate(data, option);
+
+              // Verify that the drawing rels file was not created
+              var drawingRels = t.archive.file(
+                "xl/drawings/_rels/drawing1.xml.rels"
+              );
+              expect(drawingRels).toBeNull();
+
+              // This should not throw an error even though the drawing exists but has no rels file
+              t.substitute(1, {
+                logo: "image1.png",
+              });
+
+              var newData = t.generate();
+
+              // Verify that the drawing rels file was created
+              var drawingRels = t.archive.file(
+                "xl/drawings/_rels/drawing1.xml.rels"
+              );
+              expect(drawingRels).not.toBeNull();
+
+              // Parse and verify the rels content
+              var relsRoot = etree.parse(drawingRels.asText()).getroot();
+              expect(relsRoot.findall("Relationship").length).toEqual(1);
+              expect(relsRoot.findall("Relationship")[0].attrib.Type).toEqual(
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+              );
+
+              fs.writeFileSync(
+                "test/output/shape-only-with-image.xlsx",
+                newData,
+                "binary"
+              );
+              done();
             });
         });
     });

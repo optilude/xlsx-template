@@ -715,7 +715,14 @@ class Workbook {
         drawing.filename = drawingFilename;
         drawing.root = drawingTree.getroot();
         drawing.relFilename = path.dirname(drawingFilename) + '/_rels/' + path.basename(drawingFilename) + '.rels';
-        drawing.relRoot = etree.parse(self.archive.file(drawing.relFilename).asText()).getroot();
+        // If rels file doesn't exist (e.g., drawing contains only shapes without images), create a new one.
+        var relFile = self.archive.file(drawing.relFilename);
+        if (relFile === null) {
+            drawing.relRoot = etree.Element('Relationships');
+            drawing.relRoot.set('xmlns', "http://schemas.openxmlformats.org/package/2006/relationships");
+        } else {
+            drawing.relRoot = etree.parse(relFile.asText()).getroot();
+        }
         return drawing;
     }
     addContentType(partName, contentType) {
@@ -1838,14 +1845,14 @@ class Workbook {
     }
 
     /**
-     * Hides specified columns in an Excel sheet by setting the `hidden` attribute in the XML structure.  
-     * Ensures proper updates to the `<cols>` section and recalculates workbook dependencies.  
+     * Hides specified columns in an Excel sheet by setting the `hidden` attribute in the XML structure.
+     * Ensures proper updates to the `<cols>` section and recalculates workbook dependencies.
     */
     hideCols(sheetName, hideItemIndexes) {
         var self = this;
         var sheet = self.loadSheet(sheetName);
         self.sheet = sheet;
-    
+
         if (Array.isArray(hideItemIndexes) && hideItemIndexes.length) {
             let cols = sheet.root.find("cols");
             if (cols) {
@@ -1856,19 +1863,19 @@ class Workbook {
                         const max = parseInt(c.attrib.max, 10);
                         return colIndex >= min && colIndex <= max;
                     });
-        
+
                     if (col) {
                         col.attrib.hidden = "1"; // Set hidden to true
                     }
                 });
             }
         }
-    
+
         self.archive.file(sheet.filename, etree.tostring(sheet.root));
-    
+
         self._rebuild();
     }
-    
+
     getWidthCell(numCol, sheet) {
         var defaultWidth = sheet.root.find("sheetFormatPr").attrib["defaultColWidth"];
         if (!defaultWidth) {
