@@ -1253,6 +1253,121 @@ describe("CRUD operations", function() {
             });
         });
 
+        it("Insert imageincells table with metadata already init", function(done) {
+            fs.readFile(path.join(__dirname, 'templates', 'test-insert-images_in_cell_with_metadata.xlsx'), function(err, data) {
+                expect(err).toBeNull();
+                var option = {
+                    imageRootPath : path.join(__dirname, 'templates', 'dataset')
+                }
+                var t = new XlsxTemplate(data, option);
+                var imgB64 = 'iVBORw0KGgoAAAANSUhEUgAAALAAAAA2CAYAAABnXhObAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAUjSURBVHhe7ZtbyGVjGMfXlmmccpqRcYgZmQsTMeVYQiJzozEYJRHCcCUaNy5kyg3KhUNEhjSRbwipIcoF0pRpxiFiLsYUIqcoZ8b2/6/1vKtnv3u9+/smuXjW/v/qv593PetZa+/17f9617vetb9BVVVDSIiQ7GFRiJC0PfBwOGRbiBAMBoPat+qBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoZGBRWhkYBEaGViERgYWoenND9oHg8EFCOdBPJ57cDzfWf5MhLPZBr9AL2LdzmZxFNTui3AdtF+dqKqtqH3F2iOg9g6EVLcFdTPW7gT1CxAuhE6FFkG/Ql9Cm7HtC4gtqL0S4ehmaRzU32XNiWA/VyGcDGGT4c11sifg2Np/hWODB8iXsAJ3p2OBznL5rS5Pfey38wJPuzpqe6HuXFdDfdRVlwRo9r+stkvboYWu/ifLlzTP7z8XOBZ63mqTDuyqjap0XNMwhGCvStjjkeNw9q6ydgtyCxEub5Za5lnMWW0xsQzbn2btEZBfh0DtWSeq6h3oQeghaBMTYCl0UtMc4U/obegN6FXoJWgGXyBPhk7wfrcgfAJdXCemgNrJ3t0RBUo98KeW+wCiIdjmMCLfnpdYNrw+y+us9ltb/6FFisOWvO4Ut/4HaHWh5j7odJdLPfAXvnYuAk/Ztuuhn61NqQcOzt/QM02zWome6gBrJzj2Jey9imC7lQjsrcn1FsmlFj33WiS34Q+/0dotyL0L3QptttR/hT32cuzvWkQec6+ZNgNvaJo1ay3SlLyxOr5Zqm6wWKI1qpluW7NULcF+zrE29zkfId08sid/3Nq7BfazwMvSRfA+j0Lv2eIui71lqgyML/Z1xO+bxepqi+RGizTAW9Ycw0yZxr+8VJP7LZJLLJJjLBIOY2qwj1XQRtOM6VmIMxM5R0CcTWmFunRSzAX1wD0ifZnpMn4kzHCita+xyLEoKX3xNC9NTB7mCwz/ZL3U4A18sEWSThpyCMRenOL+qMsgfxNXD/IKTFqXox64RyRTcqossQ4mvsna5AmLacYinxv3sw9/YNvlFNpp/HoYlldY+2uLhLMMiTchvifFGYlJcJ6YJ0IrnDDcfq703sCkvpsDfAkrMNssxGsut8Ny1O8W2xkHQPOxsdPleOPGxmx6zG3Dyz4bfI9FKe/WP2DrqRUu/6PldnsWwgvwgU3av2YhguOHBX42IA0J/Fj2N4se3/tOwg8j0qwH3+POpjnC/z1G1RCipzxn0eMfBU8y8C70AINcyKeT4iAMIy6y9u3QN02zWoP8y9D50OHQMuTOaFaVQd0JuWxVJ1i/N7SUwqI/QY5CbjG0vy33hrorBmPddCSB2YYQm7L69y3ftW6L5eshBFhiy9R6X5sEOD+caja4PG8QeROX1pXUNYQoaX6qzQV4JcnrvTo/fzSl45nWHpj4YUT+Q5y8B+YPhRJ8nDsG/qjMf9UsVVdYZJ43hpxS4+NjPsHL4Xj8EdTxUXEi7adE/Q0WKD5mNno1rOClr7FzcxkMDS6P+zDiWNIsQg3yeyHHG6kRmGcsrfP50r5zZqvD+sUIh0L8ZdznqONj4zHSZ+ui6/N6sG2xY8K2/1gzNDjG2re9MrCYHpKBp3kIIXqADCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAiNDCxCIwOL0MjAIjQysAhN+x8ZQkREPbAITFX9C5ozpqaetbGcAAAAAElFTkSuQmCC';
+
+                t.substitute('table_image_in_cell', {
+                    imgArray : [
+                        {filename : imgB64},
+                        {filename : imgB64},
+                        {filename : imgB64},
+                    ],
+                    someText : "Hello ImageInCell",
+                });
+                var newData = t.generate();
+                try {
+                    // Verify richData files
+                    var richDataFile = etree.parse(t.archive.file("xl/richData/_rels/richValueRel.xml.rels").asText()).getroot();
+                    expect(richDataFile.findall("Relationship").length).toEqual(4);
+                    
+                    var rdrichvalueFile = etree.parse(t.archive.file("xl/richData/rdrichvalue.xml").asText()).getroot();
+                    expect(rdrichvalueFile.findall("rv").length).toEqual(4);
+                    expect(parseInt(rdrichvalueFile.attrib.count)).toEqual(4);
+                    
+                    var richValueRelFile = etree.parse(t.archive.file("xl/richData/richValueRel.xml").asText()).getroot();
+                    expect(richValueRelFile.findall("rel").length).toEqual(4);
+                    
+                    // Verify metadata.xml file
+                    var metadataFile = etree.parse(t.archive.file("xl/metadata.xml").asText()).getroot();
+                    
+                    // Verify that metadataTypes still contains 2 types (XLDAPR and XLRICHVALUE)
+                    var metadataTypes = metadataFile.find('metadataTypes');
+                    expect(parseInt(metadataTypes.attrib.count)).toEqual(2);
+                    var metadataTypesList = metadataTypes.findall('metadataType');
+                    expect(metadataTypesList.length).toEqual(2);
+                    expect(metadataTypesList[0].attrib.name).toEqual('XLDAPR');
+                    expect(metadataTypesList[1].attrib.name).toEqual('XLRICHVALUE');
+                    
+                    // Verify that XLRICHVALUE is at index 1 (the second type)
+                    var xlrichvalueIndex = -1;
+                    for (var i = 0; i < metadataTypesList.length; i++) {
+                        if (metadataTypesList[i].attrib.name === 'XLRICHVALUE') {
+                            xlrichvalueIndex = i;
+                            break;
+                        }
+                    }
+                    expect(xlrichvalueIndex).toEqual(1);
+                    
+                    // Verify futureMetadata - there should be 2 (XLDAPR and XLRICHVALUE)
+                    var futureMetadataList = metadataFile.findall('futureMetadata');
+                    expect(futureMetadataList.length).toEqual(2);
+                    
+                    // Find the XLRICHVALUE futureMetadata
+                    var xlrichvalueFutureMetadata = null;
+                    var xldaprFutureMetadata = null;
+                    for (var i = 0; i < futureMetadataList.length; i++) {
+                        if (futureMetadataList[i].attrib.name === 'XLRICHVALUE') {
+                            xlrichvalueFutureMetadata = futureMetadataList[i];
+                        } else if (futureMetadataList[i].attrib.name === 'XLDAPR') {
+                            xldaprFutureMetadata = futureMetadataList[i];
+                        }
+                    }
+                    
+                    // Verify that XLDAPR was not modified (still 1 element)
+                    expect(xldaprFutureMetadata).not.toBeNull();
+                    expect(parseInt(xldaprFutureMetadata.attrib.count)).toEqual(1);
+                    expect(xldaprFutureMetadata.findall("bk").length).toEqual(1);
+                    
+                    // Verify that XLRICHVALUE was updated (1 existing + 3 new = 4)
+                    expect(xlrichvalueFutureMetadata).not.toBeNull();
+                    expect(parseInt(xlrichvalueFutureMetadata.attrib.count)).toEqual(4);
+                    var xlrichvalueBkList = xlrichvalueFutureMetadata.findall("bk");
+                    expect(xlrichvalueBkList.length).toEqual(4);
+                    
+                    // Verify that the i indexes are correct (0, 1, 2, 3)
+                    for (var i = 0; i < xlrichvalueBkList.length; i++) {
+                        var rvb = xlrichvalueBkList[i].find(".//xlrd:rvb");
+                        expect(rvb).not.toBeNull();
+                        expect(rvb.attrib.i).toEqual(i.toString());
+                    }
+                    
+                    // Verify cellMetadata (should remain at 1)
+                    var cellMetadata = metadataFile.find('cellMetadata');
+                    expect(parseInt(cellMetadata.attrib.count)).toEqual(1);
+                    expect(cellMetadata.findall("bk").length).toEqual(1);
+                    
+                    // Verify valueMetadata (1 existing + 3 new = 4)
+                    var valueMetadata = metadataFile.find('valueMetadata');
+                    expect(parseInt(valueMetadata.attrib.count)).toEqual(4);
+                    var valueMetadataBkList = valueMetadata.findall("bk");
+                    expect(valueMetadataBkList.length).toEqual(4);
+                    
+                    // Verify that t and v attributes are correct in valueMetadata
+                    // The first element (existing) should have t="2" v="0"
+                    expect(valueMetadataBkList[0].find("rc").attrib.t).toEqual("2");
+                    expect(valueMetadataBkList[0].find("rc").attrib.v).toEqual("0");
+                    
+                    // The new elements should have t="2" (xlrichvalueIndex + 1 = 1 + 1 = 2) and increasing v
+                    for (var i = 1; i < valueMetadataBkList.length; i++) {
+                        var rc = valueMetadataBkList[i].find("rc");
+                        expect(rc.attrib.t).toEqual("2"); // xlrichvalueIndex (1) + 1 = 2
+                        expect(rc.attrib.v).toEqual(i.toString());
+                    }
+                    
+                    fs.writeFileSync('test/output/insert_imageincell_table_with_metadata.xlsx', newData, 'binary');
+                    done();
+                } catch (err) {
+                    done(err);
+                }
+            });
+        });
+
         it("Insert some format of image", function(done) {
             fs.readFile(path.join(__dirname, "templates", "test-insert-images.xlsx"), function(err, data) {
                 expect(err).toBeNull();

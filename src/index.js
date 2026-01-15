@@ -1431,7 +1431,8 @@ class Workbook {
             return true;
         }
         this.initRichData();
-        const maxFildId = this.findMaxFileId(/xl\/media\/image\d*.jpg/, /image(\d*)\.jpg/);
+        const maxFildId = this.findMaxFileId(/xl\/media\/image\d*\..*/, /image(\d*)\./);
+        const fileExtension = substitution.split('.').pop();
         try {
             substitution = this.imageToBuffer(substitution);
         }
@@ -1443,12 +1444,12 @@ class Workbook {
                 throw error;
             }
         }
-        this.archive.file('xl/media/image' + maxFildId + '.jpg', this.toArrayBuffer(substitution), { binary: true, base64: false });
+        this.archive.file('xl/media/image' + maxFildId + '.' + fileExtension, this.toArrayBuffer(substitution), { binary: true, base64: false });
         const maxIdRichData = this.findMaxId(this._relsrichValueRel, 'Relationship', 'Id', /rId(\d*)/);
         const _rel = etree.SubElement(this._relsrichValueRel, 'Relationship');
         _rel.set('Id', 'rId' + maxIdRichData);
         _rel.set('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image');
-        _rel.set('Target', '../media/image' + maxFildId + '.jpg');
+        _rel.set('Target', '../media/image' + maxFildId + '.' + fileExtension);
         const currentCountrdRichValue = this.rdrichvalue.get('count');
         this.rdrichvalue.set('count', parseInt(currentCountrdRichValue) + 1);
         const rv = etree.SubElement(this.rdrichvalue, 'rv');
@@ -1459,9 +1460,12 @@ class Workbook {
         secondV.text = "5";
         const rel = etree.SubElement(this.richValueRel, 'rel');
         rel.set("r:id", 'rId' + maxIdRichData);
-        const futureMetadataCount = this.metadata.find('futureMetadata').get('count');
-        this.metadata.find('futureMetadata').set('count', parseInt(futureMetadataCount) + 1);
-        const bk = etree.SubElement(this.metadata.find('futureMetadata'), 'bk');
+        const futureMetadata = this.metadata.findall('futureMetadata').find(function(fm) {
+            return fm.attrib.name === 'XLRICHVALUE';
+        });
+        const futureMetadataCount = futureMetadata.get('count');
+        futureMetadata.set('count', parseInt(futureMetadataCount) + 1);
+        const bk = etree.SubElement(futureMetadata, 'bk');
         const extLst = etree.SubElement(bk, 'extLst');
         const ext = etree.SubElement(extLst, 'ext');
         ext.set("uri", "{3e2802c4-a4d2-4d8b-9148-e3be6c30e623}");
@@ -1471,7 +1475,10 @@ class Workbook {
         this.metadata.find('valueMetadata').set('count', parseInt(valueMetadataCount) + 1);
         const bk_VM = etree.SubElement(this.metadata.find('valueMetadata'), 'bk');
         const rc = etree.SubElement(bk_VM, 'rc');
-        rc.set("t", "1");
+        const XLRICHVALUEMetaDataTypeIndex = this.metadata.find('metadataTypes').findall('metadataType').findIndex(function(el) {
+            return el.attrib.name === "XLRICHVALUE";
+        });
+        rc.set("t", `${XLRICHVALUEMetaDataTypeIndex + 1}`);
         rc.set("v", valueMetadataCount);
         cell.set("t", "e");
         cell.set("vm", parseInt(currentCountrdRichValue) + 1);
