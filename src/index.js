@@ -1454,7 +1454,12 @@ class Workbook {
         }
         this.initRichData();
         const maxFildId = this.findMaxFileId(/xl\/media\/image\d*\..*/, /image(\d*)\./);
-        const fileExtension = substitution.split('.').pop();
+        /**
+         * Setting extension back to "jpg" which works for all image formats
+         * for now. Proper extension detection will be addressed in a future PR
+         * with appropriate testing.
+         */
+        const fileExtension = "jpg";
         try {
             substitution = this.imageToBuffer(substitution);
         }
