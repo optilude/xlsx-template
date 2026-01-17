@@ -12,7 +12,7 @@ Generate Excel (.xlsx) reports from templates with dynamic data substitution. Cr
 - **Preserve formatting** - Cell formatting, merged cells, formulas, named tables are maintained
 - **Image support** - Insert images from file paths or Base64
 - **Multiple sheets** - Work with multiple sheets, copy/delete sheets dynamically
-- **Lightweight & cross-platform** - Only 3 dependencies ([jszip](https://www.npmjs.com/package/@kant2002/jszip), [elementtree](https://www.npmjs.com/package/elementtree), [image-size](https://www.npmjs.com/package/image-size)). Direct XML DOM manipulation with no superfluous overhead. Works seamlessly on Windows, Linux, and macOS.
+- **Lightweight & cross-platform** - Only 3 dependencies ([jszip@2](https://www.npmjs.com/package/@kant2002/jszip), [elementtree](https://www.npmjs.com/package/elementtree), [image-size](https://www.npmjs.com/package/image-size)). Direct XML DOM manipulation with no superfluous overhead. Works seamlessly on Windows, Linux, and macOS.
 
 ## Installation
 
@@ -540,6 +540,10 @@ MIT License - see [LICENSE](LICENSE) file for details
 ---
 
 ## Changelog History
+
+### Version 1.4.7
+
+* Revert dynamic file extension detection to hardcoded 'jpg' (#218) (@jdugh)
 
 ### Version 1.4.6
 
