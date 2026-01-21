@@ -811,6 +811,7 @@ describe("CRUD operations", function() {
                 expect(workbook.find("./definedNames/definedName[@name='RangeRightOfTable']").text).toEqual("Tables!$E$14:$F$14");
                 expect(workbook.find("./definedNames/definedName[@name='RightOfTable']").text).toEqual("Tables!$F$8");
                 expect(workbook.find("./definedNames/definedName[@name='_xlnm.Print_Titles']").text).toEqual("Tables!$1:$3");
+                expect(workbook.find("./definedNames/definedName[@name='Formula']").text).toEqual("IF(Tables!$I$8>1,Tables!$G$7,SUM(Untouched!$A$2:$A$6)/COUNT(Untouched!$A$2:$A$6))");
 
                 // Merged cells have moved
                 expect(sheet1.find("./mergeCells/mergeCell[@ref='B2:C2']")).not.toBeNull(); // title - unchanged
@@ -1486,19 +1487,23 @@ describe("CRUD operations", function() {
                     pushDownPageBreakOnTableSubstitution : true
                 };
                 var t = new XlsxTemplate(buffer, option);
-                var data = {
-                    myarray : [
-                        {name : "foo"},
-                        {name : "john"},
-                        {name : "doe"},
+                t.substitute(1, {
+                    users: [
+                        {
+                            name: "John",
+                            surname : "Smith"
+                        },
+                        {
+                            name: "John",
+                            surname : "Doe"
+                        }
                     ]
-                };
-                t.substitute(1, data);
+                });
                 var newData = t.generate();
                 var workbook = etree.parse(t.archive.file("xl/workbook.xml").asText()).getroot();
 
                 workbook.findall("definedNames/definedName").forEach(function(name) {
-                    expect(name.text === "Feuil1!$A$1:$J$12");
+                    expect(name.text === "Feuil1!$A$1:$J$13");
                 });
 
                 fs.writeFileSync("test/output/movePageBreakOption.xlsx", newData, "binary");

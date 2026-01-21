@@ -1672,6 +1672,47 @@ class Workbook {
             row.attrib.spans = rowSpan.join(":");
         }
     }
+    // Split text of a definedName like IF(Table1!A1>Table1!$B2,Table2!$A$3,Table1!A$2*Table2!$B$3) into
+    // [
+    //  {isRef: false, text: "IF(Table1!A1>Table1!$B2,"},
+    //  {isRef: true, ref: "Table2!$A$3"},
+    //  {isRef: false, text: ",Table1!A$2*"},
+    //  {isRef: true, ref: "Table2!$B$3"},
+    //  {isRef: false, text: ")"},
+    // ]
+    // DefinedNames always use table references
+    splitDefinedNameText(text, sheetName) {
+        const rangeRegExp = /!\$?[A-Z]*\$?\d+(:\$?[A-Z]*\$?\d+)?/;
+        const parts = [];
+        let remainder = text;
+
+        while (remainder) {
+            let idx = remainder.indexOf(sheetName);
+            let tableName = sheetName;
+
+            if (idx < 0) {
+                parts.push({ isRef: false, text: remainder });
+                remainder = "";
+            } else {
+                if (remainder[idx - 1] === "'") {
+                    idx -= 1;
+                    tableName = "'" + sheetName + "'";
+                }
+                if (idx > 0) {
+                    parts.push({ isRef: false, text: remainder.slice(0, idx) });
+                }
+                const match = remainder.slice(idx + tableName.length).match(rangeRegExp);
+                parts.push({ isRef: true, ref: tableName + match[0] });
+                remainder = remainder.slice(idx + tableName.length + match[0].length);
+            }
+        }
+
+        return parts;
+    }
+    // invers to splitDefinedNameText
+    joinDefinedNameText(parts) {
+        return parts.map(p => (p.isRef ? p.ref : p.text)).join("");
+    }
     // Split a range like "A1:B1" into {start: "A1", end: "B1"}
     splitRange(range) {
         var split = range.split(":");
@@ -1708,30 +1749,44 @@ class Workbook {
 
         // Named cells/ranges
         workbook.findall("definedNames/definedName").forEach(function (name) {
-            var ref = name.text;
+            // only definedNames which reference a cell in the sheet where the change occurred require adjustment
+            if (!name.text.includes(self.sheet.name)) return;
 
-            if (self.isRange(ref)) {
-                var namedRange = self.splitRange(ref), namedStart = self.splitRef(namedRange.start), namedStartCol = self.charToNum(namedStart.col), namedEnd = self.splitRef(namedRange.end), namedEndCol = self.charToNum(namedEnd.col);
+            const formulaParts = self.splitDefinedNameText(name.text, self.sheet.name);
 
-                if (namedStart.row === currentRow && currentCol < namedStartCol) {
-                    namedStart.col = self.numToChar(namedStartCol + numCols);
-                    namedEnd.col = self.numToChar(namedEndCol + numCols);
+            formulaParts.forEach(function (part) {
+                if (!part.isRef || !part.ref.includes(self.sheet.name)) return;
 
-                    name.text = self.joinRange({
-                        start: self.joinRef(namedStart),
-                        end: self.joinRef(namedEnd),
-                    });
+                if (self.isRange(part.ref)) {
+                    const namedRange = self.splitRange(part.ref);
+                    const namedRangeStart = self.splitRef(namedRange.start);
+                    const namedRangeStartCol = self.charToNum(namedRangeStart.col);
+
+                    if (namedRangeStart.row === currentRow && currentCol < namedRangeStartCol) {
+                        const namedRangeEnd = self.splitRef(namedRange.end);
+                        const namedRangeEndCol = self.charToNum(namedRangeEnd.col);
+
+                        namedRangeStart.col = self.numToChar(namedRangeStartCol + numCols);
+                        namedRangeEnd.col = self.numToChar(namedRangeEndCol + numCols);
+
+                        part.ref = self.joinRange({
+                            start: self.joinRef(namedRangeStart),
+                            end: self.joinRef(namedRangeEnd),
+                        });
+                    }
+                } else {
+                    const namedRef = self.splitRef(part.ref);
+                    const namedCol = self.charToNum(namedRef.col);
+
+                    if (namedRef.row === currentRow && currentCol < namedCol) {
+                        namedRef.col = self.numToChar(namedCol + numCols);
+
+                        part.ref = self.joinRef(namedRef);
+                    }
                 }
-            } else {
-                var namedRef = self.splitRef(ref), namedCol = self.charToNum(namedRef.col);
+            });
 
-                if (namedRef.row === currentRow && currentCol < namedCol) {
-                    namedRef.col = self.numToChar(namedCol + numCols);
-
-                    name.text = self.joinRef(namedRef);
-                }
-            }
-
+            name.text = self.joinDefinedNameText(formulaParts);
         });
 
         // Update hyperlinks refs
@@ -1807,43 +1862,56 @@ class Workbook {
 
         // Named cells/ranges
         workbook.findall("definedNames/definedName").forEach(function (name) {
-            var ref = name.text;
-            if (self.isRange(ref)) {
-                var namedRange = self.splitRange(ref), //TODO : I think is there a bug, the ref is equal to [sheetName]![startRange]:[endRange]
-                    namedStart = self.splitRef(namedRange.start), // here, namedRange.start is [sheetName]![startRange] ?
-                    namedEnd = self.splitRef(namedRange.end);
-                if (namedStart) {
-                    if (namedStart.row > currentRow) {
-                        namedStart.row += numRows;
-                        namedEnd.row += numRows;
+            // only definedName which references a cell in the sheet where the change occurred requires adjustment
+            if (!name.text.includes(self.sheet.name)) return;
 
-                        name.text = self.joinRange({
-                            start: self.joinRef(namedStart),
-                            end: self.joinRef(namedEnd),
-                        });
+            const formulaParts = self.splitDefinedNameText(name.text, self.sheet.name);
 
-                    }
-                }
-                if (self.option && self.option.pushDownPageBreakOnTableSubstitution) {
-                    if (self.sheet.name == name.text.split("!")[0].replace(/'/gi, "") && namedEnd) {
-                        if (namedEnd.row > currentRow) {
-                            namedEnd.row += numRows;
-                            name.text = self.joinRange({
-                                start: self.joinRef(namedStart),
-                                end: self.joinRef(namedEnd),
-                            });
-                        }
-                    }
+            if (self.option && self.option.pushDownPageBreakOnTableSubstitution && name.attrib.name === "_xlnm.Print_Area") {
+                if (self.isRange(name.text)) {
+                    const namedRange = self.splitRange(name.text);
+                    const namedRangeEnd = self.splitRef(namedRange.end);
+
+                    namedRangeEnd.row += numRows;
+                    name.text = self.joinRange({
+                        start: namedRange.start,
+                        end: self.joinRef(namedRangeEnd),
+                    })
+                } else {
+                    console.error("Illegal PageBreak, skipping adjustment");
                 }
             } else {
-                var namedRef = self.splitRef(ref);
+                formulaParts.forEach(function (part) {
+                    if (!part.isRef || !part.ref.includes(self.sheet.name)) return;
 
-                if (namedRef.row > currentRow) {
-                    namedRef.row += numRows;
-                    name.text = self.joinRef(namedRef);
-                }
+                    if (self.isRange(part.ref)) {
+                        const namedRange = self.splitRange(part.ref);
+                        const namedRangeStart = self.splitRef(namedRange.start);
+                        const namedRangeEnd = self.splitRef(namedRange.end);
+
+                        if (namedRangeStart.row > currentRow) {
+
+                            namedRangeStart.row += numRows;
+                            namedRangeEnd.row += numRows;
+
+                            part.ref = self.joinRange({
+                                start: self.joinRef(namedRangeStart),
+                                end: self.joinRef(namedRangeEnd),
+                            });
+                        }
+                    } else {
+                        const namedRef = self.splitRef(part.ref);
+
+                        if (namedRef.row > currentRow) {
+                            namedRef.row += numRows;
+
+                            part.ref = self.joinRef(namedRef);
+                        }
+                    }
+                });
+
+                name.text = self.joinDefinedNameText(formulaParts);
             }
-
         });
 
         // Update hyperlinks refs
