@@ -1,54 +1,51 @@
 import * as etree from "elementtree";
 import * as JSZip from "jszip";
 
-export interface TemplatePlaceholder{
-    type: string;
-    string?: string;
-    full: boolean;
-    name: string;
-    key: string;
-    placeholder?: string
+declare namespace XlsxTemplate {
+    export interface TemplatePlaceholder {
+        type: string;
+        string?: string;
+        full: boolean;
+        name: string;
+        key: string;
+        placeholder?: string;
+        subType?: string;
+    }
+
+    export interface NamedTable {
+        filename: string;
+        root: etree.Element;
+    }
+
+    interface OutputByType {
+        base64: string;
+        uint8array: Uint8Array;
+        arraybuffer: ArrayBuffer;
+        blob: Blob;
+        nodebuffer: Buffer;
+    }
+
+    type GenerateType = keyof OutputByType;
+
+    export type GenerateOptions<T extends GenerateType = GenerateType> = {
+        type: T;
+    };
+
+    interface RangeSplit {
+        start: string;
+        end: string;
+    }
+
+    interface ReferenceAddress {
+        table?: string;
+        colAbsolute?: boolean;
+        col: string;
+        rowAbsolute?: boolean;
+        row: number;
+    }
 }
 
-export interface NamedTable{
-    filename: string;
-    root: etree.Element;
-}
-
-namespace XlsxTemplate {
-
-}
-
-interface OutputByType {
-    base64: string;
-    uint8array: Uint8Array;
-    arraybuffer: ArrayBuffer;
-    blob: Blob;
-    nodebuffer: Buffer;
-}
-
-type GenerateType = keyof OutputByType;
-
-export type GenerateOptions<T extends GenerateType = GenerateType> = {
-  type: T;
-};
-
-interface RangeSplit
-{
-    start: string;
-    end: string;
-}
-
-interface ReferenceAddress
-{
-    table?: string;
-    colAbsolute?: boolean;
-    col : string;
-    rowAbsolute?: boolean;
-    row : number;
-}
-
-class XlsxTemplate
+declare class XlsxTemplate
 {
     public readonly sharedStrings: string[];
     protected readonly workbook: etree.ElementTree;
@@ -62,16 +59,16 @@ class XlsxTemplate
     public copySheet(sheetName : string, copyName : string, binary? : boolean) : this;
     public loadTemplate(data : Buffer) : void;
     public substitute(sheetName : string | number, substitutions : Object) : void;
-    public generate<T extends GenerateType>(options: GenerateOptions<T>): OutputByType[T];
+    public generate<T extends XlsxTemplate.GenerateType>(options: XlsxTemplate.GenerateOptions<T>): XlsxTemplate.OutputByType[T];
     public generate() : any;
 
     public replaceString(oldString : string, newString : string) : number; // returns idx
     public stringIndex(s : string) : number; // returns idx
     public writeSharedStrings() : void;
-    public splitRef(ref : string) : ReferenceAddress;
-    public joinRef(ref : ReferenceAddress) : string;
+    public splitRef(ref : string) : XlsxTemplate.ReferenceAddress;
+    public joinRef(ref : XlsxTemplate.ReferenceAddress) : string;
     public addSharedString(s : string) : any; // I think s is a string? Not sure what its return "idx" is though, I think it's a number? Is "idx" short for "index"?
-    public substituteScalar(cell : any, string: string, placeholder: TemplatePlaceholder, substitution: any): string;
+    public substituteScalar(cell : any, string: string, placeholder: XlsxTemplate.TemplatePlaceholder, substitution: any): string;
     public charToNum(str : string) : number;
     public numToChar(num : number) : string;
     public nextCol(ref : string) : string; 
@@ -79,9 +76,9 @@ class XlsxTemplate
     public stringify(value : Date | number | boolean | string) : string;
     public isWithin(ref : string, startRef : string, endRef : string) : boolean;
     public isRange(ref : string) : boolean;
-    public splitRange(range : string) : RangeSplit;
-    public joinRange(range : RangeSplit) : string;
-    public extractPlaceholders(templateString : string) : TemplatePlaceholder[];
+    public splitRange(range : string) : XlsxTemplate.RangeSplit;
+    public joinRange(range : XlsxTemplate.RangeSplit) : string;
+    public extractPlaceholders(templateString : string) : XlsxTemplate.TemplatePlaceholder[];
     
     // need typing properly
     protected _rebuild() : void;
@@ -100,8 +97,8 @@ class XlsxTemplate
     protected substituteTableColumnHeaders(tables : any, substitutions : any) : void;
     protected insertCellValue(cell : any, substitution : any) : string;
     protected substituteArray(cells : any[], cell : any, substitution : any);
-    protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any, placeholder : TemplatePlaceholder, drawing : etree.ElementTree) : any;
-    protected substituteImage(cell : any, string : string, placeholder: TemplatePlaceholder, substitution : any, drawing : etree.ElementTree) : boolean
+    protected substituteTable(row : any, newTableRows : any, cells : any[], cell : any, namedTables : any, substitution : any, key : any, placeholder : XlsxTemplate.TemplatePlaceholder, drawing : etree.ElementTree) : any;
+    protected substituteImage(cell : any, string : string, placeholder: XlsxTemplate.TemplatePlaceholder, substitution : any, drawing : etree.ElementTree) : boolean
     protected substituteImageInCell(cell : any, substitution : any) : boolean;
     protected cloneElement(element : any, deep? : any) : any;
     protected replaceChildren(parent : any, children : any) : void;
