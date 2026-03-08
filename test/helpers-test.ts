@@ -128,6 +128,19 @@ describe("Helpers", function() {
             }]);
         });
 
+        it("can extract placeholders with subtypes", function() {
+            var t = new XlsxTemplate();
+
+            expect(t.extractPlaceholders("${table:foo.bar:image}")).toEqual([{
+                full: true,
+                key: "bar",
+                name: "foo",
+                placeholder: "${table:foo.bar:image}",
+                subType: "image",
+                type: "table"
+            }]);
+        });
+
         it("can handle strings with no placeholders", function() {
             var t = new XlsxTemplate();
 
