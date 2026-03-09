@@ -1,0 +1,16 @@
+{
+  "name": "commonjs-typings-test",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "scripts": {
+    "test:types": "tsc --noEmit",
+    "test": "npm i --no-save --no-package-lock && npm run test:types"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "xlsx-template": "file:../../../.."
+  }
+}
