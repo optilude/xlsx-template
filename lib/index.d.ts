@@ -2,7 +2,7 @@ import * as etree from "elementtree";
 import * as JSZip from "jszip";
 
 declare namespace XlsxTemplate {
-    export interface TemplatePlaceholder {
+    interface TemplatePlaceholder {
         type: string;
         string?: string;
         full: boolean;
@@ -12,7 +12,7 @@ declare namespace XlsxTemplate {
         subType?: string;
     }
 
-    export interface NamedTable {
+    interface NamedTable {
         filename: string;
         root: etree.Element;
     }
@@ -27,7 +27,7 @@ declare namespace XlsxTemplate {
 
     type GenerateType = keyof OutputByType;
 
-    export type GenerateOptions<T extends GenerateType = GenerateType> = {
+    type GenerateOptions<T extends GenerateType = GenerateType> = {
         type: T;
     };
 
