@@ -69,7 +69,8 @@
   },
   "scripts": {
     "compile": "tsc",
-    "test": "npm run compile && jest",
+    "test:module": "find test/module -name package.json -execdir npm test \\;",
+    "test": "npm run compile && npm run test:module && jest",
     "prepublishOnly": "npm run compile"
   },
   "readme": "",
