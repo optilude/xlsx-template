@@ -1,5 +1,4 @@
-How to contribute
-=================
+# How to contribute
 
 Any changes to code is welcome. This project open to any improvements. I want to maintain backward compatibility so we need tests for the new functionality.
 This give us all confidence that next release would be just version change.
@@ -10,4 +9,5 @@ That allow not break existing customers and improve code. I do not know how prop
 If your PR sitting for too long, ping me (@kant2002) in the PR again to resurrect me from other projects. Maybe I'm slow, but I try to react on all PR.
 
 # Code style
+
 Please avoid changes in whitespaces in functional PRs. If something irks your, create new PR just for code formatting.

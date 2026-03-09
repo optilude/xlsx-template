@@ -6,6 +6,5 @@
     "noEmit": true,
     "strict": false,
     "skipLibCheck": true,
-    "types": ["node"]
-  },
+  }
 }

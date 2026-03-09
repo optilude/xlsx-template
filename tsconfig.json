@@ -11,9 +11,6 @@
     "esModuleInterop": true,
     "outDir": "lib",
     "sourceMap": true
-  }, 
-  "files": [
-    "src/index.js",
-    "src/augment.d.ts"
-  ]
+  },
+  "files": ["src/index.js", "src/augment.d.ts"]
 }

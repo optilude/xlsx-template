@@ -1,4 +1,4 @@
-import XlsxTemplate, { 
+import XlsxTemplate, {
   GenerateOptions,
   GenerateType,
   TemplatePlaceholder,
