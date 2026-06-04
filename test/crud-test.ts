@@ -820,6 +820,10 @@ describe("CRUD operations", function() {
 
                 expect(sheet1.find("./mergeCells/mergeCell[@ref='E7:F7']")).toBeNull(); // pushed down and accross
                 expect(sheet1.find("./mergeCells/mergeCell[@ref='G8:H8']")).not.toBeNull(); // pushed down and accross
+                // Guard against count string concatenation (e.g. "551111...") when adding merged cells:
+                // the mergeCells @count must always match the number of <mergeCell> nodes.
+                var mergeCells = sheet1.find("./mergeCells");
+                expect(parseInt(mergeCells.attrib.count, 10)).toEqual(mergeCells.findall("mergeCell").length);
 
                 // Table ranges and autofilter definitions have moved
                 expect(table1.attrib.ref).toEqual("B4:C7"); // Grown
