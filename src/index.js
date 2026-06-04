@@ -1777,7 +1777,8 @@ class Workbook {
                         start: self.joinRef(mergeStart),
                         end: self.joinRef(mergeEnd)
                     });
-                    mergeCells.attrib.count += 1;
+                    var mergeCount = parseInt(mergeCells.attrib.count || '0', 10);
+                    mergeCells.attrib.count = (mergeCount + 1).toString();
                     mergeCells._children.push(newMergeCell);
                 }
             }
