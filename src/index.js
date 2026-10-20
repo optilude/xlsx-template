@@ -1783,6 +1783,41 @@ class Workbook {
             }
         });
 
+        // Data-validation targets are stored as a whitespace-separated list
+        // of cell references or ranges in `sqref`. Move them with the cells
+        // when table substitution inserts rows, just like merged cells.
+        sheet.findall("dataValidations/dataValidation").forEach(function (validation) {
+            if (!validation.attrib.sqref) {
+                return;
+            }
+
+            validation.attrib.sqref = validation.attrib.sqref.trim().split(/\s+/).map(function (reference) {
+                var parts = reference.split(":");
+                // Preserve unknown Excel reference syntax rather than
+                // silently rewriting a reference we cannot fully parse.
+                if (parts.length > 2 || !parts.every(function (part) {
+                    return /^\$?[A-Z]{1,3}\$?[0-9]+$/.test(part);
+                })) {
+                    return reference;
+                }
+
+                var start = self.splitRef(parts[0]);
+                var end = parts.length === 2 ? self.splitRef(parts[1]) : null;
+
+                if (start.row > currentRow) {
+                    start.row += numRows;
+                    if (end) {
+                        end.row += numRows;
+                    }
+                } else if (end && end.row > currentRow) {
+                    // An inserted row inside an existing range extends it.
+                    end.row += numRows;
+                }
+
+                return self.joinRef(start) + (end ? ":" + self.joinRef(end) : "");
+            }).join(" ");
+        });
+
         // Update named tables below this row
         tables.forEach(function (table) {
             var tableRoot = table.root, tableRange = self.splitRange(tableRoot.attrib.ref), tableStart = self.splitRef(tableRange.start), tableEnd = self.splitRef(tableRange.end);
