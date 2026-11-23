@@ -844,7 +844,6 @@ class Workbook {
     //Perform substitution in hyperlinks
     substituteHyperlinks(rels, substitutions) {
         let self = this;
-        etree.parse(self.archive.file(self.sharedStringsPath).asText()).getroot();
         if (rels === null) {
             return;
         }
