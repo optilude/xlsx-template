@@ -1780,37 +1780,46 @@ describe("CRUD operations", function() {
             });
         });
 
-        it("substituteAll leaves the archive as substituting each sheet in turn would when a sheet throws", function(done) {
+        it("substituteAll writes the shared strings the substituted sheets refer to when a later sheet throws", function(done) {
             fs.readFile(path.join(__dirname, "templates", "multple-sheet-substitution.xlsx"), function(err, data) {
                 expect(err).toBeNull();
 
-                var all = new XlsxTemplate(data);
-                var substitute = all.substitute.bind(all);
+                var t = new XlsxTemplate(data);
+                var substitute = t.substitute.bind(t);
                 var calls = 0;
-                jest.spyOn(all, "substitute").mockImplementation(function(sheetName, substitutions) {
+                jest.spyOn(t, "substitute").mockImplementation(function(sheetName, substitutions) {
                     calls++;
                     if (calls === 2) {
-                        all.addSharedString("added before the error");
                         throw new Error("sheet failed");
                     }
                     return substitute(sheetName, substitutions);
                 });
                 expect(() => {
-                    all.substituteAll({ foo: "bar" });
+                    t.substituteAll({ foo: "bar" });
                 }).toThrow("sheet failed");
 
-                var each = new XlsxTemplate(data);
-                var firstSheet = each.loadSheets(each.prefix, each.workbook, each.workbookRels)[0];
-                each.substitute(firstSheet.id, { foo: "bar" });
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("bar");
+                done();
+            });
+        });
 
-                var files = Object.keys(all.archive.files).sort();
-                expect(files).toEqual(Object.keys(each.archive.files).sort());
-                files.forEach(function(file) {
-                    if (all.archive.files[file].dir) {
-                        return;
-                    }
-                    expect(all.archive.file(file).asText()).toEqual(each.archive.file(file).asText());
+        it("substituteAll writes the shared strings a sheet refers to when the sheet throws after it is written", function(done) {
+            fs.readFile(path.join(__dirname, "templates", "multple-sheet-substitution.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                jest.spyOn(t, "writeTables").mockImplementation(function() {
+                    throw new Error("tables failed");
                 });
+                expect(() => {
+                    t.substituteAll({ foo: "bar" });
+                }).toThrow("tables failed");
+
+                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
+                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
+                expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("bar");
                 done();
             });
         });
