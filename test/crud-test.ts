@@ -1725,59 +1725,36 @@ describe("CRUD operations", function() {
             });
         });
 
-        it("substituteAll writes the same files as substituting each sheet in turn", function(done) {
-            var names = ["multple-sheet-substitution.xlsx", "multple-sheets-arrays.xlsx"];
-            var remaining = names.length;
-            names.forEach(function(name) {
-                fs.readFile(path.join(__dirname, "templates", name), function(err, data) {
-                    expect(err).toBeNull();
-                    var values = {
-                        foo: "bar",
-                        page: "Page 1",
-                        sheetNumber: 1
-                    };
-
-                    var all = new XlsxTemplate(data);
-                    all.substituteAll(values);
-
-                    var each = new XlsxTemplate(data);
-                    each.loadSheets(each.prefix, each.workbook, each.workbookRels).forEach(function(sheet) {
-                        each.substitute(sheet.id, values);
-                    });
-
-                    var files = Object.keys(all.archive.files).sort();
-                    expect(files).toEqual(Object.keys(each.archive.files).sort());
-                    files.forEach(function(file) {
-                        if (all.archive.files[file].dir) {
-                            return;
-                        }
-                        expect(all.archive.file(file).asText()).toEqual(each.archive.file(file).asText());
-                    });
-
-                    remaining--;
-                    if (remaining === 0) {
-                        done();
-                    }
-                });
-            });
-        });
-
-        it("substituteAll leaves substituted shared strings in the archive before generate", function(done) {
-            fs.readFile(path.join(__dirname, "templates", "multple-sheet-substitution.xlsx"), function(err, data) {
+        function expectSubstituteAllToMatchEachSheetInTurn(name, values, done) {
+            fs.readFile(path.join(__dirname, "templates", name), function(err, data) {
                 expect(err).toBeNull();
 
-                var t = new XlsxTemplate(data);
-                t.substituteAll({
-                    foo: "bar"
+                var all = new XlsxTemplate(data);
+                all.substituteAll(values);
+
+                var each = new XlsxTemplate(data);
+                each.loadSheets(each.prefix, each.workbook, each.workbookRels).forEach(function(sheet) {
+                    each.substitute(sheet.id, values);
                 });
 
-                var sharedStrings = etree.parse(t.archive.file("xl/sharedStrings.xml").asText()).getroot();
-                var sheet1        = etree.parse(t.archive.file("xl/worksheets/sheet1.xml").asText()).getroot();
-                var sheet2        = etree.parse(t.archive.file("xl/worksheets/sheet2.xml").asText()).getroot();
-                expect(getSharedString(sharedStrings, sheet1, "A1")).toEqual("bar");
-                expect(getSharedString(sharedStrings, sheet2, "A1")).toEqual("bar");
+                var files = Object.keys(all.archive.files).sort();
+                expect(files).toEqual(Object.keys(each.archive.files).sort());
+                files.forEach(function(file) {
+                    if (all.archive.files[file].dir) {
+                        return;
+                    }
+                    expect(all.archive.file(file).asText()).toEqual(each.archive.file(file).asText());
+                });
                 done();
             });
+        }
+
+        it("substituteAll writes the same files as substituting each sheet in turn when sheets share a placeholder", function(done) {
+            expectSubstituteAllToMatchEachSheetInTurn("multple-sheet-substitution.xlsx", { foo: "bar" }, done);
+        });
+
+        it("substituteAll writes the same files as substituting each sheet in turn when sheets have their own placeholder strings", function(done) {
+            expectSubstituteAllToMatchEachSheetInTurn("multple-sheets-arrays.xlsx", { page: "Page 1", sheetNumber: 1 }, done);
         });
 
         it("substituteAll writes the shared strings the substituted sheets refer to when a later sheet throws", function(done) {
