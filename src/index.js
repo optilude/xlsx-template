@@ -71,6 +71,7 @@ class Workbook {
         this.workbookRels = null;
         this.calChainRel = null;
         this.calcChainPath = "";
+        this.deferSharedStringsWrite = false;
 
         if (data) {
             this.loadTemplate(data);
@@ -339,9 +340,15 @@ class Workbook {
     substituteAll(substitutions) {
         var self = this;
         var sheets = self.loadSheets(self.prefix, self.workbook, self.workbookRels);
-        sheets.forEach(function (sheet) {
-            self.substitute(sheet.id, substitutions);
-        });
+        self.deferSharedStringsWrite = true;
+        try {
+            sheets.forEach(function (sheet) {
+                self.substitute(sheet.id, substitutions);
+            });
+        } finally {
+            self.deferSharedStringsWrite = false;
+            self.writeSharedStrings();
+        }
     }
     /**
      * Interpolate values for the sheet with the given number (1-based) or
@@ -561,7 +568,9 @@ class Workbook {
             self.archive.remove(self.calcChainPath);
         }
 
-        self.writeSharedStrings();
+        if (!self.deferSharedStringsWrite) {
+            self.writeSharedStrings();
+        }
         self.writeTables(namedTables);
         self.writeDrawing(drawing);
     }
@@ -820,7 +829,6 @@ class Workbook {
     //Perform substitution in hyperlinks
     substituteHyperlinks(rels, substitutions) {
         let self = this;
-        etree.parse(self.archive.file(self.sharedStringsPath).asText()).getroot();
         if (rels === null) {
             return;
         }
