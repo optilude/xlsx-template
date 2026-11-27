@@ -839,6 +839,30 @@ describe("CRUD operations", function() {
 
         });
 
+        it("shifts data validation sqref locations with inserted table rows", function(done) {
+            fs.readFile(path.join(__dirname, "templates", "test-named-tables.xlsx"), function(err, data) {
+                expect(err).toBeNull();
+
+                var t = new XlsxTemplate(data);
+                var sheet = t.loadSheet("Tables");
+                var validations = etree.SubElement(sheet.root, "dataValidations", { count: "3" });
+                var single = etree.SubElement(validations, "dataValidation", { type: "list", sqref: "B10" });
+                var mixed = etree.SubElement(validations, "dataValidation", {
+                    type: "list", sqref: "B2 B10:B12 $C$11 D4:D8"
+                });
+                var other = etree.SubElement(validations, "dataValidation", { type: "list", sqref: "C3:C4" });
+
+                // pushDown is the production operation used when table rows
+                // are inserted below the row containing a table placeholder.
+                t.pushDown(t.workbook, sheet.root, [], 5, 2);
+
+                expect(single.attrib.sqref).toEqual("B12");
+                expect(mixed.attrib.sqref).toEqual("B2 B12:B14 $C$13 D4:D10");
+                expect(other.attrib.sqref).toEqual("C3:C4");
+                done();
+            });
+        });
+
         it("Correctly parse when formula in the file", function(done) {
 
             fs.readFile(path.join(__dirname, "templates", "template.xlsx"), function(err, data) {
